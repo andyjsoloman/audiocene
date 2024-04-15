@@ -1,5 +1,12 @@
+import NavBar from "../components/NavBar";
+
 function AppLayout() {
-  return <div>AUDIOCENE APP</div>;
+  return (
+    <>
+      <NavBar />
+      <h1>AUDIOCENE APP</h1>
+    </>
+  );
 }
 
 export default AppLayout;

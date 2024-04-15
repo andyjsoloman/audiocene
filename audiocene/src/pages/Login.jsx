@@ -1,5 +1,12 @@
+import NavBar from "../components/NavBar";
+
 function Login() {
-  return <div>AUDIOCENE LOGIN</div>;
+  return (
+    <>
+      <NavBar />
+      <h1>LOGIN</h1>
+    </>
+  );
 }
 
 export default Login;
