@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const LogoContainer = styled.div`
+  width: 150px;
+`;
 
 function Logo() {
   return (
-    <Link to="/">
-      <img src="audiocene/public/headerlogo.svg" alt="Audiocene logo" />
-    </Link>
+    <LogoContainer>
+      <Link to="/">
+        <img src="./public/headerlogo.svg" alt="Audiocene logo" />
+      </Link>
+    </LogoContainer>
   );
 }
 
