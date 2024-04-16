@@ -26,6 +26,10 @@ const NavLink = styled(BaseNavLink)`
   background-color: #abefed;
   padding: 8px 16px;
   border-radius: 4px;
+
+  &.active {
+    border: 1px solid black;
+  }
 `;
 
 function NavBar() {
