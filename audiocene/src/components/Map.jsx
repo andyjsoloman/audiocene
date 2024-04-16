@@ -17,6 +17,16 @@ const MapCont = styled.div`
   width: 40%;
 `;
 
+const mapIcon = L.icon({
+  iconUrl: "./src/assets/mapmarker.png",
+  iconSize: [36, 50],
+  iconAnchor: [18, 50],
+  popupAnchor: [5, -40],
+  //   shadowUrl: "my-icon-shadow.png",
+  //   shadowSize: [68, 95],
+  //   shadowAnchor: [22, 94],
+});
+
 function Map() {
   return (
     <MapCont>
@@ -29,7 +39,7 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[51.505, -0.09]}>
+        <Marker position={[51.505, -0.09]} icon={mapIcon}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
