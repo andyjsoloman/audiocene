@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const AppContainer = styled.div`
   display: flex;
-  /* justify-content: space-evenly; */
+  justify-content: space-evenly;
 `;
 
 function AppLayout() {
