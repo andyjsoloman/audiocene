@@ -5,6 +5,7 @@ import {
   Marker,
   Popup,
 } from "react-leaflet";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledMapContainer = styled(BaseMapContainer)`
@@ -15,10 +16,11 @@ const StyledMapContainer = styled(BaseMapContainer)`
 const MapCont = styled.div`
   height: 600px;
   width: 40%;
+  flex: 1;
 `;
 
 const mapIcon = L.icon({
-  iconUrl: "./src/assets/mapmarker.png",
+  iconUrl: "../src/assets/mapmarker.png",
   iconSize: [36, 50],
   iconAnchor: [18, 50],
   popupAnchor: [5, -40],
@@ -28,6 +30,9 @@ const mapIcon = L.icon({
 });
 
 function Map() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
   return (
     <MapCont>
       <StyledMapContainer

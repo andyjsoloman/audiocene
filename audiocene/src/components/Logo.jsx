@@ -9,7 +9,7 @@ function Logo() {
   return (
     <LogoContainer>
       <Link to="/">
-        <img src="./public/headerlogo.svg" alt="Audiocene logo" />
+        <img src="../public/headerlogo.svg" alt="Audiocene logo" />
       </Link>
     </LogoContainer>
   );

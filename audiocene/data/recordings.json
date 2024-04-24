@@ -1,0 +1,37 @@
+{
+  "recordings": [
+    {
+      "id": "1234",
+      "title": "Paphos",
+      "country": "Cyprus",
+      "date": "2024-04-09T04:49:04.128Z",
+      "description": "dfhdfh",
+      "position": {
+        "lat": "34.77094763658632",
+        "lng": "32.41241455078126"
+      }
+    },
+    {
+      "id": "2222",
+      "title": "Bournemouth",
+      "country": "United Kingdom of Great Britain and Northern Ireland (the)",
+      "date": "2024-04-11T00:05:33.223Z",
+      "description": "",
+      "position": {
+        "lat": "50.71733015526967",
+        "lng": "-1.8731689453125002"
+      }
+    },
+    {
+      "id": "4556",
+      "title": "Marrakesh",
+      "country": "Morocco",
+      "date": "2024-04-11T00:08:24.767Z",
+      "description": "",
+      "position": {
+        "lat": "31.87755764334002",
+        "lng": "-8.206787109375002"
+      }
+    }
+  ]
+}

@@ -38,7 +38,7 @@ function NavBar() {
       <Logo />
       <NavUl>
         <NavLi>
-          <NavLink to="/app">Explore</NavLink>
+          <NavLink to="/app/explore">Explore</NavLink>
         </NavLi>
         <NavLi>
           <NavLink to="/about">About</NavLink>
