@@ -1,6 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useRecordings } from "../contexts/RecordingsContext";
 import { useEffect } from "react";
+import BackButton from "./BackButton";
 
 function Recording() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ function Recording() {
   return (
     <>
       <div>Recording Info for {id}</div>
+      <BackButton />
     </>
   );
 }
