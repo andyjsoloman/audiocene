@@ -8,16 +8,19 @@ import {
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useRecordings } from "../contexts/RecordingsContext";
+import MapSidePanel from "./MapSidePanel";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;
   width: 100%; // Ensuring it takes up all the available width too
+  z-index: 1;
 `;
 
 const MapCont = styled.div`
   height: 600px;
-  width: 40%;
+  width: 100%;
   flex: 1;
+  z-index: 1;
 `;
 
 const mapIcon = L.icon({

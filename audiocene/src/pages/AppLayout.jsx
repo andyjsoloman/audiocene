@@ -1,12 +1,14 @@
 import Map from "../components/Map";
-import NavBar from "../components/NavBar";
 import MapSidePanel from "../components/MapSidePanel";
+import NavBar from "../components/NavBar";
+
 import styled from "styled-components";
 
 const AppContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
   padding: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 function AppLayout() {
@@ -14,8 +16,8 @@ function AppLayout() {
     <>
       <NavBar />
       <AppContainer>
-        <MapSidePanel />
         <Map />
+        <MapSidePanel />
       </AppContainer>
     </>
   );

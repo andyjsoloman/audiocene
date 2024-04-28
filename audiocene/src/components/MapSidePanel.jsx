@@ -3,7 +3,16 @@ import styled from "styled-components";
 import AppNav from "./AppNav";
 
 const PanelContainer = styled.div`
-  flex-basis: 600px;
+  position: absolute;
+
+  right: 100px;
+  z-index: 500;
+  width: 500px;
+  height: 400px;
+  background-color: white;
+  border: 1px solid var(--color-black);
+  border-radius: 12px;
+  padding: 20px;
 `;
 
 function MapSidePanel() {
