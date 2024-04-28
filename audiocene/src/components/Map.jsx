@@ -7,6 +7,7 @@ import {
 } from "react-leaflet";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { useRecordings } from "../contexts/RecordingsContext";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;
@@ -30,25 +31,28 @@ const mapIcon = L.icon({
 });
 
 function Map() {
+  const { recordings } = useRecordings();
   const [searchParams, setSearchParams] = useSearchParams();
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
   return (
     <MapCont>
-      <StyledMapContainer
-        center={[51.505, -0.09]}
-        zoom={13}
-        scrollWheelZoom={true}
-      >
+      <StyledMapContainer center={[51, -1.8]} zoom={13} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[51.505, -0.09]} icon={mapIcon}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        {recordings.map((recording) => (
+          <Marker
+            position={[recording.position.lat, recording.position.lng]}
+            key={recording.id}
+            icon={mapIcon}
+          >
+            <Popup>
+              <span>{recording.title}</span>
+            </Popup>
+          </Marker>
+        ))}
       </StyledMapContainer>
     </MapCont>
   );

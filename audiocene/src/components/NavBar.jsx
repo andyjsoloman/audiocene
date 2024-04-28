@@ -23,12 +23,16 @@ const NavLi = styled.li`
 
 const NavLink = styled(BaseNavLink)`
   text-decoration: none;
-  background-color: #abefed;
+  font-size: 1.3rem;
+  color: var(--color-black);
+  background-color: var(--color-bg);
   padding: 8px 16px;
   border-radius: 4px;
+  font-family: "metallophile-sp8", sans-serif;
+  font-weight: 500;
 
   &.active {
-    border: 1px solid black;
+    color: var(--color-primary);
   }
 `;
 
