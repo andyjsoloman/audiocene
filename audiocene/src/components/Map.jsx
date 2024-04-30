@@ -5,10 +5,11 @@ import {
   Marker,
   Popup,
 } from "react-leaflet";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useRecordings } from "../contexts/RecordingsContext";
 import MapSidePanel from "./MapSidePanel";
+import { useState, useEffect } from "react";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;
@@ -24,9 +25,9 @@ const MapCont = styled.div`
 `;
 
 const mapIcon = L.icon({
-  iconUrl: "../src/assets/mapmarker.png",
-  iconSize: [36, 50],
-  iconAnchor: [18, 50],
+  iconUrl: "../public/mapMarker.svg",
+  iconSize: [45, 60],
+  iconAnchor: [22, 60],
   popupAnchor: [5, -40],
   //   shadowUrl: "my-icon-shadow.png",
   //   shadowSize: [68, 95],
@@ -34,13 +35,25 @@ const mapIcon = L.icon({
 });
 
 function Map() {
+  const navigate = useNavigate();
   const { recordings } = useRecordings();
+
+  const [mapPosition, setMapPosition] = useState([40, 0]);
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
+  const mapLat = searchParams.get("lat");
+  const mapLng = searchParams.get("lng");
+
+  useEffect(
+    function () {
+      if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+    },
+    [mapLat, mapLng]
+  );
+
   return (
     <MapCont>
-      <StyledMapContainer center={[51, -1.8]} zoom={13} scrollWheelZoom={true}>
+      <StyledMapContainer center={mapPosition} zoom={13} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -56,9 +69,16 @@ function Map() {
             </Popup>
           </Marker>
         ))}
+        <ChangeLocation position={mapPosition} />
       </StyledMapContainer>
     </MapCont>
   );
+}
+
+function ChangeLocation({ position }) {
+  const map = useMap();
+  map.setView(position);
+  return null;
 }
 
 export default Map;
