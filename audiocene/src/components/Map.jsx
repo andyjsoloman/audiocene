@@ -25,7 +25,7 @@ const MapCont = styled.div`
 `;
 
 const mapIcon = L.icon({
-  iconUrl: "../public/mapMarker.svg",
+  iconUrl: "/mapMarker.svg",
   iconSize: [45, 60],
   iconAnchor: [22, 60],
   popupAnchor: [5, -40],
