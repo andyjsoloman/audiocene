@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import AppNav from "./AppNav";
+import Button from "./Button";
 
 const PanelContainer = styled.div`
   position: absolute;
@@ -22,6 +23,7 @@ function MapSidePanel() {
       <AppNav />
 
       <Outlet />
+      <Button variant={"base"}>Base Button</Button>
     </PanelContainer>
   );
 }
