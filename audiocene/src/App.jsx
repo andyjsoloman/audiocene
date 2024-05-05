@@ -8,6 +8,7 @@ import About from "./pages/About";
 import RecordingsList from "./components/RecordingsList";
 import Recording from "./components/Recording";
 import { RecordingsProvider } from "./contexts/RecordingsContext";
+import Form from "./components/Form";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
               element={<p>Find a recording on the map...</p>}
             />
             <Route path="favourites/:id" element={<Recording />} />
-            <Route path="add" element={<p>Add a Recording</p>} />
+            <Route path="add" element={<Form />} />
             <Route path="favourites" element={<RecordingsList />} />
           </Route>
           <Route path="login" element={<Login />}></Route>

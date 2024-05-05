@@ -13,6 +13,7 @@ import MapSidePanel from "./MapSidePanel";
 import { useState, useEffect } from "react";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
+import useUrlPositon from "../hooks/useUrlPosition";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;
@@ -41,15 +42,13 @@ function Map() {
   const navigate = useNavigate();
   const { recordings } = useRecordings();
   const [mapPosition, setMapPosition] = useState([40, 0]);
-  const [searchParams, setSearchParams] = useSearchParams();
+
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     getPosition,
   } = useGeoLocation();
-
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  const [mapLat, mapLng] = useUrlPositon();
 
   useEffect(
     function () {
