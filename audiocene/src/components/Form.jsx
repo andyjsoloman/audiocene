@@ -5,12 +5,16 @@ import Button from "./Button";
 import Message from "./Message";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import { useRecordings } from "../contexts/RecordingsContext";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 export default function Form() {
+  const { createRecording, isLoading } = useRecordings();
+  const navigate = useNavigate();
   const [lat, lng] = useUrlPositon();
-  const [recordingTitle, setRecordingTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [locality, setLocality] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
@@ -21,6 +25,7 @@ export default function Form() {
 
   useEffect(
     function () {
+      if (!lat && !lng) return;
       async function fetchRecordingData() {
         try {
           setIsLoadingGeoCoding(true);
@@ -28,7 +33,7 @@ export default function Form() {
             `${BASE_URL}?latitude=${lat}&longitude=${lng}`
           );
           const data = await res.json();
-          console.log(data);
+
           setLocality(data.locality || "");
           setCountry(data.countryName || "");
         } catch (err) {
@@ -42,8 +47,19 @@ export default function Form() {
     [lat, lng]
   );
 
-  function handleSubmit() {
-    console.log("SUBMIT");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!date) return;
+    const newRecording = {
+      title,
+      locality,
+      country,
+      date,
+      description: notes,
+      position: { lat, lng },
+    };
+    await createRecording(newRecording);
+    navigate("/app/explore");
   }
 
   if (isLoadingGeocoding) return <LoadingSpinner />;
@@ -55,11 +71,11 @@ export default function Form() {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="recordingTitle">Recording Title</label>
+        <label htmlFor="title">Recording Title</label>
         <input
-          id="recordingTitle"
-          onChange={(e) => setRecordingTitle(e.target.value)}
-          value={recordingTitle}
+          id="title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
         />
       </div>
       <div>

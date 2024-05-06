@@ -32,6 +32,30 @@
         "lat": "31.87755764334002",
         "lng": "-8.206787109375002"
       }
+    },
+    {
+      "id": "7796",
+      "title": "",
+      "locality": "Vancouver East",
+      "country": "Canada",
+      "date": "2024-05-06T00:11:44.173Z",
+      "description": "",
+      "position": {
+        "lat": "49.27566585223293",
+        "lng": "-123.06610107421876"
+      }
+    },
+    {
+      "id": "fe3c",
+      "title": "",
+      "locality": "Vancouver Centre",
+      "country": "Canada",
+      "date": "2024-05-06T00:36:13.937Z",
+      "description": "",
+      "position": {
+        "lat": "49.30656601563087",
+        "lng": "-123.14982488751413"
+      }
     }
   ]
 }

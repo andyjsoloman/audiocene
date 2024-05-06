@@ -38,9 +38,52 @@ function RecordingsProvider({ children }) {
     }
   }
 
+  async function createRecording(newRecording) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/recordings`, {
+        method: "POST",
+        body: JSON.stringify(newRecording),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setRecordings((recordings) => [...recordings, data]);
+    } catch {
+      alert("Error creating a recording");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteRecording(id) {
+    try {
+      setIsLoading(true);
+      await fetch(`${BASE_URL}/recordings/${id}`, {
+        method: "DELETE",
+      });
+
+      setRecordings((recordings) =>
+        recordings.filter((recording) => recording.id !== id)
+      );
+    } catch {
+      alert("Error deleting recording data");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <RecordingsContext.Provider
-      value={{ recordings, isLoading, currentRecording, getRecording }}
+      value={{
+        recordings,
+        isLoading,
+        currentRecording,
+        getRecording,
+        createRecording,
+        deleteRecording,
+      }}
     >
       {children}
     </RecordingsContext.Provider>
