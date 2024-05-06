@@ -1,46 +1,103 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useReducer,
+} from "react";
 
 const RecordingsContext = createContext();
 
 const BASE_URL = "http://localhost:8000";
 
+const initialState = {
+  recordings: [],
+  isLoading: false,
+  currentRecording: {},
+  error: "",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "loading":
+      return { ...state, isLoading: true };
+    case "recordings/loaded":
+      return {
+        ...state,
+        isLoading: false,
+        recordings: action.payload,
+      };
+
+    case "recording/loaded":
+      return { ...state, isLoading: false, currentRecording: action.payload };
+
+    case "recording/created":
+      return {
+        ...state,
+        isLoading: false,
+        recordings: [...state.recordings, action.payload],
+        currentRecording: action.payload,
+      };
+
+    case "recording/deleted":
+      return {
+        ...state,
+        isLoading: false,
+        recordings: state.recordings.filter(
+          (recording) => recording.id !== action.payload
+        ),
+        currentRecording: {},
+      };
+
+    case "rejected":
+      return { ...state, isLoading: false, error: action.payload };
+
+    default:
+      throw new Error("Unknown action type");
+  }
+}
+
 function RecordingsProvider({ children }) {
-  const [recordings, setRecordings] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentRecording, setCurrentRecording] = useState({});
+  const [{ recordings, isLoading, currentRecording }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
+  // const [recordings, setRecordings] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [currentRecording, setCurrentRecording] = useState({});
 
   useEffect(function () {
     async function fetchRecordings() {
+      dispatch({ type: "loading" });
       try {
-        setIsLoading(true);
         const res = await fetch(`${BASE_URL}/recordings`);
         const data = await res.json();
-        setRecordings(data);
+
+        dispatch({ type: "recordings/loaded", payload: data });
       } catch {
-        alert("Error loading recording data");
-      } finally {
-        setIsLoading(false);
+        dispatch({ type: "rejected", payload: "Error loading recording data" });
       }
     }
+
     fetchRecordings();
   }, []);
 
   async function getRecording(id) {
+    if (Number(id) === currentRecording.id) return;
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       const res = await fetch(`${BASE_URL}/recordings/${id}`);
       const data = await res.json();
-      setCurrentRecording(data);
+      dispatch({ type: "recording/loaded", payload: data });
     } catch {
-      alert("Error loading recording data");
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "rejected", payload: "Error loading recording data" });
     }
   }
 
   async function createRecording(newRecording) {
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       const res = await fetch(`${BASE_URL}/recordings`, {
         method: "POST",
         body: JSON.stringify(newRecording),
@@ -49,28 +106,22 @@ function RecordingsProvider({ children }) {
         },
       });
       const data = await res.json();
-      setRecordings((recordings) => [...recordings, data]);
+      dispatch({ type: "recording/created", payload: data });
     } catch {
-      alert("Error creating a recording");
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "rejected", payload: "Error creating the recording" });
     }
   }
 
   async function deleteRecording(id) {
+    dispatch({ type: "loading" });
     try {
-      setIsLoading(true);
       await fetch(`${BASE_URL}/recordings/${id}`, {
         method: "DELETE",
       });
 
-      setRecordings((recordings) =>
-        recordings.filter((recording) => recording.id !== id)
-      );
+      dispatch({ type: "recording/deleted", payload: id });
     } catch {
-      alert("Error deleting recording data");
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: "rejected", payload: "Error deleting the recording" });
     }
   }
 

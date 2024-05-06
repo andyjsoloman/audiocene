@@ -44,18 +44,6 @@
         "lat": "49.27566585223293",
         "lng": "-123.06610107421876"
       }
-    },
-    {
-      "id": "fe3c",
-      "title": "",
-      "locality": "Vancouver Centre",
-      "country": "Canada",
-      "date": "2024-05-06T00:36:13.937Z",
-      "description": "",
-      "position": {
-        "lat": "49.30656601563087",
-        "lng": "-123.14982488751413"
-      }
     }
   ]
 }
