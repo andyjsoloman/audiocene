@@ -4,10 +4,6 @@ import styled from "styled-components";
 
 const UserContainer = styled.div`
   background-color: var(--color-bg);
-  padding: 1rem 0.5rem;
-  border-radius: 7px;
-  z-index: 999;
-  /* box-shadow: 0 0.8rem 2.4rem rgba(36, 42, 46, 0.5); */
   font-size: 1.2rem;
   font-weight: 400;
   font-family: "metallophile-sp8", sans-serif;
