@@ -1,6 +1,8 @@
 import { NavLink as BaseNavLink } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "./Logo";
+import User from "./User";
+import { useAuth } from "../contexts/AuthContext";
 
 const Nav = styled.nav`
   display: flex;
@@ -37,6 +39,8 @@ const NavLink = styled(BaseNavLink)`
 `;
 
 function NavBar() {
+  const { user } = useAuth();
+
   return (
     <Nav>
       <Logo />
@@ -47,9 +51,13 @@ function NavBar() {
         <NavLi>
           <NavLink to="/about">About</NavLink>
         </NavLi>
-        <NavLi>
-          <NavLink to="/login">Login</NavLink>
-        </NavLi>
+        {user ? (
+          <User />
+        ) : (
+          <NavLi>
+            <NavLink to="/login">Login</NavLink>
+          </NavLi>
+        )}
       </NavUl>
     </Nav>
   );
