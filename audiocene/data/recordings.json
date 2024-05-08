@@ -44,6 +44,18 @@
         "lat": "49.38085013027026",
         "lng": "-122.85598754882814"
       }
+    },
+    {
+      "id": "245f",
+      "title": "",
+      "locality": "Castello de la Plana",
+      "country": "Spain",
+      "date": "2024-05-08T01:12:03.539Z",
+      "description": "",
+      "position": {
+        "lat": "40.01751691390323",
+        "lng": "0.0054931640625"
+      }
     }
   ]
 }

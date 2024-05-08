@@ -81,4 +81,7 @@ html {
   --color-black: hsl(192, 75%, 8%);
   --color-bg: hsl(60, 60%, 98%);
   --color-primary-hover: hsl(195, 100%, 13%);
+
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
+    source-sans-pro, sans-serif;
 }
