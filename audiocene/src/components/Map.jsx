@@ -82,6 +82,13 @@ function Map() {
               position={[recording.position.lat, recording.position.lng]}
               key={recording.id}
               icon={mapIcon}
+              eventHandlers={{
+                click: () => {
+                  navigate(
+                    `favourites/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}` // THis may be messing with the way the map centers on currentRecording. Is the info being called correctly? Also could this logic be extracted from the JSX to be cleaner
+                  );
+                },
+              }}
             >
               <Popup>
                 <span>{recording.title}</span>
