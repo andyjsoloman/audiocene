@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import Map from "../components/Map";
 import MapSidePanel from "../components/MapSidePanel";
 import NavBar from "../components/NavBar";
 
 import styled from "styled-components";
+import { getRecordings } from "../services/apiRecordings";
 
 const AppContainer = styled.div`
   padding: 40px;
@@ -12,6 +14,10 @@ const AppContainer = styled.div`
 `;
 
 function AppLayout() {
+  useEffect(function () {
+    getRecordings().then((data) => console.log(data));
+  }, []);
+
   return (
     <>
       <NavBar />
