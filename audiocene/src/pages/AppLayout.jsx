@@ -14,10 +14,6 @@ const AppContainer = styled.div`
 `;
 
 function AppLayout() {
-  useEffect(function () {
-    getRecordings().then((data) => console.log(data));
-  }, []);
-
   return (
     <>
       <NavBar />

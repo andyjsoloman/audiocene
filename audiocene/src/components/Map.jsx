@@ -41,7 +41,10 @@ const mapIcon = L.icon({
 function Map() {
   const navigate = useNavigate();
   const { recordings } = useRecordings();
-  const [mapPosition, setMapPosition] = useState([40, 0]);
+
+  const [mapPosition, setMapPosition] = useState([
+    50.71733015526967, 1.8731689453125002,
+  ]); //DEFAULT MAP POSITION
 
   const {
     isLoading: isLoadingPosition,

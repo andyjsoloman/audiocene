@@ -1,9 +1,20 @@
 /* eslint-disable react/prop-types */
+import { useQuery } from "@tanstack/react-query";
 import { useRecordings } from "../contexts/RecordingsContext";
 import RecordingItem from "./RecordingItem";
+import { getRecordings } from "../services/apiRecordings";
 
 function RecordingsList() {
-  const { recordings, isLoading } = useRecordings();
+  const {
+    isLoading,
+    data: recordings,
+    error,
+  } = useQuery({
+    queryKey: ["recordings"],
+    queryFn: getRecordings,
+  });
+
+  console.log(recordings);
 
   if (isLoading) return <p>Loading</p>;
   return (

@@ -10,7 +10,7 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function RecordingItem({ recording }) {
-  const { title, date, id, position } = recording;
+  const { title, recording_date, id, position } = recording;
   const { deleteRecording } = useRecordings();
 
   function handleClick(e) {
@@ -22,7 +22,7 @@ function RecordingItem({ recording }) {
     <li>
       <Link to={`${id}?lat=${position.lat}&lng=${position.lng}`}>
         <h3>{title}</h3>
-        <time>{formatDate(date)}</time>
+        <time>{formatDate(recording_date)}</time>
         <button onClick={handleClick}>&times;</button>
       </Link>
     </li>
