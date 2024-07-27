@@ -8,7 +8,8 @@ import {
 } from "react-leaflet";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { useRecordings } from "../contexts/RecordingsContext";
+import { useQuery } from "@tanstack/react-query";
+import { getRecordings } from "../services/apiRecordings";
 import MapSidePanel from "./MapSidePanel";
 import { useState, useEffect } from "react";
 import { useGeoLocation } from "../hooks/useGeolocation";
@@ -40,7 +41,14 @@ const mapIcon = L.icon({
 
 function Map() {
   const navigate = useNavigate();
-  const { recordings } = useRecordings();
+  const {
+    isLoading,
+    data: recordings,
+    error,
+  } = useQuery({
+    queryKey: ["recordings"],
+    queryFn: getRecordings,
+  });
 
   const [mapPosition, setMapPosition] = useState([
     50.71733015526967, 1.8731689453125002,

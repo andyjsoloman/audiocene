@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useQuery } from "@tanstack/react-query";
-import { useRecordings } from "../contexts/RecordingsContext";
 import RecordingItem from "./RecordingItem";
 import { getRecordings } from "../services/apiRecordings";
 
@@ -17,6 +16,7 @@ function RecordingsList() {
   console.log(recordings);
 
   if (isLoading) return <p>Loading</p>;
+  if (error) return <p>Error: {error.message}</p>;
   return (
     <ul>
       {recordings.map((recording) => (
