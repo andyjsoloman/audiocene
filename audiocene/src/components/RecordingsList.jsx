@@ -13,8 +13,6 @@ function RecordingsList() {
     queryFn: getRecordings,
   });
 
-  console.log(recordings);
-
   if (isLoading) return <p>Loading</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (

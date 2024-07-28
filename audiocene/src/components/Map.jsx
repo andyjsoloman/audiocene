@@ -10,7 +10,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { getRecordings } from "../services/apiRecordings";
-import MapSidePanel from "./MapSidePanel";
+
 import { useState, useEffect } from "react";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
@@ -43,7 +43,7 @@ function Map() {
   const navigate = useNavigate();
   const {
     isLoading,
-    data: recordings,
+    data: recordings = [],
     error,
   } = useQuery({
     queryKey: ["recordings"],

@@ -10,3 +10,12 @@ export async function getRecordings() {
 
   return data;
 }
+
+export async function deleteRecording(id) {
+  const { error } = await supabase.from("recordings").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Recording could not be deleted");
+  }
+}
