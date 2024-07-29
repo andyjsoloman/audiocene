@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteRecording } from "../services/apiRecordings";
+import toast from "react-hot-toast";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -19,12 +20,12 @@ function RecordingItem({ recording }) {
     mutationFn: deleteRecording,
 
     onSuccess: () => {
-      alert("Recording deleted");
+      toast.success("Recording deleted");
       queryClient.invalidateQueries({
         queryKey: ["recordings"],
       });
     },
-    onError: (err) => alert(err.message),
+    onError: (err) => toast.error(err.message),
   });
 
   return (
