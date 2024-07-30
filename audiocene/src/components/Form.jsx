@@ -1,5 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createRecording } from "../services/apiRecordings";
+import toast from "react-hot-toast";
 import useUrlPositon from "../hooks/useUrlPosition";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,15 +9,24 @@ import Button from "./Button";
 import Message from "./Message";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
-import { useRecordings } from "../contexts/RecordingsContext";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 export default function Form() {
-  const { register, handleSubmit, control, setValue } = useForm();
+  const queryClient = useQueryClient();
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: createRecording,
+    onSuccess: () => {
+      toast.success("New recording created");
+      queryClient.invalidateQueries({ queryKey: ["recordings"] });
+      reset();
+    },
+    onError: (err) => toast.error(err.message),
+  });
 
-  const { createRecording, isLoading } = useRecordings();
+  const { register, handleSubmit, control, setValue, reset } = useForm();
+
   const navigate = useNavigate();
   const [lat, lng] = useUrlPositon();
   const [locality, setLocality] = useState("");
@@ -36,6 +47,8 @@ export default function Form() {
         setCountry(data.countryName || "");
         setValue("locality", data.locality || "");
         setValue("country", data.countryName || "");
+        setValue("lat", lat);
+        setValue("lng", lng);
       } catch (err) {
         setGeocodingError(err.message);
       } finally {
@@ -47,9 +60,9 @@ export default function Form() {
   }, [lat, lng, setValue]);
 
   function onSubmit(data) {
-    console.log(data);
-    // navigate("/app/explore");
-    createRecording(data);
+    const { lat, lng, ...recordingData } = data;
+    recordingData.position = { lat, lng };
+    mutate(recordingData);
   }
 
   if (isLoadingGeocoding) return <LoadingSpinner />;
@@ -63,15 +76,21 @@ export default function Form() {
         <input id="title" defaultValue="" {...register("title")} />
       </div>
       <div>
-        <label htmlFor="locality">Locality:</label>
-        <p>{locality}</p>
+        <label htmlFor="locality" className="inline">
+          Locality:
+        </label>
+        <p className="inline">{locality}</p>
         <input id="locality" type="hidden" {...register("locality")} />
       </div>
       <div>
-        <label htmlFor="country">Country:</label>
-        <p>{country}</p>
+        <label htmlFor="country" className="inline">
+          Country:
+        </label>
+        <p className="inline">{country}</p>
         <input id="country" type="hidden" {...register("country")} />
       </div>
+      <input type="hidden" {...register("lat")} />
+      <input type="hidden" {...register("lng")} />
       <div>
         <label htmlFor="date">Date of Recording</label>
         <Controller
@@ -92,7 +111,7 @@ export default function Form() {
         <label htmlFor="notes">Notes</label>
         <textarea id="notes" defaultValue="" {...register("notes")} />
       </div>
-      <Button>Add Recording</Button>
+      <Button disabled={isCreating}>Add Recording</Button>
     </form>
   );
 }

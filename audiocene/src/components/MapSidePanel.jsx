@@ -13,6 +13,7 @@ const PanelContainer = styled.div`
   border: 1px solid var(--color-black);
   border-radius: 12px;
   padding: 20px;
+  overflow: scroll;
 `;
 
 function MapSidePanel() {
