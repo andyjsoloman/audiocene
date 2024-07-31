@@ -70,8 +70,12 @@ function Map() {
 
   useEffect(
     function () {
-      if (geolocationPosition)
+      if (geolocationPosition) {
         setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+        navigate(
+          `?lat=${geolocationPosition.lat}&lng=${geolocationPosition.lng}`
+        );
+      }
     },
     [geolocationPosition]
   );
@@ -108,11 +112,11 @@ function Map() {
           ))}
           <ChangeLocation position={mapPosition} />
           <DetectClick />
-          <Button onClick={getPosition} variant={"locate"}>
-            {isLoadingPosition ? "Loading..." : "Get your position"}{" "}
-          </Button>
         </StyledMapContainer>
       </MapCont>
+      <Button onClick={getPosition} variant={"locate"}>
+        {isLoadingPosition ? "Loading..." : "Get your position"}{" "}
+      </Button>
     </>
   );
 }
