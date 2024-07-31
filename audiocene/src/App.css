@@ -80,6 +80,7 @@ html {
   --color-primary: hsl(194 98% 25%);
   --color-black: hsl(192, 75%, 8%);
   --color-bg: hsl(60, 60%, 98%);
+  --color-grey: hsl(192, 5%, 80%);
   --color-primary-hover: hsl(195, 100%, 13%);
   --color-error-red: hsl(2, 80%, 47%);
 

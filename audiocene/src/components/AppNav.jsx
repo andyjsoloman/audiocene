@@ -5,7 +5,8 @@ const NavWrapper = styled.ul`
   display: flex;
   justify-content: space-evenly;
   padding-inline-start: 0px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-grey);
 `;
 
 const NavItem = styled.li`

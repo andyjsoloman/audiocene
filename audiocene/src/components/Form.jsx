@@ -11,12 +11,22 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import FormRow from "./FormRow";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
-const Error = styled.p`
-  font-size: 1rem;
-  color: var(--color-error-red);
+const LocationInfo = styled.div`
+  display: grid;
+  align-items: center;
+
+  grid-template-columns: 8rem 1fr 1.2fr;
+  gap: 0.4rem;
+
+  padding: 0.2rem 0;
+
+  label {
+    font-weight: 500;
+  }
 `;
 
 export default function Form() {
@@ -82,34 +92,32 @@ export default function Form() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
-      <div>
-        <label htmlFor="title">Recording Title</label>
+      <LocationInfo>
+        <label htmlFor="locality">Locality:</label>
+        <p className="inline">{locality}</p>
+        <input id="locality" type="hidden" {...register("locality")} />
+      </LocationInfo>
+      <LocationInfo>
+        <label htmlFor="country">Country:</label>
+        <p className="inline">{country}</p>
+        <input id="country" type="hidden" {...register("country")} />
+      </LocationInfo>
+      <input type="hidden" {...register("lat")} />
+      <input type="hidden" {...register("lng")} />
+
+      <FormRow label="Recording Title" error={errors?.title?.message}>
         <input
           id="title"
           defaultValue=""
           {...register("title", { required: "This field is required" })}
         />
-        {errors?.title?.message && <Error>{errors.title.message}</Error>}
-      </div>
-      <div>
-        <label htmlFor="locality" className="inline">
-          Locality:
-        </label>
-        <p className="inline">{locality}</p>
-        <input id="locality" type="hidden" {...register("locality")} />
-      </div>
-      <div>
-        <label htmlFor="country" className="inline">
-          Country:
-        </label>
-        <p className="inline">{country}</p>
-        <input id="country" type="hidden" {...register("country")} />
-      </div>
-      <input type="hidden" {...register("lat")} />
-      <input type="hidden" {...register("lng")} />
-      <div>
-        <label htmlFor="date">Date of Recording</label>
+      </FormRow>
+      <FormRow label="Notes">
+        <textarea id="notes" defaultValue="" {...register("notes")} />
+      </FormRow>
+      <FormRow label="Date of Recording">
         <Controller
+          id="date"
           control={control}
           name="date"
           defaultValue={new Date()}
@@ -122,11 +130,8 @@ export default function Form() {
             />
           )}
         />
-      </div>
-      <div>
-        <label htmlFor="notes">Notes</label>
-        <textarea id="notes" defaultValue="" {...register("notes")} />
-      </div>
+      </FormRow>
+
       <Button disabled={isCreating}>Add Recording</Button>
     </form>
   );

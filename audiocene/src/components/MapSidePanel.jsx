@@ -8,7 +8,7 @@ const PanelContainer = styled.div`
   right: 100px;
   z-index: 500;
   width: 500px;
-  height: 400px;
+  height: 500px;
   background-color: white;
   border: 1px solid var(--color-black);
   border-radius: 12px;
