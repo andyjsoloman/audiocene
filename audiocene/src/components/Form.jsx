@@ -10,8 +10,14 @@ import Message from "./Message";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
+const Error = styled.p`
+  font-size: 1rem;
+  color: var(--color-error-red);
+`;
 
 export default function Form() {
   const queryClient = useQueryClient();
@@ -25,7 +31,10 @@ export default function Form() {
     onError: (err) => toast.error(err.message),
   });
 
-  const { register, handleSubmit, control, setValue, reset } = useForm();
+  const { register, handleSubmit, control, setValue, reset, formState } =
+    useForm();
+
+  const { errors } = formState;
 
   const navigate = useNavigate();
   const [lat, lng] = useUrlPositon();
@@ -65,15 +74,22 @@ export default function Form() {
     mutate(recordingData);
   }
 
+  function onError(error) {}
+
   if (isLoadingGeocoding) return <LoadingSpinner />;
   if (!lat && !lng) return <p>Start by clicking somewhere on the map</p>;
   if (geocodingError) return <Message message={geocodingError} />;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
       <div>
         <label htmlFor="title">Recording Title</label>
-        <input id="title" defaultValue="" {...register("title")} />
+        <input
+          id="title"
+          defaultValue=""
+          {...register("title", { required: "This field is required" })}
+        />
+        {errors?.title?.message && <Error>{errors.title.message}</Error>}
       </div>
       <div>
         <label htmlFor="locality" className="inline">
