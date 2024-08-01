@@ -2,8 +2,9 @@
 import { Link } from "react-router-dom";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteRecording } from "../services/apiRecordings";
+
 import toast from "react-hot-toast";
+import { deleteRecording } from "../services/apiRecordings";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -13,7 +14,7 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function RecordingItem({ recording }) {
-  const { title, date, id, position } = recording;
+  const { title, date, id, position, audio } = recording;
 
   const queryClient = useQueryClient();
   const { isLoading: isDeleting, mutate } = useMutation({
@@ -28,12 +29,16 @@ function RecordingItem({ recording }) {
     onError: (err) => toast.error(err.message),
   });
 
+  console.log(audio);
+  console.log(title);
+
   return (
     <li>
       <Link to={`${id}?lat=${position.lat}&lng=${position.lng}`}>
         <h3>{title}</h3>
         <time>{formatDate(date)}</time>
       </Link>
+      <audio controls src={audio}></audio>
       <button onClick={() => mutate(id)} disabled={isDeleting}>
         &times;
       </button>

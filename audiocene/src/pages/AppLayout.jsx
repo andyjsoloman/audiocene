@@ -4,7 +4,6 @@ import MapSidePanel from "../components/MapSidePanel";
 import NavBar from "../components/NavBar";
 
 import styled from "styled-components";
-import { getRecordings } from "../services/apiRecordings";
 
 const AppContainer = styled.div`
   padding: 40px;

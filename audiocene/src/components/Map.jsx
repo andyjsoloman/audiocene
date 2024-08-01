@@ -9,12 +9,12 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getRecordings } from "../services/apiRecordings";
 
 import { useState, useEffect } from "react";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
+import { getRecordings } from "../services/apiRecordings";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;

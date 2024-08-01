@@ -1,6 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createRecording } from "../services/apiRecordings";
+
 import toast from "react-hot-toast";
 import useUrlPositon from "../hooks/useUrlPosition";
 import DatePicker from "react-datepicker";
@@ -12,6 +12,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FormRow from "./FormRow";
+import { createRecording } from "../services/apiRecordings";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -81,7 +82,8 @@ export default function Form() {
   function onSubmit(data) {
     const { lat, lng, ...recordingData } = data;
     recordingData.position = { lat, lng };
-    mutate(recordingData);
+    mutate({ ...recordingData, audio: data.audio[0] });
+    console.log(data);
   }
 
   function onError(error) {}
@@ -110,6 +112,15 @@ export default function Form() {
           id="title"
           defaultValue=""
           {...register("title", { required: "This field is required" })}
+        />
+      </FormRow>
+      <FormRow label="Audio File" error={errors?.title?.message}>
+        <input
+          id="audio"
+          defaultValue=""
+          type="file"
+          accept="audio/*"
+          {...register("audio", { required: "This field is required" })}
         />
       </FormRow>
       <FormRow label="Notes">
