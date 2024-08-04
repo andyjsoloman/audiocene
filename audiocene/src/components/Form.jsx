@@ -34,6 +34,7 @@ export default function Form() {
   const queryClient = useQueryClient();
   const { mutate, isLoading: isCreating } = useMutation({
     mutationFn: createRecording,
+
     onSuccess: () => {
       toast.success("New recording created");
       queryClient.invalidateQueries({ queryKey: ["recordings"] });
@@ -137,7 +138,8 @@ export default function Form() {
               id="date"
               selected={field.value}
               onChange={field.onChange}
-              dateFormat="dd/MM/yyyy"
+              dateFormat="MMM d, yyyy h:mm aa"
+              showTimeSelect
             />
           )}
         />

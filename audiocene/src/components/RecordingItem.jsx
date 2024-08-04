@@ -29,9 +29,6 @@ function RecordingItem({ recording }) {
     onError: (err) => toast.error(err.message),
   });
 
-  console.log(audio);
-  console.log(title);
-
   return (
     <li>
       <Link to={`${id}?lat=${position.lat}&lng=${position.lng}`}>

@@ -11,13 +11,29 @@ export async function getRecordings() {
   return data;
 }
 
+export async function getRecordingById(id) {
+  const { data, error } = await supabase
+    .from("recordings")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Recording could not be loaded");
+  }
+
+  return data;
+}
+
 export async function createRecording(newRecording) {
+  console.log("creating");
   const audioName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
     "/",
     ""
   );
 
-  const audioPath = `${supabaseUrl}/storage/v1/object/sign/recordings-audio/${audioName}`;
+  const audioPath = `${supabaseUrl}/storage/v1/object/public/recordings-audio/${audioName}`;
 
   // 1. Create Recording
   const { data, error } = await supabase

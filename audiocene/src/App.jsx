@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import About from "./pages/About";
 
 import RecordingsList from "./components/RecordingsList";
-import Recording from "./components/Recording";
+import Recording from "./components/RecordingDetail";
 import { RecordingsProvider } from "./contexts/RecordingsContext";
 import Form from "./components/Form";
 import { AuthProvider } from "./contexts/AuthContext";
