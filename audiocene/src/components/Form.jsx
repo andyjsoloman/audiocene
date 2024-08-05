@@ -84,7 +84,6 @@ export default function Form() {
     const { lat, lng, ...recordingData } = data;
     recordingData.position = { lat, lng };
     mutate({ ...recordingData, audio: data.audio[0] });
-    console.log(data);
   }
 
   function onError(error) {}

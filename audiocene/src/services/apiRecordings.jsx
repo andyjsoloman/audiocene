@@ -27,7 +27,6 @@ export async function getRecordingById(id) {
 }
 
 export async function createRecording(newRecording) {
-  console.log("creating");
   const audioName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
     "/",
     ""

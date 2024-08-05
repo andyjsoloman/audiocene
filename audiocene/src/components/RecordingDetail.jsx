@@ -24,8 +24,6 @@ function Recording() {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(recording);
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "long", day: "numeric" };
