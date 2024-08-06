@@ -1,11 +1,20 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
+import Button from "./Button";
+import styled from "styled-components";
+import Form from "./Form";
 
-function Recording() {
+const DetailPanel = styled.div`
+  position: flex;
+`;
+
+function RecordingDetail() {
   const { id } = useParams();
+
+  const [showForm, setShowForm] = useState(false);
 
   const {
     isLoading,
@@ -37,12 +46,23 @@ function Recording() {
 
   return (
     <>
-      <div>Recording Info for {id}</div>
-      <div>Recorded at {formatDate(recording.date)}</div>
+      <DetailPanel>
+        <audio controls src={recording.audio}></audio>
+        <div>Recording Info for {id}</div>
+        <div>Recorded at {formatDate(recording.date)}</div>
+        <div>
+          {recording.locality}, {recording.country}
+        </div>
 
-      <BackButton />
+        <Button onClick={() => setShowForm((show) => !show)}>
+          {showForm ? "Cancel" : "Edit"}
+        </Button>
+
+        <BackButton />
+      </DetailPanel>
+      {showForm && <Form recordingToEdit={recording} />}
     </>
   );
 }
 
-export default Recording;
+export default RecordingDetail;

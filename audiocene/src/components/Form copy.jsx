@@ -12,7 +12,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import FormRow from "./FormRow";
 
 import useUrlPositon from "../hooks/useUrlPosition";
-import { createEditRecording } from "../services/apiRecordings";
+import { createRecording } from "../services/apiRecordings";
 import { Controller, useForm } from "react-hook-form";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
@@ -31,22 +31,11 @@ const LocationInfo = styled.div`
   }
 `;
 
-export default function Form({ recordingToEdit = {} }) {
-  const { id: editId, ...editValues } = recordingToEdit;
-
-  const isEditSession = Boolean(editId);
-
-  const { register, handleSubmit, control, setValue, reset, formState } =
-    useForm({
-      defaultValues: isEditSession
-        ? { ...editValues, date: new Date(editValues.date) }
-        : {},
-    });
-
+export default function Form() {
   const queryClient = useQueryClient();
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: createRecording,
 
-  const { mutate: createRecording, isLoading: isCreating } = useMutation({
-    mutationFn: createEditRecording,
     onSuccess: () => {
       toast.success("New recording created");
       queryClient.invalidateQueries({ queryKey: ["recordings"] });
@@ -55,18 +44,8 @@ export default function Form({ recordingToEdit = {} }) {
     onError: (err) => toast.error(err.message),
   });
 
-  const { mutate: editRecording, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newRecordingData, id }) =>
-      createEditRecording(newRecordingData, id),
-    onSuccess: () => {
-      toast.success("Recording successfully edited");
-      queryClient.invalidateQueries({ queryKey: ["recordings"] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const isWorking = isCreating || isEditing;
+  const { register, handleSubmit, control, setValue, reset, formState } =
+    useForm();
 
   const { errors } = formState;
 
@@ -103,18 +82,9 @@ export default function Form({ recordingToEdit = {} }) {
   }, [lat, lng, setValue]);
 
   function onSubmit(data) {
-    const audio = typeof data.audio === "string" ? data.audio : data.audio[0];
-
-    if (isEditSession) {
-      delete data.lat;
-      delete data.lng;
-      editRecording({ newRecordingData: { ...data, audio }, id: editId });
-    } else {
-      const { lat, lng, ...recordingData } = data;
-      recordingData.position = { lat, lng };
-
-      createRecording({ ...recordingData, audio: audio });
-    }
+    const { lat, lng, ...recordingData } = data;
+    recordingData.position = { lat, lng };
+    mutate({ ...recordingData, audio: data.audio[0] });
   }
 
   function onError(error) {}
@@ -142,7 +112,6 @@ export default function Form({ recordingToEdit = {} }) {
         <input
           id="title"
           defaultValue=""
-          disabled={isWorking}
           {...register("title", { required: "This field is required" })}
         />
       </FormRow>
@@ -152,18 +121,11 @@ export default function Form({ recordingToEdit = {} }) {
           defaultValue=""
           type="file"
           accept="audio/*"
-          {...register("audio", {
-            required: isEditSession ? false : "This field is required",
-          })}
+          {...register("audio", { required: "This field is required" })}
         />
       </FormRow>
       <FormRow label="Notes">
-        <textarea
-          id="notes"
-          defaultValue=""
-          disabled={isWorking}
-          {...register("notes")}
-        />
+        <textarea id="notes" defaultValue="" {...register("notes")} />
       </FormRow>
       <FormRow label="Date of Recording">
         <Controller
@@ -178,15 +140,12 @@ export default function Form({ recordingToEdit = {} }) {
               onChange={field.onChange}
               dateFormat="MMM d, yyyy h:mm aa"
               showTimeSelect
-              disabled={isWorking}
             />
           )}
         />
       </FormRow>
 
-      <Button disabled={isCreating}>
-        {isEditSession ? "Save Changes" : "Add Recording"}
-      </Button>
+      <Button disabled={isCreating}>Add Recording</Button>
     </form>
   );
 }

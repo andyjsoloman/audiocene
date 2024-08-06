@@ -26,19 +26,36 @@ export async function getRecordingById(id) {
   return data;
 }
 
-export async function createRecording(newRecording) {
+export async function createEditRecording(newRecording, id) {
+  console.log(newRecording, id);
+
+  const hasAudioPath = newRecording.audio?.startsWith?.(supabaseUrl);
+
   const audioName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
     "/",
     ""
   );
 
-  const audioPath = `${supabaseUrl}/storage/v1/object/public/recordings-audio/${audioName}`;
+  const audioPath = hasAudioPath
+    ? newRecording.audio
+    : `${supabaseUrl}/storage/v1/object/public/recordings-audio/${audioName}`;
 
-  // 1. Create Recording
-  const { data, error } = await supabase
-    .from("recordings")
-    .insert([{ ...newRecording, audio: audioPath }])
-    .select();
+  // 1. Create / Edit Recording
+  let query = supabase.from("recordings");
+
+  // A) CREATE
+  if (!id) query = query.insert([{ ...newRecording, audio: audioPath }]);
+
+  // B) EDIT
+
+  if (id)
+    query = query
+      .update({ ...newRecording, audio: audioPath })
+      .eq("id", id)
+      .select();
+
+  const { data, error } = await query.select().single();
+
   if (error) {
     console.error(error);
     throw new Error("Recording could not be created");
