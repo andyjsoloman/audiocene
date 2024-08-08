@@ -1,8 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
@@ -12,8 +11,10 @@ import LoadingSpinner from "./LoadingSpinner";
 import FormRow from "./FormRow";
 
 import useUrlPositon from "../hooks/useUrlPosition";
-import { createEditRecording } from "../services/apiRecordings";
 import { Controller, useForm } from "react-hook-form";
+
+import { useCreateRecording } from "../features/recordings/useCreateRecording";
+import { useEditRecording } from "../features/recordings/useEditRecording";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -43,28 +44,9 @@ export default function Form({ recordingToEdit = {} }) {
         : {},
     });
 
-  const queryClient = useQueryClient();
+  const { isCreating, createRecording } = useCreateRecording();
 
-  const { mutate: createRecording, isLoading: isCreating } = useMutation({
-    mutationFn: createEditRecording,
-    onSuccess: () => {
-      toast.success("New recording created");
-      queryClient.invalidateQueries({ queryKey: ["recordings"] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const { mutate: editRecording, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newRecordingData, id }) =>
-      createEditRecording(newRecordingData, id),
-    onSuccess: () => {
-      toast.success("Recording successfully edited");
-      queryClient.invalidateQueries({ queryKey: ["recordings"] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { isEditing, editRecording } = useEditRecording();
 
   const isWorking = isCreating || isEditing;
 
@@ -108,12 +90,22 @@ export default function Form({ recordingToEdit = {} }) {
     if (isEditSession) {
       delete data.lat;
       delete data.lng;
-      editRecording({ newRecordingData: { ...data, audio }, id: editId });
+      editRecording(
+        { newRecordingData: { ...data, audio }, id: editId },
+        {
+          onSuccess: (data) => reset(),
+        }
+      );
     } else {
       const { lat, lng, ...recordingData } = data;
       recordingData.position = { lat, lng };
 
-      createRecording({ ...recordingData, audio: audio });
+      createRecording(
+        { ...recordingData, audio: audio },
+        {
+          onSuccess: (data) => reset(),
+        }
+      );
     }
   }
 

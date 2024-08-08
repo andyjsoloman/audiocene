@@ -1,10 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import toast from "react-hot-toast";
-import { deleteRecording } from "../services/apiRecordings";
+import { useDeleteRecording } from "../features/recordings/useDeleteRecording";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -16,18 +12,7 @@ const formatDate = (date) =>
 function RecordingItem({ recording }) {
   const { title, date, id, position, audio } = recording;
 
-  const queryClient = useQueryClient();
-  const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: deleteRecording,
-
-    onSuccess: () => {
-      toast.success("Recording deleted");
-      queryClient.invalidateQueries({
-        queryKey: ["recordings"],
-      });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { isDeleting, deleteRecording } = useDeleteRecording();
 
   return (
     <li>
@@ -36,7 +21,7 @@ function RecordingItem({ recording }) {
         <time>{formatDate(date)}</time>
       </Link>
       <audio controls src={audio}></audio>
-      <button onClick={() => mutate(id)} disabled={isDeleting}>
+      <button onClick={() => deleteRecording(id)} disabled={isDeleting}>
         &times;
       </button>
     </li>
