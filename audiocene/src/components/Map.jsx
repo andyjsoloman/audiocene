@@ -5,8 +5,8 @@ import {
   Marker,
   Popup,
   useMapEvents,
-  L,
 } from "react-leaflet";
+import * as L from "leaflet";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
