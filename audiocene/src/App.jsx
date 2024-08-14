@@ -14,6 +14,7 @@ import Recording from "./components/RecordingDetail";
 
 import Form from "./components/Form";
 import { AuthProvider } from "./contexts/AuthContext";
+import Explore from "./components/Explore";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,10 +34,7 @@ function App() {
             <Route index element={<Homepage />}></Route>
             <Route path="app" element={<AppLayout />}>
               <Route index element={<RecordingsList />} />
-              <Route
-                path="explore"
-                element={<p>Find a recording on the map...</p>}
-              />
+              <Route path="explore" element={<Explore />} />
               <Route path="favourites/:id" element={<Recording />} />
               <Route path="add" element={<Form />} />
               <Route path="favourites" element={<RecordingsList />} />
