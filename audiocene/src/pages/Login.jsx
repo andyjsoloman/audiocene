@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../features/authentication/LoginForm";
 import NavBar from "../components/NavBar";
 
 const LoginLayout = styled.main`

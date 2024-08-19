@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import { useAuth } from "../contexts/AuthContext.jsx";
+import Button from "../../components/Button.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Heading from "./Heading.jsx";
+import Heading from "../../components/Heading.jsx";
+import { login } from "../../services/apiAuth.js";
+import { useLogin } from "./useLogin.js";
 
 const StyledLogin = styled.form`
   display: flex;
@@ -17,15 +19,18 @@ const StyledLogin = styled.form`
 
 export default function LoginForm() {
   // PRE-FILL FOR DEV PURPOSES
-  const [email, setEmail] = useState("jack@example.com");
-  const [password, setPassword] = useState("qwerty");
+  const [email, setEmail] = useState("andy@example.com");
+  const [password, setPassword] = useState("passwerd");
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isLoading } = useLogin();
+
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (email && password) login(email, password);
+    if (!email || !password) return;
+    login({ email, password });
   }
 
   useEffect(
@@ -43,8 +48,10 @@ export default function LoginForm() {
         <input
           type="email"
           id="email"
+          autoComplete="username"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
+          disabled={isLoading}
         />
       </div>
 
@@ -53,13 +60,15 @@ export default function LoginForm() {
         <input
           type="password"
           id="password"
+          autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          disabled={isLoading}
         />
       </div>
 
       <div>
-        <Button>Login</Button>
+        <Button disabled={isLoading}>Login</Button>
       </div>
     </StyledLogin>
   );
