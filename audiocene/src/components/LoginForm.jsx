@@ -1,9 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import { useAuth } from "../contexts/FakeAuthContext";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import Heading from "./Heading.jsx";
 
-export default function Login() {
+const StyledLogin = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.2rem 4rem;
+  border-radius: 24px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  gap: 1rem;
+`;
+
+export default function LoginForm() {
   // PRE-FILL FOR DEV PURPOSES
   const [email, setEmail] = useState("jack@example.com");
   const [password, setPassword] = useState("qwerty");
@@ -24,7 +36,8 @@ export default function Login() {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <StyledLogin onSubmit={handleSubmit}>
+      <Heading as="h4">Login to your account</Heading>
       <div>
         <label htmlFor="email">Email address</label>
         <input
@@ -48,6 +61,6 @@ export default function Login() {
       <div>
         <Button>Login</Button>
       </div>
-    </form>
+    </StyledLogin>
   );
 }
