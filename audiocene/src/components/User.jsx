@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import styled from "styled-components";
 import { useState } from "react";
+import { useUser } from "../features/authentication/useUser";
+import { useLogout } from "../features/authentication/useLogout";
 
 const UserContainer = styled.div`
   background-color: var(--color-bg);
@@ -54,14 +56,10 @@ const DropdownItem = styled.div`
 `;
 
 function User() {
-  const { user, logout } = useAuth();
+  const { logout, isLoading } = useLogout();
+  const { user } = useUser;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  function handleLogout() {
-    logout();
-    navigate("/");
-  }
 
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
@@ -73,21 +71,17 @@ function User() {
 
   return (
     <>
-      {user && (
-        <>
-          <UserContainer onClick={toggleDropdown}>
-            <UserImg src="../profile.svg" alt={user.name} />
-            <span>Welcome, {user.name}</span>
-            {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
-            {dropdownOpen && (
-              <Dropdown>
-                <DropdownItem onClick={goToProfile}>Profile</DropdownItem>
-                <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-              </Dropdown>
-            )}
-          </UserContainer>
-        </>
-      )}
+      <UserContainer onClick={toggleDropdown}>
+        <UserImg src="../profile.svg" alt={user} />
+        <span>Welcome</span>
+        {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
+        {dropdownOpen && (
+          <Dropdown>
+            <DropdownItem onClick={goToProfile}>Profile</DropdownItem>
+            <DropdownItem onClick={logout}>Logout</DropdownItem>
+          </Dropdown>
+        )}
+      </UserContainer>
     </>
   );
 }

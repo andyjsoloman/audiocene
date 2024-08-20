@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Logo from "./Logo";
 import User from "./User";
 import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../features/authentication/useUser";
 
 const Nav = styled.nav`
   display: flex;
@@ -39,7 +40,7 @@ const NavLink = styled(BaseNavLink)`
 `;
 
 function NavBar() {
-  const { user } = useAuth();
+  const { user } = useUser();
 
   return (
     <Nav>
