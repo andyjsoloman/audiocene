@@ -7,15 +7,15 @@ const rotate = keyframes`
 `;
 
 const SpinnerContainer = styled.div`
-  height: 100%;
+  height: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const Spinner = styled.div`
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   background: conic-gradient(#0000 10%, var(--color-primary));
   mask: radial-gradient(

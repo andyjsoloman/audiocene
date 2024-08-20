@@ -15,6 +15,8 @@ import Recording from "./components/RecordingDetail";
 import Form from "./components/Form";
 import { AuthProvider } from "./contexts/AuthContext";
 import Explore from "./components/Explore";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,7 +38,14 @@ function App() {
               <Route index element={<RecordingsList />} />
               <Route path="explore" element={<Explore />} />
               <Route path="favourites/:id" element={<Recording />} />
-              <Route path="add" element={<Form />} />
+              <Route
+                path="add"
+                element={
+                  <ProtectedRoute type="guide">
+                    <Form />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="favourites" element={<RecordingsList />} />
             </Route>
             <Route path="login" element={<Login />}></Route>
