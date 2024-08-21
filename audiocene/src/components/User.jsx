@@ -57,7 +57,7 @@ const DropdownItem = styled.div`
 
 function User() {
   const { logout, isLoading } = useLogout();
-  const { user } = useUser;
+  const { user } = useUser();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -73,7 +73,7 @@ function User() {
     <>
       <UserContainer onClick={toggleDropdown}>
         <UserImg src="../profile.svg" alt={user} />
-        <span>Welcome</span>
+        <span>Welcome, </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (
           <Dropdown>

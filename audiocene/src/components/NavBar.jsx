@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import User from "./User";
 import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../features/authentication/useUser";
+import { useLogout } from "../features/authentication/useLogout";
 
 const Nav = styled.nav`
   display: flex;
@@ -41,6 +42,7 @@ const NavLink = styled(BaseNavLink)`
 
 function NavBar() {
   const { user } = useUser();
+  const { loggedOut } = useLogout();
 
   return (
     <Nav>
@@ -53,7 +55,7 @@ function NavBar() {
           <NavLink to="/about">About</NavLink>
         </NavLi>
         {user ? (
-          <User />
+          <User key={loggedOut ? "logged-out" : "logged-in"} />
         ) : (
           <NavLi>
             <NavLink to="/login">Login</NavLink>
