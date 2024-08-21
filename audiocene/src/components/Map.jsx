@@ -16,6 +16,7 @@ import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
 import { getRecordings } from "../services/apiRecordings";
+import LoadingSpinner from "./LoadingSpinner";
 
 const StyledMapContainer = styled(BaseMapContainer)`
   height: 100%;
@@ -93,24 +94,25 @@ function Map() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {recordings.map((recording) => (
-            <Marker
-              position={[recording.position.lat, recording.position.lng]}
-              key={recording.id}
-              icon={mapIcon}
-              eventHandlers={{
-                click: () => {
-                  navigate(
-                    `favourites/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}` // THis may be messing with the way the map centers on currentRecording. Is the info being called correctly? Also could this logic be extracted from the JSX to be cleaner
-                  );
-                },
-              }}
-            >
-              <Popup>
-                <span>{recording.title}</span>
-              </Popup>
-            </Marker>
-          ))}
+          {Array.isArray(recordings) &&
+            recordings.map((recording) => (
+              <Marker
+                position={[recording.position.lat, recording.position.lng]}
+                key={recording.id}
+                icon={mapIcon}
+                eventHandlers={{
+                  click: () => {
+                    navigate(
+                      `favourites/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}`
+                    );
+                  },
+                }}
+              >
+                <Popup>
+                  <span>{recording.title}</span>
+                </Popup>
+              </Marker>
+            ))}
           <ChangeLocation position={mapPosition} />
           <DetectClick />
         </StyledMapContainer>

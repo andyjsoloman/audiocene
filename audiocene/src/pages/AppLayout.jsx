@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Map from "../components/Map";
 import MapSidePanel from "../components/MapSidePanel";
 import NavBar from "../components/NavBar";
