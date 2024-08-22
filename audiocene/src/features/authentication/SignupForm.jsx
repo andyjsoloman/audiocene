@@ -6,10 +6,10 @@ import FormRow from "../../components/FormRow";
 
 // Email regex: /\S+@\S+\.\S+/
 
-const StyledSignup = styled.form`
+const StyledSignupForm = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   padding: 3.2rem 4rem;
   border-radius: 24px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -17,22 +17,64 @@ const StyledSignup = styled.form`
 `;
 
 function SignupForm() {
+  const { register, formState, getValues, handleSubmit } = useForm();
+  const { errors } = formState;
+
+  function onSubmit(data) {
+    console.log(data);
+  }
+
   return (
-    <StyledSignup>
-      <FormRow label="Full name" error={""}>
-        <input type="text" id="fullName" />
+    <StyledSignupForm onSubmit={handleSubmit(onSubmit)}>
+      <FormRow label="Full name" error={errors?.fullName?.message}>
+        <input
+          type="text"
+          id="fullName"
+          {...register("fullName", { required: "This field is required" })}
+        />
       </FormRow>
 
-      <FormRow label="Email address" error={""}>
-        <input type="email" id="email" />
+      <FormRow label="Email address" error={errors?.email?.message}>
+        <input
+          type="email"
+          id="email"
+          {...register("email", {
+            required: "This field is required",
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "Please provide a valid email address",
+            },
+          })}
+        />
       </FormRow>
 
-      <FormRow label="Password (min 8 characters)" error={""}>
-        <input type="password" id="password" />
+      <FormRow
+        label="Password (min 8 characters)"
+        error={errors?.password?.message}
+      >
+        <input
+          type="password"
+          id="password"
+          {...register("password", {
+            required: "This field is required",
+            minLength: {
+              value: 8,
+              message: "Password needs a minimum of 8 characters",
+            },
+          })}
+        />
       </FormRow>
 
-      <FormRow label="Repeat password" error={""}>
-        <input type="password" id="passwordConfirm" />
+      <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
+        <input
+          type="password"
+          id="passwordConfirm"
+          {...register("passwordConfirm", {
+            required: "This field is required",
+            validate: (value) =>
+              value === getValues().password || "Passwords need to match",
+          })}
+        />
       </FormRow>
 
       <FormRow>
@@ -40,7 +82,7 @@ function SignupForm() {
         <Button>Cancel</Button>
         <Button>Create new user</Button>
       </FormRow>
-    </StyledSignup>
+    </StyledSignupForm>
   );
 }
 
