@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Button from "../../components/Button";
 import FormRow from "../../components/FormRow";
 
+import { useSignup } from "./useSignup";
+
 // Email regex: /\S+@\S+\.\S+/
 
 const StyledSignupForm = styled.form`
@@ -17,11 +19,13 @@ const StyledSignupForm = styled.form`
 `;
 
 function SignupForm() {
-  const { register, formState, getValues, handleSubmit } = useForm();
+  const { signup, isLoading } = useSignup();
+  const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
 
-  function onSubmit(data) {
-    console.log(data);
+  function onSubmit({ fullName, email, password }) {
+    signup({ fullName, email, password });
+    onSettled: reset();
   }
 
   return (
@@ -30,6 +34,7 @@ function SignupForm() {
         <input
           type="text"
           id="fullName"
+          disabled={isLoading}
           {...register("fullName", { required: "This field is required" })}
         />
       </FormRow>
@@ -38,6 +43,7 @@ function SignupForm() {
         <input
           type="email"
           id="email"
+          disabled={isLoading}
           {...register("email", {
             required: "This field is required",
             pattern: {
@@ -55,6 +61,7 @@ function SignupForm() {
         <input
           type="password"
           id="password"
+          disabled={isLoading}
           {...register("password", {
             required: "This field is required",
             minLength: {
@@ -69,6 +76,7 @@ function SignupForm() {
         <input
           type="password"
           id="passwordConfirm"
+          disabled={isLoading}
           {...register("passwordConfirm", {
             required: "This field is required",
             validate: (value) =>
@@ -79,7 +87,9 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button>Cancel</Button>
+        <Button type="reset" onClick={() => reset()}>
+          Cancel
+        </Button>
         <Button>Create new user</Button>
       </FormRow>
     </StyledSignupForm>
