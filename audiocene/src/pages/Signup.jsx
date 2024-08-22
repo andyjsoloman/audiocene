@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import LoginForm from "../features/authentication/LoginForm";
 import NavBar from "../components/NavBar";
-import { NavLink } from "react-router-dom";
+import SignupForm from "../features/authentication/SignupForm";
 
 const LoginLayout = styled.main`
   min-height: 80vh;
@@ -19,10 +19,7 @@ function Login() {
       <NavBar />
 
       <LoginLayout>
-        <LoginForm />
-        <p>
-          No account? Create one <NavLink to="/signup">here</NavLink>
-        </p>
+        <SignupForm />
       </LoginLayout>
     </>
   );

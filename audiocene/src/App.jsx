@@ -8,6 +8,7 @@ import Homepage from "./pages/Homepage";
 import AppLayout from "./pages/AppLayout";
 import Login from "./pages/Login";
 import About from "./pages/About";
+import Signup from "./pages/Signup";
 
 import RecordingsList from "./components/RecordingsList";
 import Recording from "./components/RecordingDetail";
@@ -50,6 +51,7 @@ function App() {
             </Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="about" element={<About />}></Route>
+            <Route path="signup" element={<Signup />}></Route>
           </Routes>
         </BrowserRouter>
       </AuthProvider>
