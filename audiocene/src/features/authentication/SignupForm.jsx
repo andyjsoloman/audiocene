@@ -87,7 +87,13 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button type="reset" onClick={() => reset()}>
+        <Button
+          type="reset"
+          onClick={(e) => {
+            e.preventDefault();
+            reset();
+          }}
+        >
           Cancel
         </Button>
         <Button>Create new user</Button>
