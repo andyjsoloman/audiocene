@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
+import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
 import Form from "./Form";
@@ -13,7 +14,7 @@ const DetailPanel = styled.div`
 
 function RecordingDetail() {
   const { id } = useParams();
-
+  const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [showForm, setShowForm] = useState(false);
 
   const {
@@ -47,13 +48,12 @@ function RecordingDetail() {
   return (
     <>
       <DetailPanel>
-        <audio controls src={recording.audio}></audio>
         <div>Recording Info for {id}</div>
         <div>Recorded at {formatDate(recording.date)}</div>
         <div>
           {recording.locality}, {recording.country}
         </div>
-
+        <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
         <Button onClick={() => setShowForm((show) => !show)}>
           {showForm ? "Cancel" : "Edit"}
         </Button>

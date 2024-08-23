@@ -14,10 +14,11 @@ import RecordingsList from "./components/RecordingsList";
 import Recording from "./components/RecordingDetail";
 
 import Form from "./components/Form";
-import { AuthProvider } from "./contexts/AuthContext";
 import Explore from "./components/Explore";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LoadingSpinner from "./components/LoadingSpinner";
+
+import { CurrentlyPlayingProvider } from "./contexts/CurrentlyPlayingContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,30 +32,32 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<Homepage />}></Route>
-            <Route path="app" element={<AppLayout />}>
-              <Route index element={<RecordingsList />} />
-              <Route path="explore" element={<Explore />} />
-              <Route path="favourites/:id" element={<Recording />} />
-              <Route
-                path="add"
-                element={
-                  <ProtectedRoute type="guide">
-                    <Form />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="favourites" element={<RecordingsList />} />
-            </Route>
-            <Route path="login" element={<Login />}></Route>
-            <Route path="about" element={<About />}></Route>
-            <Route path="signup" element={<Signup />}></Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+      <CurrentlyPlayingProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<Homepage />}></Route>
+              <Route path="app" element={<AppLayout />}>
+                <Route index element={<RecordingsList />} />
+                <Route path="explore" element={<Explore />} />
+                <Route path="favourites/:id" element={<Recording />} />
+                <Route
+                  path="add"
+                  element={
+                    <ProtectedRoute type="guide">
+                      <Form />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="favourites" element={<RecordingsList />} />
+              </Route>
+              <Route path="login" element={<Login />}></Route>
+              <Route path="about" element={<About />}></Route>
+              <Route path="signup" element={<Signup />}></Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </CurrentlyPlayingProvider>
       <Toaster
         position="top-center"
         gutter={12}
