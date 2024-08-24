@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import { getRecordingById } from "../services/apiRecordings";
+import styled from "styled-components";
+import PlayButton from "./PlayButton";
 
 function AudioPlayer() {
   const { currentRecordingId } = useCurrentlyPlaying();
   const [audioSrc, setAudioSrc] = useState(null);
   const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -70,7 +72,7 @@ function AudioPlayer() {
   return (
     <div className="audio-player">
       <h3>{audioSrc.title}</h3>
-      <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
+      <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
       <input
         type="range"
         min="0"
