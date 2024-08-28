@@ -3,6 +3,7 @@ import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import { getRecordingById } from "../services/apiRecordings";
 import styled from "styled-components";
 import PlayButton from "./PlayButton";
+import VolumeControl from "./VolumeControl";
 
 function AudioPlayer() {
   const { currentRecordingId } = useCurrentlyPlaying();
@@ -67,12 +68,25 @@ function AudioPlayer() {
     }
   }, [currentRecordingId]);
 
+  const formatTime = (time) => {
+    if (typeof time === "number" && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      // Convert to string and pad with leading zeros if necessary
+      const formatMinutes = minutes.toString().padStart(2, "0");
+      const formatSeconds = seconds.toString().padStart(2, "0");
+      return `${formatMinutes}:${formatSeconds}`;
+    }
+    return "00:00";
+  };
+
   if (!audioSrc) return null; // Render nothing if no audio source
 
   return (
     <div className="audio-player">
       <h3>{audioSrc.title}</h3>
       <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
+      <span>{formatTime(currentTime)}</span>
       <input
         type="range"
         min="0"
@@ -81,10 +95,9 @@ function AudioPlayer() {
         onChange={handleProgressChange}
         disabled={!duration} // Disable input if duration is not available
       />
-      <span>
-        {Math.floor(currentTime)} / {Math.floor(duration)}
-      </span>
+      <span>{formatTime(duration)}</span>
       <button onClick={handleVolumeChange}>{volume ? "Mute" : "Unmute"}</button>
+      <VolumeControl audioRef={audioRef} />
       <audio autoPlay ref={audioRef} src={audioSrc.audio} />
     </div>
   );
