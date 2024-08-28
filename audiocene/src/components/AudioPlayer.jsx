@@ -17,7 +17,6 @@ function AudioPlayer() {
   useEffect(() => {
     const audio = audioRef.current;
 
-    // Ensure audio element exists before adding listeners
     if (!audio) return;
 
     const handleLoadedMetadata = () => setDuration(audio.duration);
@@ -30,11 +29,11 @@ function AudioPlayer() {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [audioSrc]); // Add `audioSrc` to dependencies to re-run effect when audio source changes
+  }, [audioSrc]);
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
-    if (!audio) return; // Ensure audio element exists
+    if (!audio) return;
     if (isPlaying) {
       audio.pause();
     } else {
@@ -45,16 +44,16 @@ function AudioPlayer() {
 
   const handleProgressChange = (e) => {
     const audio = audioRef.current;
-    if (!audio) return; // Ensure audio element exists
+    if (!audio) return;
     audio.currentTime = (e.target.value / 100) * duration;
     setCurrentTime(audio.currentTime);
   };
 
-  const handleVolumeChange = () => {
+  const handleVolumeChange = (e) => {
     const audio = audioRef.current;
     if (!audio) return; // Ensure audio element exists
-    audio.muted = !audio.muted;
-    setVolume(audio.muted ? 0 : 1);
+    audio.volume = e.target.value / 100;
+    setVolume(audio.volume);
   };
 
   useEffect(() => {
@@ -80,7 +79,7 @@ function AudioPlayer() {
     return "00:00";
   };
 
-  if (!audioSrc) return null; // Render nothing if no audio source
+  if (!audioSrc) return null;
 
   return (
     <div className="audio-player">
@@ -93,11 +92,11 @@ function AudioPlayer() {
         max="100"
         value={duration ? (currentTime / duration) * 100 : 0}
         onChange={handleProgressChange}
-        disabled={!duration} // Disable input if duration is not available
+        disabled={!duration}
       />
       <span>{formatTime(duration)}</span>
-      <button onClick={handleVolumeChange}>{volume ? "Mute" : "Unmute"}</button>
-      <VolumeControl audioRef={audioRef} />
+
+      <VolumeControl handleVolumeChange={handleVolumeChange} volume={volume} />
       <audio autoPlay ref={audioRef} src={audioSrc.audio} />
     </div>
   );
