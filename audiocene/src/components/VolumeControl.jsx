@@ -2,13 +2,32 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const VolumeIcon = styled.div`
-  width: 40px;
+  width: 20px;
+  height: 100%;
   color: var(--color-primary);
+  display: flex;
+  justify-content: flex-end;
 `;
-const VolumeControl = ({ handleVolumeChange, volume }) => {
+
+const RangeInput = styled.input.attrs({ type: "range" })`
+  transform: rotate(-90deg);
+  width: 80px;
+  height: 80px;
+  margin-bottom: 40px;
+`;
+
+const VolumeControl = ({ handleVolumeChange, volume, handleMute }) => {
   return (
     <>
-      <VolumeIcon onClick={() => console.log("mute")}>
+      <RangeInput
+        aria-label="volume"
+        type="range"
+        min="0"
+        max="100"
+        onChange={handleVolumeChange}
+        value={volume * 100}
+      />
+      <VolumeIcon aria-label="mute" onClick={() => handleMute()}>
         {volume < 0.05 ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,14 +54,6 @@ const VolumeControl = ({ handleVolumeChange, volume }) => {
           </svg>
         )}
       </VolumeIcon>
-
-      <input
-        type="range"
-        min="0"
-        max="100"
-        onChange={handleVolumeChange}
-        value={volume * 100}
-      />
     </>
   );
 };

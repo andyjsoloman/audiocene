@@ -5,6 +5,42 @@ import styled from "styled-components";
 import PlayButton from "./PlayButton";
 import VolumeControl from "./VolumeControl";
 
+const AudioContainer = styled.div`
+  width: 40%;
+  height: 120px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+  border-radius: 12px;
+  padding: 4px;
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const ProgressContainer = styled.div`
+  display: flex;
+`;
+
+const VolumeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40%;
+`;
+
+const Title = styled.h3`
+  display: flex;
+  justify-content: center;
+`;
+
 function AudioPlayer() {
   const { currentRecordingId } = useCurrentlyPlaying();
   const [audioSrc, setAudioSrc] = useState(null);
@@ -13,6 +49,7 @@ function AudioPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -49,6 +86,12 @@ function AudioPlayer() {
     setCurrentTime(audio.currentTime);
   };
 
+  const handleMute = () => {
+    const audio = audioRef.current;
+    isMuted ? setVolume(1) : setVolume(0);
+    setIsMuted(!isMuted);
+  };
+
   const handleVolumeChange = (e) => {
     const audio = audioRef.current;
     if (!audio) return; // Ensure audio element exists
@@ -82,23 +125,32 @@ function AudioPlayer() {
   if (!audioSrc) return null;
 
   return (
-    <div className="audio-player">
-      <h3>{audioSrc.title}</h3>
+    <AudioContainer className="audio-player">
       <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
-      <span>{formatTime(currentTime)}</span>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={duration ? (currentTime / duration) * 100 : 0}
-        onChange={handleProgressChange}
-        disabled={!duration}
-      />
-      <span>{formatTime(duration)}</span>
-
-      <VolumeControl handleVolumeChange={handleVolumeChange} volume={volume} />
+      <InfoContainer>
+        <Title>{audioSrc.title}</Title>
+        <ProgressContainer>
+          <span>{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={duration ? (currentTime / duration) * 100 : 0}
+            onChange={handleProgressChange}
+            disabled={!duration}
+          />
+          <span>{formatTime(duration)}</span>
+        </ProgressContainer>
+      </InfoContainer>
+      <VolumeContainer>
+        <VolumeControl
+          handleVolumeChange={handleVolumeChange}
+          volume={volume}
+          handleMute={handleMute}
+        />
+      </VolumeContainer>
       <audio autoPlay ref={audioRef} src={audioSrc.audio} />
-    </div>
+    </AudioContainer>
   );
 }
 
