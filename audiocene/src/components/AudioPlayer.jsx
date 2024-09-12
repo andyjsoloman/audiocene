@@ -12,10 +12,11 @@ const AudioContainer = styled.div`
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
   border-radius: 12px;
-  padding: 4px;
+  padding: 4px 12px 4px 40px;
+  margin: 20px 40px;
   display: flex;
-  gap: 20px;
-  justify-content: space-evenly;
+  gap: 12px;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -23,10 +24,16 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 8px;
 `;
 
 const ProgressContainer = styled.div`
   display: flex;
+`;
+
+const DurationContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const VolumeContainer = styled.div`
@@ -36,9 +43,10 @@ const VolumeContainer = styled.div`
   height: 40%;
 `;
 
-const Title = styled.h3`
+const Title = styled.h4`
   display: flex;
   justify-content: center;
+  margin-bottom: 8px;
 `;
 
 function AudioPlayer() {
@@ -129,8 +137,11 @@ function AudioPlayer() {
       <PlayButton togglePlayPause={togglePlayPause} isPlaying={isPlaying} />
       <InfoContainer>
         <Title>{audioSrc.title}</Title>
-        <ProgressContainer>
+        <DurationContainer>
           <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(duration)}</span>
+        </DurationContainer>
+        <ProgressContainer>
           <input
             type="range"
             min="0"
@@ -139,7 +150,6 @@ function AudioPlayer() {
             onChange={handleProgressChange}
             disabled={!duration}
           />
-          <span>{formatTime(duration)}</span>
         </ProgressContainer>
       </InfoContainer>
       <VolumeContainer>
