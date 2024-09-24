@@ -6,7 +6,7 @@ import PlayButton from "./PlayButton";
 import VolumeControl from "./VolumeControl";
 
 const AudioContainer = styled.div`
-  width: 40%;
+  width: 600px;
   height: 120px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -24,11 +24,56 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
 `;
 
 const ProgressContainer = styled.div`
   display: flex;
+`;
+
+const ProgressBar = styled.input.attrs({ type: "range" })`
+  //remove baseline styles
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+
+  /***** Track Styles *****/
+  /***** Chrome, Safari, Opera, and Edge Chromium *****/
+  &::-webkit-slider-runnable-track {
+    background: var(--color-black);
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  /******** Firefox ********/
+  &&::-moz-range-track {
+    background: var(--color-black);
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  &&::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -9px; /* Centers thumb on the track */
+    background-color: var(--color-primary);
+    height: 24px;
+    width: 12px;
+    border-radius: 4px;
+  }
+
+  &&::-moz-range-thumb {
+    border: none; /*Removes extra border that FF applies*/
+    border-radius: 0; /*Removes default border-radius that FF applies*/
+    background-color: var(--color-primary);
+    height: 24px;
+    width: 12px;
+    border-radius: 4px;
+  }
+
+  width: 400px;
+  margin-top: 12px;
+  margin-bottom: 24px;
 `;
 
 const DurationContainer = styled.div`
@@ -47,6 +92,7 @@ const Title = styled.h4`
   display: flex;
   justify-content: center;
   margin-bottom: 8px;
+  margin-top: 24px;
 `;
 
 function AudioPlayer() {
@@ -142,7 +188,7 @@ function AudioPlayer() {
           <span>{formatTime(duration)}</span>
         </DurationContainer>
         <ProgressContainer>
-          <input
+          <ProgressBar
             type="range"
             min="0"
             max="100"

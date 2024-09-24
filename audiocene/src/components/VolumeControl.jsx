@@ -10,8 +10,48 @@ const VolumeIcon = styled.div`
 `;
 
 const RangeInput = styled.input.attrs({ type: "range" })`
+  //remove baseline styles
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+
+  /***** Track Styles *****/
+  /***** Chrome, Safari, Opera, and Edge Chromium *****/
+  &::-webkit-slider-runnable-track {
+    background: var(--color-black);
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  /******** Firefox ********/
+  &&::-moz-range-track {
+    background: var(--color-black);
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  &&::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -9px; /* Centers thumb on the track */
+    background-color: var(--color-primary);
+    height: 24px;
+    width: 12px;
+    border-radius: 4px;
+  }
+
+  &&::-moz-range-thumb {
+    border: none; /*Removes extra border that FF applies*/
+    border-radius: 0; /*Removes default border-radius that FF applies*/
+    background-color: var(--color-primary);
+    height: 24px;
+    width: 12px;
+    border-radius: 4px;
+  }
+
   transform: rotate(-90deg);
-  width: 80px;
+  width: 60px;
   height: 80px;
   margin-bottom: 40px;
 `;
