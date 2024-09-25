@@ -11,7 +11,7 @@ import About from "./pages/About";
 import Signup from "./pages/Signup";
 
 import RecordingsList from "./components/RecordingsList";
-import Recording from "./components/RecordingDetail";
+import RecordingDetail from "./components/RecordingDetail";
 
 import Form from "./components/Form";
 import Explore from "./components/Explore";
@@ -40,7 +40,8 @@ function App() {
               <Route path="app" element={<AppLayout />}>
                 <Route index element={<RecordingsList />} />
                 <Route path="explore" element={<Explore />} />
-                <Route path="favourites/:id" element={<Recording />} />
+                <Route path="favourites/:id" element={<RecordingDetail />} />
+                <Route path="explore/:id" element={<RecordingDetail />} />
                 <Route
                   path="add"
                   element={

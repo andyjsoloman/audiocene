@@ -11,6 +11,7 @@ const Play = styled.button`
   background-color: var(--color-primary);
   border-radius: 50%;
   border: none;
+  cursor: pointer;
 `;
 
 function PlayButton({ isPlaying, togglePlayPause }) {

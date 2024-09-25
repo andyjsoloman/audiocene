@@ -48,7 +48,7 @@ function RecordingDetail() {
   return (
     <>
       <DetailPanel>
-        <div>Recording Info for {id}</div>
+        <div>Recording Info for {recording.title}</div>
         <div>Recorded at {formatDate(recording.date)}</div>
         <div>
           {recording.locality}, {recording.country}

@@ -79,7 +79,7 @@ function Map() {
         );
       }
     },
-    [geolocationPosition]
+    [geolocationPosition, navigate]
   );
 
   return (
@@ -103,7 +103,7 @@ function Map() {
                 eventHandlers={{
                   click: () => {
                     navigate(
-                      `favourites/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}`
+                      `explore/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}`
                     );
                   },
                 }}
@@ -118,7 +118,7 @@ function Map() {
         </StyledMapContainer>
       </MapCont>
       <Button onClick={getPosition} variant={"locate"}>
-        {isLoadingPosition ? "Loading..." : "Get your position"}{" "}
+        {isLoadingPosition ? "Loading..." : "Get your position"}
       </Button>
     </>
   );
@@ -126,7 +126,13 @@ function Map() {
 
 function ChangeLocation({ position }) {
   const map = useMap();
-  map.setView(position);
+
+  useEffect(() => {
+    if (position) {
+      map.setView(position);
+    }
+  }, [position, map]);
+
   return null;
 }
 
