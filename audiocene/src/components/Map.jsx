@@ -11,7 +11,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // <-- Added useRef
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
@@ -55,7 +55,6 @@ function Map() {
   const [mapPosition, setMapPosition] = useState([
     50.71733015526967, 1.8731689453125002,
   ]); //DEFAULT MAP POSITION
-
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
@@ -63,24 +62,33 @@ function Map() {
   } = useGeoLocation();
   const [mapLat, mapLng] = useUrlPositon();
 
-  useEffect(
-    function () {
-      if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
-    },
-    [mapLat, mapLng]
-  );
+  const markerRefs = useRef({}); // <-- Added ref object to hold marker references
+  const [done, setDone] = useState(false); // <-- Added state to track when refs are ready
+  const [searchParams] = useSearchParams(); // <-- Get URL search params
+  const activeMarkerId = searchParams.get("id"); // <-- Get marker ID from URL params
 
-  useEffect(
-    function () {
-      if (geolocationPosition) {
-        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
-        navigate(
-          `?lat=${geolocationPosition.lat}&lng=${geolocationPosition.lng}`
-        );
+  useEffect(() => {
+    if (mapLat && mapLng) setMapPosition([mapLat, mapLng]);
+  }, [mapLat, mapLng]);
+
+  useEffect(() => {
+    if (geolocationPosition) {
+      setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+      navigate(
+        `?lat=${geolocationPosition.lat}&lng=${geolocationPosition.lng}`
+      );
+    }
+  }, [geolocationPosition, navigate]);
+
+  // <-- New useEffect to open the popup when the marker ID is in the URL and all refs are set
+  useEffect(() => {
+    if (activeMarkerId && done) {
+      const markerToOpen = markerRefs.current[activeMarkerId];
+      if (markerToOpen) {
+        markerToOpen.openPopup(); // <-- Open popup of the marker that matches the URL param
       }
-    },
-    [geolocationPosition, navigate]
-  );
+    }
+  }, [activeMarkerId, done]); // <-- Depend on `done` and URL param
 
   return (
     <>
@@ -95,15 +103,22 @@ function Map() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {Array.isArray(recordings) &&
-            recordings.map((recording) => (
+            recordings.map((recording, index) => (
               <Marker
                 position={[recording.position.lat, recording.position.lng]}
                 key={recording.id}
                 icon={mapIcon}
+                ref={(m) => {
+                  // <-- Store marker reference
+                  markerRefs.current[recording.id] = m; // <-- Add marker ref to the object
+                  if (index === recordings.length - 1 && !done) {
+                    setDone(true); // <-- Set done when all refs are set
+                  }
+                }}
                 eventHandlers={{
                   click: () => {
                     navigate(
-                      `explore/${recording.id}?lat=${recording.position.lat}&lng=${recording.position.lng}`
+                      `explore/?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
                     );
                   },
                 }}
