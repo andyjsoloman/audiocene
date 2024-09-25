@@ -118,7 +118,7 @@ function Map() {
                 eventHandlers={{
                   click: () => {
                     navigate(
-                      `explore/?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
+                      `explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
                     );
                   },
                 }}

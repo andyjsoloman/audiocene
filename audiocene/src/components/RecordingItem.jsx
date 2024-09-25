@@ -19,7 +19,7 @@ function RecordingItem({ recording }) {
 
   return (
     <li>
-      <Link to={`?id=${id}&lat=${position.lat}&lng=${position.lng}`}>
+      <Link to={`${id}?id=${id}&lat=${position.lat}&lng=${position.lng}`}>
         <h3>{title}</h3>
         <time>{formatDate(date)}</time>
       </Link>
