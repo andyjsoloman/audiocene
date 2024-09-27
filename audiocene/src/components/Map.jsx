@@ -29,6 +29,9 @@ const MapCont = styled.div`
   width: 100%;
   flex: 1;
   z-index: 1;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--color-dkgrey);
 `;
 
 const mapIcon = L.icon({
