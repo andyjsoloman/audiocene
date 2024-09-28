@@ -12,7 +12,6 @@ import "mapbox-gl/dist/mapbox-gl.css"; // Import Mapbox CSS
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
-console.log(import.meta.env.VITE_MAPBOX_KEY);
 const MapCont = styled.div`
   height: 600px;
   width: 100%;
@@ -51,7 +50,7 @@ function MapGL() {
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
     latitude: mapPosition[0],
-    zoom: 13,
+    zoom: 2,
   });
 
   useEffect(() => {
@@ -88,6 +87,12 @@ function MapGL() {
     }
   }, [activeMarkerId, done]);
 
+  const handleMapLoad = (map) => {
+    // Set padding when the map is loaded
+    map.setPadding({ top: 50, bottom: 50, left: 50, right: 500 });
+    map.setFog({});
+  };
+
   return (
     <>
       <MapCont>
@@ -96,7 +101,9 @@ function MapGL() {
           onMove={(evt) => setViewState(evt.viewState)}
           mapboxAccessToken={MAPBOX_TOKEN}
           style={{ width: "100%", height: "100%" }}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
+          mapStyle="mapbox://styles/mapbox/satellite-v9"
+          projection="globe"
+          onLoad={(evt) => handleMapLoad(evt.target)}
         >
           {Array.isArray(recordings) &&
             recordings.map((recording, index) => (
@@ -116,12 +123,12 @@ function MapGL() {
                   alt="Marker"
                   style={{ width: 45, height: 60 }}
                 />
-                {activeMarkerId === recording.id && (
+                {activeMarkerId === String(recording.id) && (
                   <Popup
                     longitude={recording.position.lng}
                     latitude={recording.position.lat}
                     closeOnClick={false}
-                    onClose={() => navigate(`/explore`)}
+                    onClose={() => navigate(`/app/explore`)}
                   >
                     <span>{recording.title}</span>
                   </Popup>
