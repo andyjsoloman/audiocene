@@ -22,6 +22,15 @@ const MapCont = styled.div`
   border: 1px solid var(--color-dkgrey);
 `;
 
+const PopupContent = styled.span`
+  padding: 8px;
+
+  font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
+    source-sans-pro, sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+`;
+
 function MapGL() {
   const navigate = useNavigate();
   const {
@@ -50,7 +59,7 @@ function MapGL() {
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
     latitude: mapPosition[0],
-    zoom: 2,
+    zoom: 3,
   });
 
   useEffect(() => {
@@ -90,7 +99,12 @@ function MapGL() {
   const handleMapLoad = (map) => {
     // Set padding when the map is loaded
     map.setPadding({ top: 50, bottom: 50, left: 50, right: 500 });
-    map.setFog({});
+    map.setFog({
+      "horizon-blend": 0.3,
+      "high-color": "#a1d7e9",
+      "space-color": "#0c3947",
+      "star-intensity": 1.0,
+    });
   };
 
   return (
@@ -128,9 +142,10 @@ function MapGL() {
                     longitude={recording.position.lng}
                     latitude={recording.position.lat}
                     closeOnClick={false}
+                    offset={[0, -60]}
                     onClose={() => navigate(`/app/explore`)}
                   >
-                    <span>{recording.title}</span>
+                    <PopupContent>{recording.title}</PopupContent>
                   </Popup>
                 )}
               </Marker>
