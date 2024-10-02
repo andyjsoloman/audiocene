@@ -12,6 +12,15 @@ const DetailPanel = styled.div`
   position: flex;
 `;
 
+const Title = styled.h3`
+  margin-bottom: 20px;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
@@ -48,17 +57,18 @@ function RecordingDetail() {
   return (
     <>
       <DetailPanel>
-        <div>Recording Info for {recording.title}</div>
+        <Title>{recording.title}</Title>
         <div>Recorded at {formatDate(recording.date)}</div>
         <div>
           {recording.locality}, {recording.country}
         </div>
-        <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
-        <Button onClick={() => setShowForm((show) => !show)}>
-          {showForm ? "Cancel" : "Edit"}
-        </Button>
-
-        <BackButton />
+        <ButtonRow>
+          <BackButton />
+          <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
+          <Button onClick={() => setShowForm((show) => !show)}>
+            {showForm ? "Cancel" : "Edit"}
+          </Button>
+        </ButtonRow>
       </DetailPanel>
       {showForm && <Form recordingToEdit={recording} />}
     </>

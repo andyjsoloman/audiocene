@@ -3,12 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import Map, { Marker, Popup } from "react-map-gl";
-
+import "mapbox-gl/dist/mapbox-gl.css";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
 import { getRecordings } from "../services/apiRecordings";
-import "mapbox-gl/dist/mapbox-gl.css"; // Import Mapbox CSS
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -31,7 +30,7 @@ const PopupContent = styled.span`
   font-weight: 300;
 `;
 
-function MapGL() {
+export default function MapGL() {
   const navigate = useNavigate();
   const {
     isLoading,
@@ -55,6 +54,7 @@ function MapGL() {
   const [done, setDone] = useState(false);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
+  const [reverseGeocodeError, setReverseGeocodeError] = useState("");
 
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
@@ -107,6 +107,39 @@ function MapGL() {
     });
   };
 
+  //MOVE REVERSE GEOCODING LOGIC INTO FORM, REPLACE EXISTING API WIHT MAPBOX
+
+  async function reverseGeocode(lng, lat) {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}`
+      );
+
+      const data = await response.json();
+
+      return data.features;
+    } catch (err) {
+      setReverseGeocodeError(err.message);
+      console.log(err.message);
+      return null;
+    }
+  }
+
+  const handleMapClick = async (event) => {
+    if (event.originalEvent.target.closest(".mapboxgl-marker")) {
+      return; // Click target was a marker so do nothing…
+    }
+    const { lng, lat } = event.lngLat;
+    const locationData = await reverseGeocode(lng, lat);
+
+    if (locationData) {
+      console.log(locationData);
+      navigate(`add?lat=${lat}&lng=${lng}`);
+    } else {
+      console.log("Unable to retrieve location data");
+    }
+  };
+
   return (
     <>
       <MapCont>
@@ -118,6 +151,7 @@ function MapGL() {
           mapStyle="mapbox://styles/mapbox/satellite-v9"
           projection="globe"
           onLoad={(evt) => handleMapLoad(evt.target)}
+          onClick={handleMapClick}
         >
           {Array.isArray(recordings) &&
             recordings.map((recording, index) => (
@@ -158,5 +192,3 @@ function MapGL() {
     </>
   );
 }
-
-export default MapGL;
