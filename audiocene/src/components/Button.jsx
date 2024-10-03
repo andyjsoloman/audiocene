@@ -17,7 +17,7 @@ const ButtonBase = styled.button`
   line-height: 20px;
   list-style: none;
   margin: 0;
-  outline: none;
+  /* outline: none; */
   padding: 10px 16px;
   position: relative;
   text-align: center;
@@ -34,13 +34,17 @@ const ButtonBase = styled.button`
   }
 `;
 
-const GeoLocateButton = styled(ButtonBase)`
-  background-color: #000;
-  position: absolute;
-  z-index: 1000;
+const SecondaryButton = styled(ButtonBase)`
+  background-color: var(--color-bg);
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
 
-  bottom: 4rem;
-  left: 30%;
+  &:hover,
+  &:focus {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
 `;
 
 export default function Button({ variant, children, onClick }) {
@@ -49,8 +53,8 @@ export default function Button({ variant, children, onClick }) {
     case "base":
       Component = ButtonBase;
       break;
-    case "locate":
-      Component = GeoLocateButton;
+    case "secondary":
+      Component = SecondaryButton;
       break;
     default:
       Component = ButtonBase; // Default to ButtonBase if variant is unrecognized

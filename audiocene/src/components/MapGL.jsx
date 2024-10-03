@@ -23,11 +23,17 @@ const MapCont = styled.div`
 
 const PopupContent = styled.span`
   padding: 8px;
-
   font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
     source-sans-pro, sans-serif;
   font-size: 10px;
   font-weight: 300;
+`;
+
+const GeolocateContainer = styled.div`
+  position: absolute;
+  z-index: 1000;
+  bottom: 4rem;
+  left: 30%;
 `;
 
 export default function MapGL() {
@@ -185,10 +191,13 @@ export default function MapGL() {
               </Marker>
             ))}
         </Map>
+
+        <GeolocateContainer>
+          <Button onClick={getPosition} variant={"secondary"}>
+            {isLoadingPosition ? "Loading..." : "Get your position"}
+          </Button>
+        </GeolocateContainer>
       </MapCont>
-      <Button onClick={getPosition} variant={"locate"}>
-        {isLoadingPosition ? "Loading..." : "Get your position"}
-      </Button>
     </>
   );
 }
