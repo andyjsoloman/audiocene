@@ -16,7 +16,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useCreateRecording } from "../features/recordings/useCreateRecording";
 import { useEditRecording } from "../features/recordings/useEditRecording";
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+// const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
 const LocationInfo = styled.div`
   display: grid;
@@ -62,24 +64,76 @@ export default function Form({ recordingToEdit = {} }) {
   useEffect(() => {
     if (!lat && !lng) return;
 
+    function getPreferredLocation(features) {
+      const preferredTypes = ["place", "locality", "region"];
+
+      for (let type of preferredTypes) {
+        const matchedFeature = features.find((feature) =>
+          feature.place_type.includes(type)
+        );
+        if (matchedFeature) {
+          return matchedFeature.text;
+        }
+      }
+      return "Unknown Location";
+    }
+
+    function getCountry(features) {
+      const countryFeature = features.find((feature) =>
+        feature.place_type.includes("country")
+      );
+      return countryFeature ? countryFeature.place_name : "Country not found";
+    }
+
     async function fetchRecordingData() {
       try {
         setIsLoadingGeoCoding(true);
-        const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
+        const res = await fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}`
+        );
+
         const data = await res.json();
 
-        setLocality(data.locality || "");
-        setCountry(data.countryName || "");
-        setValue("locality", data.locality || "");
-        setValue("country", data.countryName || "");
+        const locationName = getPreferredLocation(data.features);
+
+        const countryName = getCountry(data.features);
+
+        console.log(countryName);
+
+        setLocality(locationName || "Unknown Region");
+        setCountry(countryName || "Unknown Country");
+        setValue("locality", locationName || "Unknown Region");
+        setValue("country", countryName || "Unknown Country");
         setValue("lat", lat);
         setValue("lng", lng);
+
+        console.log(data);
       } catch (err) {
         setGeocodingError(err.message);
+        console.log(err.message);
       } finally {
         setIsLoadingGeoCoding(false);
       }
     }
+
+    // async function fetchRecordingData() {
+    //   try {
+    //     setIsLoadingGeoCoding(true);
+    //     const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
+    //     const data = await res.json();
+
+    //     setLocality(data.locality || "");
+    //     setCountry(data.countryName || "");
+    //     setValue("locality", data.locality || "");
+    //     setValue("country", data.countryName || "");
+    //     setValue("lat", lat);
+    //     setValue("lng", lng);
+    //   } catch (err) {
+    //     setGeocodingError(err.message);
+    //   } finally {
+    //     setIsLoadingGeoCoding(false);
+    //   }
+    // }
 
     fetchRecordingData();
   }, [lat, lng, setValue]);

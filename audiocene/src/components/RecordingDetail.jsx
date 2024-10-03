@@ -54,6 +54,8 @@ function RecordingDetail() {
     return `${formattedDate} at ${formattedTime}`;
   };
 
+  console.log(recording);
+
   return (
     <>
       <DetailPanel>

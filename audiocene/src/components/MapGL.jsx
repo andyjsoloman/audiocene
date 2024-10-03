@@ -131,19 +131,18 @@ export default function MapGL() {
     }
   }
 
+  // const locationData = await reverseGeocode(lng, lat);
+
+  // if (locationData) {
+  //   console.log(locationData);
+
   const handleMapClick = async (event) => {
     if (event.originalEvent.target.closest(".mapboxgl-marker")) {
       return; // Click target was a marker so do nothing…
     }
     const { lng, lat } = event.lngLat;
-    const locationData = await reverseGeocode(lng, lat);
 
-    if (locationData) {
-      console.log(locationData);
-      navigate(`add?lat=${lat}&lng=${lng}`);
-    } else {
-      console.log("Unable to retrieve location data");
-    }
+    navigate(`add?lat=${lat}&lng=${lng}`);
   };
 
   return (
