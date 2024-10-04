@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
+import { getUserById } from "../services/apiUsers";
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
@@ -35,12 +36,26 @@ function RecordingDetail() {
     queryFn: () => getRecordingById(id),
   });
 
-  if (isLoading) {
+  const {
+    data: user,
+    error: userError,
+    isLoading: loadingUser,
+  } = useQuery({
+    queryKey: ["user", recording?.user_id],
+    queryFn: () => getUserById(recording.user_id),
+    enabled: !!recording, // Only fetch if the recording data is available
+  });
+
+  if (isLoading || loadingUser) {
     return <div>Loading...</div>;
   }
 
   if (error) {
     return <div>Error: {error.message}</div>;
+  }
+
+  if (userError) {
+    return <div>Error fetching user: {userError.message}</div>;
   }
 
   const formatDate = (dateString) => {
@@ -64,6 +79,7 @@ function RecordingDetail() {
         <div>
           {recording.locality}, {recording.country}
         </div>
+        {user && <div>Uploaded by: {user.username}</div>}
         <ButtonRow>
           <BackButton />
           <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
