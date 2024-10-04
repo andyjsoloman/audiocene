@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
+import supabase from "../services/supabase";
 
 const UserContainer = styled.div`
   background-color: var(--color-bg);
@@ -60,6 +60,40 @@ function User() {
   const { user } = useUser();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    // Fetch the current session when the component mounts
+    const fetchSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
+      } else {
+        setSession(data.session);
+      }
+    };
+
+    // Call the function to fetch session
+    fetchSession();
+
+    // Set up the auth state change listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  if (!session) {
+    return <div>Loading...</div>; // or any loading state
+  }
+
+  const fullName = session?.user?.user_metadata?.fullName || "Guest";
 
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
@@ -73,7 +107,7 @@ function User() {
     <>
       <UserContainer onClick={toggleDropdown}>
         <UserImg src="../profile.svg" alt={user} />
-        <span>Welcome, </span>
+        <span>Welcome, {fullName} </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (
           <Dropdown>

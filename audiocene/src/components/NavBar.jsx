@@ -2,7 +2,6 @@ import { NavLink as BaseNavLink } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "./Logo";
 import User from "./User";
-import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
 

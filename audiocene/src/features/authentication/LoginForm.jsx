@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button.jsx";
-import { useAuth } from "../../contexts/AuthContext.jsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Heading from "../../components/Heading.jsx";
-import { login } from "../../services/apiAuth.js";
 import { useLogin } from "./useLogin.js";
 
 const StyledLogin = styled.form`
@@ -19,12 +17,11 @@ const StyledLogin = styled.form`
 
 export default function LoginForm() {
   // PRE-FILL FOR DEV PURPOSES
-  const [email, setEmail] = useState("andy@example.com");
-  const [password, setPassword] = useState("passwerd");
+  const [email, setEmail] = useState("mikag48015@rowplant.com");
+  const [password, setPassword] = useState("asdfasdf");
 
   const { login, isLoading } = useLogin();
 
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   function handleSubmit(e) {
@@ -40,13 +37,6 @@ export default function LoginForm() {
       }
     );
   }
-
-  useEffect(
-    function () {
-      if (isAuthenticated) navigate("/app", { replace: true });
-    },
-    [isAuthenticated, navigate]
-  );
 
   return (
     <StyledLogin onSubmit={handleSubmit}>

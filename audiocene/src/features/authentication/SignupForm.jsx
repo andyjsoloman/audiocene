@@ -25,6 +25,7 @@ function SignupForm() {
 
   function onSubmit({ fullName, email, password }) {
     signup({ fullName, email, password });
+    // eslint-disable-next-line no-unused-labels
     onSettled: reset();
   }
 
@@ -88,6 +89,7 @@ function SignupForm() {
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
+          disabled={isLoading}
           type="reset"
           onClick={(e) => {
             e.preventDefault();
@@ -96,7 +98,7 @@ function SignupForm() {
         >
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button disabled={isLoading}>Create new user</Button>
       </FormRow>
     </StyledSignupForm>
   );
