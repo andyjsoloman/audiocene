@@ -31,7 +31,7 @@ function SignupForm() {
 
   return (
     <StyledSignupForm onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Full name" error={errors?.fullName?.message}>
+      <FormRow label="Username" error={errors?.fullName?.message}>
         <input
           type="text"
           id="fullName"
