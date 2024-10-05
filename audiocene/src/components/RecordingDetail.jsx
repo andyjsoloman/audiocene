@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
-import { getUserById } from "../services/apiUsers";
+import { getProfileById } from "../services/apiProfiles"; // Updated import
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
@@ -42,8 +42,13 @@ function RecordingDetail() {
     isLoading: loadingUser,
   } = useQuery({
     queryKey: ["user", recording?.user_id],
-    queryFn: () => getUserById(recording.user_id),
-    enabled: !!recording, // Only fetch if the recording data is available
+    queryFn: () => {
+      if (recording && recording.user_id) {
+        return getProfileById(recording.user_id); // Fetch profile for the specific user
+      }
+      return null; // Prevent fetching if recording is not available
+    },
+    enabled: !!recording && !!recording.user_id, // Only fetch if the recording data and user_id are available
   });
 
   if (isLoading || loadingUser) {
@@ -69,8 +74,6 @@ function RecordingDetail() {
     return `${formattedDate} at ${formattedTime}`;
   };
 
-  console.log(recording);
-
   return (
     <>
       <DetailPanel>
@@ -79,7 +82,8 @@ function RecordingDetail() {
         <div>
           {recording.locality}, {recording.country}
         </div>
-        {user && <div>Uploaded by: {user.username}</div>}
+        {user && <div>Uploaded by: {user.display_name}</div>}{" "}
+        {/* Updated to access the first user */}
         <ButtonRow>
           <BackButton />
           <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>

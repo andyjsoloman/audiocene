@@ -103,8 +103,6 @@ function User() {
     navigate("/app/profile");
   }
 
-  console.log(user);
-
   return (
     <>
       <UserContainer onClick={toggleDropdown}>
