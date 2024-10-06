@@ -24,7 +24,7 @@ function RecordingItem({ recording }) {
         <time>{formatDate(date)}</time>
       </Link>
       <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
-      <button onClick={() => deleteRecording(id)} disabled={isDeleting}>
+      <button onClick={() => deleteRecording({ id })} disabled={isDeleting}>
         &times;
       </button>
     </li>

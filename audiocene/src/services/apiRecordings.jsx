@@ -93,11 +93,32 @@ export async function createEditRecording(newRecording, id, userId) {
   }
 }
 
-export async function deleteRecording(id) {
-  const { error } = await supabase.from("recordings").delete().eq("id", id);
+export async function deleteRecording(id, currentUserId) {
+  // Step 1: Retrieve the recording to verify the owner
+  const { data: recording, error: fetchError } = await supabase
+    .from("recordings")
+    .select("user_id")
+    .eq("id", id)
+    .single();
 
-  if (error) {
-    console.error(error);
+  if (fetchError) {
+    console.error(fetchError);
+    throw new Error("Recording not found or could not be fetched");
+  }
+
+  // Step 2: Check if the current user is the owner of the recording
+  if (recording.user_id !== currentUserId) {
+    throw new Error("You are not authorized to delete this recording");
+  }
+
+  // Step 3: Proceed with deletion if user is authorized
+  const { error: deleteError } = await supabase
+    .from("recordings")
+    .delete()
+    .eq("id", id);
+
+  if (deleteError) {
+    console.error(deleteError);
     throw new Error("Recording could not be deleted");
   }
 }
