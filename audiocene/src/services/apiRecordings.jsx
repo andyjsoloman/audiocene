@@ -26,7 +26,7 @@ export async function getRecordingById(id) {
   return data;
 }
 
-export async function createEditRecording(newRecording, id) {
+export async function createEditRecording(newRecording, id, userId) {
   console.log(newRecording, id);
 
   const hasAudioPath = newRecording.audio?.startsWith?.(supabaseUrl);
@@ -44,21 +44,40 @@ export async function createEditRecording(newRecording, id) {
   let query = supabase.from("recordings");
 
   // A) CREATE
-  if (!id) query = query.insert([{ ...newRecording, audio: audioPath }]);
+  if (!id) {
+    query = query.insert([{ ...newRecording, audio: audioPath }]);
+  }
 
   // B) EDIT
-
-  if (id)
-    query = query
-      .update({ ...newRecording, audio: audioPath })
+  if (id) {
+    // Fetch the recording to check its owner
+    const { data: existingRecording, error: fetchError } = await supabase
+      .from("recordings")
+      .select("user_id")
       .eq("id", id)
-      .select();
+      .single();
+
+    if (fetchError) {
+      console.error(fetchError);
+      throw new Error("Error fetching the recording");
+    }
+
+    console.log(`Existing recording user ID: ${existingRecording.user_id}`);
+    console.log(`Current user ID: ${userId}`);
+
+    // Check if the current user is the owner
+    if (existingRecording.user_id !== userId) {
+      throw new Error("You are not authorized to edit this recording");
+    }
+
+    query = query.update({ ...newRecording, audio: audioPath }).eq("id", id);
+  }
 
   const { data, error } = await query.select().single();
 
   if (error) {
     console.error(error);
-    throw new Error("Recording could not be created");
+    throw new Error("Recording could not be created/edited");
   }
 
   // 2. Upload Audio

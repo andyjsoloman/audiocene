@@ -116,25 +116,6 @@ export default function Form({ recordingToEdit = {} }) {
       }
     }
 
-    // async function fetchRecordingData() {
-    //   try {
-    //     setIsLoadingGeoCoding(true);
-    //     const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
-    //     const data = await res.json();
-
-    //     setLocality(data.locality || "");
-    //     setCountry(data.countryName || "");
-    //     setValue("locality", data.locality || "");
-    //     setValue("country", data.countryName || "");
-    //     setValue("lat", lat);
-    //     setValue("lng", lng);
-    //   } catch (err) {
-    //     setGeocodingError(err.message);
-    //   } finally {
-    //     setIsLoadingGeoCoding(false);
-    //   }
-    // }
-
     fetchRecordingData();
   }, [lat, lng, setValue]);
 
