@@ -100,7 +100,7 @@ function User() {
   }
 
   function goToProfile() {
-    navigate("/app/profile");
+    navigate("/profile");
   }
 
   return (

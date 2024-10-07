@@ -17,8 +17,8 @@ const StyledLogin = styled.form`
 
 export default function LoginForm() {
   // PRE-FILL FOR DEV PURPOSES
-  const [email, setEmail] = useState("mikag48015@rowplant.com");
-  const [password, setPassword] = useState("asdfasdf");
+  const [email, setEmail] = useState("foceko9981@skrank.com");
+  const [password, setPassword] = useState("asdasdasd");
 
   const { login, isLoading } = useLogin();
 

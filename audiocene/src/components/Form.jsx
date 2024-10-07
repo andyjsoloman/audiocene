@@ -98,16 +98,12 @@ export default function Form({ recordingToEdit = {} }) {
 
         const countryName = getCountry(data.features);
 
-        console.log(countryName);
-
         setLocality(locationName || "Unknown Region");
         setCountry(countryName || "Unknown Country");
         setValue("locality", locationName || "Unknown Region");
         setValue("country", countryName || "Unknown Country");
         setValue("lat", lat);
         setValue("lng", lng);
-
-        console.log(data);
       } catch (err) {
         setGeocodingError(err.message);
         console.log(err.message);
