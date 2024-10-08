@@ -4,6 +4,8 @@ import { useUser } from "../features/authentication/useUser";
 import styled from "styled-components";
 import { getProfileById } from "../services/apiProfiles";
 import { useEffect, useState } from "react";
+import Button from "../components/Button";
+import Avatar from "../components/Avatar";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -11,6 +13,33 @@ const PleaseLogin = styled.h3`
   justify-content: center;
   height: 80%;
   gap: 0.25rem;
+`;
+
+const ProfileSection = styled.div`
+  display: flex;
+  justify-content: start;
+  margin: 80px 120px;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+`;
+const ProfileInfo = styled.div``;
+
+const ContentHeader = styled.div`
+  padding-bottom: 12px;
+  margin: 80px 120px;
+  border-bottom: 1px solid var(--color-grey);
+`;
+
+const ContentTab = styled.div`
+  display: inline;
+  margin: 12px 40px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-black);
 `;
 
 function Profile() {
@@ -25,7 +54,6 @@ function Profile() {
     try {
       const data = await getProfileById(userId);
       setProfile(data);
-      console.log(profile);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -53,12 +81,25 @@ function Profile() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!profile) return <p>No profile found.</p>;
-
+  console.log(profile);
   return (
     <div>
       <NavBar />
-      <h1>Profile for {profile.display_name || "User"}</h1>
-      <p>Email: {profile.email_address}</p>
+
+      <ProfileSection>
+        <ProfileContainer>
+          <ProfileInfo>
+            <Avatar />
+            <h1>Profile for {profile.display_name || "User"}</h1>
+            <p>Email: {profile.email_address}</p>
+          </ProfileInfo>
+          <Button>Edit</Button>
+        </ProfileContainer>
+      </ProfileSection>
+      <ContentHeader>
+        <ContentTab>Recordings</ContentTab>
+        <ContentTab>Favourites</ContentTab>
+      </ContentHeader>
     </div>
   );
 }
