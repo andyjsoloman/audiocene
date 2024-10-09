@@ -1,5 +1,6 @@
 import { NavLink as BaseNavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useUser } from "../features/authentication/useUser";
 
 const NavWrapper = styled.ul`
   display: flex;
@@ -28,6 +29,8 @@ const NavLink = styled(BaseNavLink)`
 `;
 
 export default function AppNav() {
+  const { user } = useUser();
+
   return (
     <nav>
       <NavWrapper>
@@ -37,9 +40,11 @@ export default function AppNav() {
         <NavItem>
           <NavLink to="add">Upload</NavLink>
         </NavItem>
-        <NavItem>
-          <NavLink to="favourites">Favourites</NavLink>
-        </NavItem>
+        {user && (
+          <NavItem>
+            <NavLink to="favourites">Favourites</NavLink>
+          </NavItem>
+        )}
       </NavWrapper>
     </nav>
   );
