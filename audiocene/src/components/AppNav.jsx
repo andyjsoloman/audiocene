@@ -6,6 +6,7 @@ const NavWrapper = styled.ul`
   justify-content: space-evenly;
   padding-inline-start: 0px;
   margin-bottom: 20px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--color-grey);
 `;
 
@@ -14,11 +15,12 @@ const NavItem = styled.li`
 `;
 
 const NavLink = styled(BaseNavLink)`
+  display: inline;
   text-decoration: none;
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--color-black);
-  padding-bottom: 12px;
+  padding-bottom: 6px;
 
   &.active {
     border-bottom: 3px solid var(--color-primary);

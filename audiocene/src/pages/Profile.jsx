@@ -39,7 +39,15 @@ const ContentTab = styled.div`
   margin: 12px 40px;
   font-size: 1.2rem;
   font-weight: 500;
+  padding-bottom: 6px;
   color: var(--color-black);
+  cursor: pointer;
+  transition: border-bottom 0.2s;
+
+  ${({ isActive }) =>
+    isActive
+      ? "border-bottom: 3px solid var(--color-primary);"
+      : "border-bottom: none;"}
 `;
 
 function Profile() {
@@ -47,6 +55,7 @@ function Profile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("tab1");
 
   // Async function to fetch the profile
   const fetchProfile = async (userId) => {
@@ -83,7 +92,7 @@ function Profile() {
   if (!profile) return <p>No profile found.</p>;
   console.log(profile);
   return (
-    <div>
+    <>
       <NavBar />
 
       <ProfileSection>
@@ -97,10 +106,20 @@ function Profile() {
         </ProfileContainer>
       </ProfileSection>
       <ContentHeader>
-        <ContentTab>Recordings</ContentTab>
-        <ContentTab>Favourites</ContentTab>
+        <ContentTab
+          isActive={activeTab === "tab1"}
+          onClick={() => setActiveTab("tab1")}
+        >
+          Recordings
+        </ContentTab>
+        <ContentTab
+          isActive={activeTab === "tab2"}
+          onClick={() => setActiveTab("tab2")}
+        >
+          Favourites
+        </ContentTab>
       </ContentHeader>
-    </div>
+    </>
   );
 }
 
