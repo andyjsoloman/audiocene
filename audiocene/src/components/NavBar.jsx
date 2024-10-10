@@ -1,7 +1,7 @@
 import { NavLink as BaseNavLink } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "./Logo";
-import User from "./User";
+import UserMenu from "./UserMenu";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
 
@@ -54,7 +54,7 @@ function NavBar() {
           <NavLink to="/about">About</NavLink>
         </NavLi>
         {user ? (
-          <User key={loggedOut ? "logged-out" : "logged-in"} />
+          <UserMenu key={loggedOut ? "logged-out" : "logged-in"} />
         ) : (
           <NavLi>
             <NavLink to="/login">Login</NavLink>

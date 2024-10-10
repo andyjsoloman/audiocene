@@ -43,11 +43,8 @@ const ContentTab = styled.div`
   color: var(--color-black);
   cursor: pointer;
   transition: border-bottom 0.2s;
-
-  ${({ isActive }) =>
-    isActive
-      ? "border-bottom: 3px solid var(--color-primary);"
-      : "border-bottom: none;"}
+  border-bottom: ${(props) =>
+    props.$isActive ? "3px solid var(--color-primary)" : "none"};
 `;
 
 function Profile() {
@@ -107,13 +104,13 @@ function Profile() {
       </ProfileSection>
       <ContentHeader>
         <ContentTab
-          isActive={activeTab === "tab1"}
+          $isActive={activeTab === "tab1"}
           onClick={() => setActiveTab("tab1")}
         >
           Recordings
         </ContentTab>
         <ContentTab
-          isActive={activeTab === "tab2"}
+          $isActive={activeTab === "tab2"}
           onClick={() => setActiveTab("tab2")}
         >
           Favourites

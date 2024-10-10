@@ -55,7 +55,7 @@ const DropdownItem = styled.div`
   }
 `;
 
-function User() {
+function UserMenu() {
   const { logout, isLoading } = useLogout();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -120,4 +120,4 @@ function User() {
   );
 }
 
-export default User;
+export default UserMenu;
