@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
 import supabase from "../services/supabase";
+import UserAvatar from "./UserAvatar";
 
 const UserContainer = styled.div`
   background-color: var(--color-bg);
@@ -106,7 +107,7 @@ function UserMenu() {
   return (
     <>
       <UserContainer onClick={toggleDropdown}>
-        <UserImg src="../profile.svg" alt={user} />
+        <UserAvatar size="small" />
         <span>Welcome, {fullName} </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (

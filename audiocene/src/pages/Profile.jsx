@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { getProfileById } from "../services/apiProfiles";
 import { useEffect, useState } from "react";
 import Button from "../components/Button";
-import Avatar from "../components/Avatar";
+import UserAvatar from "../components/UserAvatar";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -95,7 +95,7 @@ function Profile() {
       <ProfileSection>
         <ProfileContainer>
           <ProfileInfo>
-            <Avatar />
+            <UserAvatar size="large" />
             <h1>Profile for {profile.display_name || "User"}</h1>
             <p>Email: {profile.email_address}</p>
           </ProfileInfo>
