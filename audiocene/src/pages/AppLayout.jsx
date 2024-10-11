@@ -1,5 +1,5 @@
 import AudioPlayer from "../components/AudioPlayer";
-import Map from "../components/Map";
+
 import MapGL from "../components/MapGL";
 import MapSidePanel from "../components/MapSidePanel";
 import NavBar from "../components/NavBar";

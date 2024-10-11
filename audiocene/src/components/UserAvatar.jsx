@@ -37,8 +37,6 @@ function UserAvatar({ size }) {
 
   const { avatar } = user.user_metadata;
 
-  console.log(user);
-
   return (
     <AvatarImg
       style={styles}

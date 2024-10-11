@@ -6,6 +6,7 @@ import { getProfileById } from "../services/apiProfiles";
 import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import UserAvatar from "../components/UserAvatar";
+import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -87,7 +88,7 @@ function Profile() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!profile) return <p>No profile found.</p>;
-  console.log(profile);
+
   return (
     <>
       <NavBar />
@@ -102,6 +103,7 @@ function Profile() {
           <Button>Edit</Button>
         </ProfileContainer>
       </ProfileSection>
+      <UpdateUserDataForm />
       <ContentHeader>
         <ContentTab
           $isActive={activeTab === "tab1"}
