@@ -93,6 +93,7 @@ function Profile() {
     if (user.user?.id) {
       fetchProfile(user.user.id);
     }
+    setEditingProfile(false);
   };
 
   if (!user || !user.user) {
@@ -122,12 +123,16 @@ function Profile() {
             <p>Email: {profile.email_address}</p>
           </ProfileInfo>
           <EditButtons>
-            <Button onClick={() => setEditingProfile(true)}>
-              Edit Profile
-            </Button>
-            <Button onClick={() => setEditingPassword(true)}>
-              Edit Password
-            </Button>
+            {!editingProfile && !editingPassword && (
+              <>
+                <Button onClick={() => setEditingProfile(true)}>
+                  Edit Profile
+                </Button>
+                <Button onClick={() => setEditingPassword(true)}>
+                  Edit Password
+                </Button>
+              </>
+            )}
           </EditButtons>
         </ProfileContainer>
       </ProfileSection>
@@ -137,7 +142,9 @@ function Profile() {
           setEditingProfile={setEditingProfile}
         />
       )}
-      {editingPassword && <UpdatePasswordForm />}
+      {editingPassword && (
+        <UpdatePasswordForm setEditingPassword={setEditingPassword} />
+      )}
 
       <ContentHeader>
         <ContentTab

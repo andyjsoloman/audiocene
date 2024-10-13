@@ -8,19 +8,20 @@ const FormContainer = styled.div`
   margin: 80px 120px;
 `;
 
-function UpdatePasswordForm() {
+function UpdatePasswordForm({ setEditingPassword }) {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
 
-  const { mutate: updateUser, isLoading: isUpdating } = useUpdateUser();
+  const { updateUser, isLoading: isUpdating } = useUpdateUser();
 
   function onSubmit({ password }) {
     updateUser({ password }, { onSuccess: () => reset() });
   }
 
   function handleReset(e) {
-    // e.preventDefault();
+    e.preventDefault();
     reset();
+    setEditingPassword(false);
   }
 
   return (
@@ -63,7 +64,7 @@ function UpdatePasswordForm() {
           />
         </FormRow>
         <FormRow>
-          <Button onClick={handleReset} type="reset" variant="secondary">
+          <Button onClick={handleReset} type="button" variant="secondary">
             Cancel
           </Button>
           <Button disabled={isUpdating}>Update password</Button>
