@@ -5,11 +5,14 @@ import Button from "../../components/Button";
 import FormRow from "../../components/FormRow";
 import { useUpdateUser } from "./useUpdateUser";
 
-export default function UpdateUserDataForm() {
+export default function UpdateUserDataForm({ onProfileUpdate }) {
   // We don't need the loading state
   const user = useUser();
-  const { email, user_metadata: { fullName: currentFullName } = {} } =
-    user.user;
+  const {
+    id: userID,
+    email,
+    user_metadata: { fullName: currentFullName } = {},
+  } = user.user;
 
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
@@ -21,12 +24,14 @@ export default function UpdateUserDataForm() {
     if (!fullName) return;
 
     updateUser(
-      { fullName, avatar },
+      { fullName, avatar, userID },
       {
         onSuccess: () => {
           setAvatar(null);
           // Resetting form using .reset() that's available on all HTML form elements, otherwise the old filename will stay displayed in the UI
           e.target.reset();
+
+          if (onProfileUpdate) onProfileUpdate();
         },
       }
     );

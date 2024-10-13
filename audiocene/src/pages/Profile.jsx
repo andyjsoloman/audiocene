@@ -74,6 +74,12 @@ function Profile() {
     }
   }, [user?.user?.id]);
 
+  const handleProfileUpdate = () => {
+    if (user.user?.id) {
+      fetchProfile(user.user.id);
+    }
+  };
+
   if (!user || !user.user) {
     return (
       <>
@@ -103,7 +109,7 @@ function Profile() {
           <Button>Edit</Button>
         </ProfileContainer>
       </ProfileSection>
-      <UpdateUserDataForm />
+      <UpdateUserDataForm onProfileUpdate={handleProfileUpdate} />
       <ContentHeader>
         <ContentTab
           $isActive={activeTab === "tab1"}
