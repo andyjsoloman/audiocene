@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import UserAvatar from "../components/UserAvatar";
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
+import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -25,9 +26,21 @@ const ProfileSection = styled.div`
 const ProfileContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 40%;
+
+  width: 50%;
 `;
-const ProfileInfo = styled.div``;
+const ProfileInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const EditButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+`;
 
 const ContentHeader = styled.div`
   padding-bottom: 12px;
@@ -54,6 +67,8 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("tab1");
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editingPassword, setEditingPassword] = useState(false);
 
   // Async function to fetch the profile
   const fetchProfile = async (userId) => {
@@ -106,10 +121,24 @@ function Profile() {
             <h1>Profile for {profile.display_name || "User"}</h1>
             <p>Email: {profile.email_address}</p>
           </ProfileInfo>
-          <Button>Edit</Button>
+          <EditButtons>
+            <Button onClick={() => setEditingProfile(true)}>
+              Edit Profile
+            </Button>
+            <Button onClick={() => setEditingPassword(true)}>
+              Edit Password
+            </Button>
+          </EditButtons>
         </ProfileContainer>
       </ProfileSection>
-      <UpdateUserDataForm onProfileUpdate={handleProfileUpdate} />
+      {editingProfile && (
+        <UpdateUserDataForm
+          onProfileUpdate={handleProfileUpdate}
+          setEditingProfile={setEditingProfile}
+        />
+      )}
+      {editingPassword && <UpdatePasswordForm />}
+
       <ContentHeader>
         <ContentTab
           $isActive={activeTab === "tab1"}
