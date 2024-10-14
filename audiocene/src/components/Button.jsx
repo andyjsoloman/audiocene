@@ -47,6 +47,19 @@ const SecondaryButton = styled(ButtonBase)`
   }
 `;
 
+const TertiaryButton = styled(ButtonBase)`
+  border: none;
+  background-color: transparent;
+  color: var(--color-primary);
+
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
 export default function Button({ variant, children, onClick }) {
   let Component;
   switch (variant) {
@@ -55,6 +68,9 @@ export default function Button({ variant, children, onClick }) {
       break;
     case "secondary":
       Component = SecondaryButton;
+      break;
+    case "tertiary":
+      Component = TertiaryButton;
       break;
     default:
       Component = ButtonBase; // Default to ButtonBase if variant is unrecognized

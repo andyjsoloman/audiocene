@@ -8,9 +8,20 @@ import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
 import Form from "./Form";
+import { useUser } from "../features/authentication/useUser";
 
 const DetailPanel = styled.div`
   position: flex;
+`;
+
+const DetailHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const HeaderButtons = styled.div`
+  display: flex;
+  gap: 8px;
 `;
 
 const Title = styled.h3`
@@ -18,14 +29,34 @@ const Title = styled.h3`
 `;
 
 const ButtonRow = styled.div`
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
+`;
+
+const RecordingImage = styled.img`
+  height: 200px;
+  margin: auto;
+  margin-bottom: 20px;
 `;
 
 function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
-  const [showForm, setShowForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { user: currentUser } = useUser();
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "p.m." : "a.m.";
+    const formattedTime = `${hours % 12 || 12}:${minutes} ${ampm}`;
+    return `${formattedDate} at ${formattedTime}`;
+  };
 
   const {
     isLoading,
@@ -63,36 +94,41 @@ function RecordingDetail() {
     return <div>Error fetching user: {userError.message}</div>;
   }
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = date.toLocaleDateString("en-US", options);
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const ampm = hours >= 12 ? "p.m." : "a.m.";
-    const formattedTime = `${hours % 12 || 12}:${minutes} ${ampm}`;
-    return `${formattedDate} at ${formattedTime}`;
-  };
-
   return (
     <>
       <DetailPanel>
-        <Title>{recording.title}</Title>
-        <div>Recorded at {formatDate(recording.date)}</div>
-        <div>
-          {recording.locality}, {recording.country}
-        </div>
-        {user && <div>Uploaded by: {user.display_name}</div>}{" "}
-        {/* Updated to access the first user */}
-        <ButtonRow>
-          <BackButton />
-          <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
-          <Button onClick={() => setShowForm((show) => !show)}>
-            {showForm ? "Cancel" : "Edit"}
-          </Button>
-        </ButtonRow>
+        <DetailHeader>
+          <Title>{recording.title}</Title>
+          {user.id == currentUser.id && (
+            <HeaderButtons>
+              <Button
+                variant="tertiary"
+                onClick={() => setIsEditing((editing) => !editing)}
+              >
+                {isEditing ? "Cancel" : "Edit"}
+              </Button>
+              <Button variant="tertiary">Delete</Button>
+            </HeaderButtons>
+          )}
+        </DetailHeader>
+        {isEditing && <Form recordingToEdit={recording} />}
+
+        {!isEditing && (
+          <>
+            <RecordingImage src="/no-photo.svg"></RecordingImage>
+
+            <div>Recorded at {formatDate(recording.date)}</div>
+            <div>
+              {recording.locality}, {recording.country}
+            </div>
+            {user && <div>Uploaded by: {user.display_name}</div>}
+            <ButtonRow>
+              <BackButton />
+              <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
+            </ButtonRow>
+          </>
+        )}
       </DetailPanel>
-      {showForm && <Form recordingToEdit={recording} />}
     </>
   );
 }
