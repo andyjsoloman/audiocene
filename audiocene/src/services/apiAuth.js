@@ -47,56 +47,62 @@ export async function updateCurrentUser({
   userID,
   password,
   fullName,
-  avatar,
+  avatar, // Avatar can be null or undefined
 }) {
-  //1. Update password OR fullName
-  let updateData;
-  if (password) updateData = { password };
-  if (fullName) updateData = { data: { fullName } };
+  // Step 1: Update password or fullName
+  let updateData = {};
+  if (password) updateData.password = password;
+  if (fullName) updateData.data = { fullName };
 
   const { data, error } = await supabase.auth.updateUser(updateData);
   if (error) throw new Error(error.message);
+
+  // Step 2: Update profiles table with fullName only (if no avatar is passed)
   if (!avatar && fullName) {
-    // Update profiles table with fullName only
     const { error: profileError } = await supabase
       .from("profiles")
       .update({ display_name: fullName })
       .eq("id", userID);
     if (profileError) throw new Error(profileError.message);
 
-    return data;
+    return data; // Return early if there's no avatar to handle
   }
 
-  //2.Upload avatar image
+  // Step 3: Upload avatar image only if provided
   let avatarUrl = null;
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  if (avatar) {
+    const fileName = `avatar-${data.user.id}-${Math.random()}`;
+    const { error: storageError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, avatar);
 
-  const { error: storageError } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, avatar);
-  if (storageError) throw new Error(storageError.message);
+    if (storageError) throw new Error(storageError.message);
 
-  avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+    avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
 
-  //3. Update avatar in user
-  const { data: updatedUser, error: avatarUpdateError } =
-    await supabase.auth.updateUser({
-      data: {
-        avatar: avatarUrl,
-      },
-    });
-  if (avatarUpdateError) throw new Error(avatarUpdateError.message);
+    // Update the avatar URL in the user object
+    const { data: updatedUser, error: avatarUpdateError } =
+      await supabase.auth.updateUser({
+        data: { avatar: avatarUrl },
+      });
 
-  // 3. Update profiles table
+    if (avatarUpdateError) throw new Error(avatarUpdateError.message);
+  }
+
+  // Step 4: Update profiles table (with avatar or fullName if provided)
   const profileUpdateData = {};
   if (fullName) profileUpdateData.display_name = fullName;
   if (avatarUrl) profileUpdateData.avatar_url = avatarUrl;
 
-  const { error: profileError } = await supabase
-    .from("profiles")
-    .update(profileUpdateData)
-    .eq("id", data.user.id);
+  if (Object.keys(profileUpdateData).length > 0) {
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update(profileUpdateData)
+      .eq("id", data.user.id);
 
-  if (profileError) throw new Error(profileError.message);
-  return updatedUser;
+    if (profileError) throw new Error(profileError.message);
+  }
+
+  // Return the updated user object
+  return data;
 }

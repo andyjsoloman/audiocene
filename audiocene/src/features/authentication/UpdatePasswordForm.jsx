@@ -8,7 +8,7 @@ const FormContainer = styled.div`
   margin: 80px 120px;
 `;
 
-function UpdatePasswordForm({ setEditingPassword }) {
+function UpdatePasswordForm({ setEditingPassword, onPasswordUpdate }) {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
 
@@ -16,6 +16,7 @@ function UpdatePasswordForm({ setEditingPassword }) {
 
   function onSubmit({ password }) {
     updateUser({ password }, { onSuccess: () => reset() });
+    if (onPasswordUpdate) onPasswordUpdate();
   }
 
   function handleReset(e) {

@@ -96,6 +96,10 @@ function Profile() {
     setEditingProfile(false);
   };
 
+  const handlePasswordUpdate = () => {
+    setEditingPassword(false);
+  };
+
   if (!user || !user.user) {
     return (
       <>
@@ -143,7 +147,10 @@ function Profile() {
         />
       )}
       {editingPassword && (
-        <UpdatePasswordForm setEditingPassword={setEditingPassword} />
+        <UpdatePasswordForm
+          onPasswordUpdate={handlePasswordUpdate}
+          setEditingPassword={setEditingPassword}
+        />
       )}
 
       <ContentHeader>
