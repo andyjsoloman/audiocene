@@ -6,7 +6,7 @@ const ButtonBase = styled.button`
   border-radius: 8px;
   border-style: none;
   box-sizing: border-box;
-  color: #ffffff;
+  color: var(--color-bg);
   cursor: pointer;
   display: inline-block;
   font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
@@ -60,6 +60,18 @@ const TertiaryButton = styled(ButtonBase)`
   }
 `;
 
+const WarningButton = styled(ButtonBase)`
+  background-color: var(--color-error-red);
+  color: var(--color-bg);
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-error-hover);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
 export default function Button({ variant, children, onClick }) {
   let Component;
   switch (variant) {
@@ -71,6 +83,9 @@ export default function Button({ variant, children, onClick }) {
       break;
     case "tertiary":
       Component = TertiaryButton;
+      break;
+    case "warning":
+      Component = WarningButton;
       break;
     default:
       Component = ButtonBase; // Default to ButtonBase if variant is unrecognized

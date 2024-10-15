@@ -3,12 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
+import { useDeleteRecording } from "../features/recordings/useDeleteRecording";
 import { getProfileById } from "../services/apiProfiles"; // Updated import
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
 import Form from "./Form";
 import { useUser } from "../features/authentication/useUser";
+import Modal from "./Modal";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -44,8 +46,9 @@ function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [isEditing, setIsEditing] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user: currentUser } = useUser();
+  const { isDeleting, deleteRecording } = useDeleteRecording();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -97,6 +100,21 @@ function RecordingDetail() {
   return (
     <>
       <DetailPanel>
+        {isModalOpen && (
+          <Modal onClose={() => setIsModalOpen(false)}>
+            <h3>Delete Recording?</h3>
+            <div>This action cannot be undone</div>
+            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button
+              variant="warning"
+              onClick={() => deleteRecording({ id })}
+              disabled={isDeleting}
+            >
+              Delete
+            </Button>
+          </Modal>
+        )}
+
         <DetailHeader>
           <Title>{recording.title}</Title>
           {user.id == currentUser.id && (
@@ -107,7 +125,9 @@ function RecordingDetail() {
               >
                 {isEditing ? "Cancel" : "Edit"}
               </Button>
-              <Button variant="tertiary">Delete</Button>
+              <Button variant="tertiary" onClick={() => setIsModalOpen(true)}>
+                Delete
+              </Button>
             </HeaderButtons>
           )}
         </DetailHeader>
