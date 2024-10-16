@@ -97,7 +97,7 @@ export async function deleteRecording(id, currentUserId) {
   // Step 1: Retrieve the recording to verify the owner
   const { data: recording, error: fetchError } = await supabase
     .from("recordings")
-    .select("user_id")
+    .select("user_id, audio")
     .eq("id", id)
     .single();
 
@@ -110,8 +110,22 @@ export async function deleteRecording(id, currentUserId) {
   if (recording.user_id !== currentUserId) {
     throw new Error("You are not authorized to delete this recording");
   }
+  const recordingUrl = recording.audio.replace(
+    "https://naiqpffpxlusflmdzeqa.supabase.co/storage/v1/object/public/recordings-audio/",
+    ""
+  );
 
-  // Step 3: Proceed with deletion if user is authorized
+  // Step 3: Delete the file from Supabase storage
+  const { error: deleteStorageError } = await supabase.storage
+    .from("recordings-audio")
+    .remove([recordingUrl]);
+
+  if (deleteStorageError) {
+    console.error(deleteStorageError);
+    throw new Error("File could not be deleted from storage");
+  }
+
+  // Step 4: Proceed with deletion if user is authorized
   const { error: deleteError } = await supabase
     .from("recordings")
     .delete()

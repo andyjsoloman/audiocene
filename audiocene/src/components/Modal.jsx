@@ -10,7 +10,7 @@ const StyledModal = styled.div`
   background-color: var(--color-bg);
   border-radius: 24px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  padding: 3.2rem 4rem;
+  padding: 40px;
   transition: all 0.5s;
 `;
 
@@ -26,15 +26,25 @@ const Overlay = styled.div`
   transition: all 0.5s;
 `;
 
+const CloseButton = styled.div`
+  position: absolute;
+  right: 20px;
+  top: 20px;
+`;
+
+const Content = styled.div`
+  margin-top: 20px;
+`;
+
 function Modal({ children, onClose }) {
   return (
     <Overlay>
       <StyledModal>
-        <Button variant="tertiary" onClick={onClose}>
+        <CloseButton onClick={onClose}>
           <CloseIcon />
-        </Button>
+        </CloseButton>
 
-        <div>{children}</div>
+        <Content>{children}</Content>
       </StyledModal>
     </Overlay>
   );

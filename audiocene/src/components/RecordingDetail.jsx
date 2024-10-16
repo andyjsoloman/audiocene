@@ -42,6 +42,22 @@ const RecordingImage = styled.img`
   margin-bottom: 20px;
 `;
 
+const DeleteContent = styled.div`
+  display: flex;
+  margin-top: 40px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+`;
+
+const DeleteButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
@@ -102,16 +118,20 @@ function RecordingDetail() {
       <DetailPanel>
         {isModalOpen && (
           <Modal onClose={() => setIsModalOpen(false)}>
-            <h3>Delete Recording?</h3>
-            <div>This action cannot be undone</div>
-            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button
-              variant="warning"
-              onClick={() => deleteRecording({ id })}
-              disabled={isDeleting}
-            >
-              Delete
-            </Button>
+            <DeleteContent>
+              <h3>Delete Recording?</h3>
+              <div>This action cannot be undone</div>
+              <DeleteButtons>
+                <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                <Button
+                  variant="warning"
+                  onClick={() => deleteRecording({ id })}
+                  disabled={isDeleting}
+                >
+                  Delete
+                </Button>
+              </DeleteButtons>
+            </DeleteContent>
           </Modal>
         )}
 
