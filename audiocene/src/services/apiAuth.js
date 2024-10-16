@@ -71,6 +71,33 @@ export async function updateCurrentUser({
   // Step 3: Upload avatar image only if provided
   let avatarUrl = null;
   if (avatar) {
+    // Fetch the user's current avatar (if one exists)
+    const { data: userProfile, error: fetchError } = await supabase
+      .from("profiles")
+      .select("avatar_url") // Assuming `avatar_url` holds the file path to the user's current avatar
+      .eq("id", userID)
+      .single();
+
+    if (fetchError) {
+      console.error(fetchError);
+      throw new Error("User profile not found");
+    }
+
+    //  Delete the previous avatar from storage if one exists
+    if (userProfile.avatar_url) {
+      const avatarDeleteUrl = userProfile.avatar_url.replace(
+        "https://naiqpffpxlusflmdzeqa.supabase.co/storage/v1/object/public/avatars/",
+        ""
+      );
+      const { error: deleteError } = await supabase.storage
+        .from("avatars") // Replace with your bucket name
+        .remove([avatarDeleteUrl]);
+
+      if (deleteError) {
+        console.error(deleteError);
+        throw new Error("Failed to delete previous avatar");
+      }
+    }
     const fileName = `avatar-${data.user.id}-${Math.random()}`;
     const { error: storageError } = await supabase.storage
       .from("avatars")
