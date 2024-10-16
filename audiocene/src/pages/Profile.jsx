@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import UserAvatar from "../components/UserAvatar";
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
+import UserRecordings from "../components/UserRecordings";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -66,7 +67,7 @@ function Profile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("recordings");
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
 
@@ -155,18 +156,19 @@ function Profile() {
 
       <ContentHeader>
         <ContentTab
-          $isActive={activeTab === "tab1"}
-          onClick={() => setActiveTab("tab1")}
+          $isActive={activeTab === "recordings"}
+          onClick={() => setActiveTab("recordings")}
         >
           Recordings
         </ContentTab>
         <ContentTab
-          $isActive={activeTab === "tab2"}
-          onClick={() => setActiveTab("tab2")}
+          $isActive={activeTab === "favourites"}
+          onClick={() => setActiveTab("favourites")}
         >
           Favourites
         </ContentTab>
       </ContentHeader>
+      <UserRecordings userId={user.user.id} />
     </>
   );
 }

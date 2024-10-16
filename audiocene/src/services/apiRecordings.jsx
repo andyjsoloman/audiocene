@@ -11,6 +11,20 @@ export async function getRecordings() {
   return data;
 }
 
+export async function getRecordingsByUserId(userId) {
+  const { data, error } = await supabase
+    .from("recordings")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Recordings could not be loaded");
+  }
+
+  return data;
+}
+
 export async function getRecordingById(id) {
   const { data, error } = await supabase
     .from("recordings")
