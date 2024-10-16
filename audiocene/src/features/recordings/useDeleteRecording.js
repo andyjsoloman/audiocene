@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteRecording as deleteRecordingApi } from "../../services/apiRecordings";
 import toast from "react-hot-toast";
 import supabase from "../../services/supabase";
+import { useNavigate } from "react-router-dom";
 
 export function useDeleteRecording() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { isLoading: isDeleting, mutate: deleteRecording } = useMutation({
     mutationFn: async ({ id }) => {
@@ -26,6 +28,7 @@ export function useDeleteRecording() {
     onSuccess: () => {
       toast.success("Recording deleted");
       queryClient.invalidateQueries({ queryKey: ["recordings"] });
+      navigate("/app/explore");
     },
     onError: (err) => toast.error(err.message),
   });
