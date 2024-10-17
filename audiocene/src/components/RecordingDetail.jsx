@@ -10,7 +10,8 @@ import Button from "./Button";
 import styled from "styled-components";
 import Form from "./Form";
 import { useUser } from "../features/authentication/useUser";
-import Modal from "./Modal";
+
+import DeleteButton from "./DeleteButton";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -40,22 +41,6 @@ const RecordingImage = styled.img`
   height: 200px;
   margin: auto;
   margin-bottom: 20px;
-`;
-
-const DeleteContent = styled.div`
-  display: flex;
-  margin-top: 40px;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-`;
-
-const DeleteButtons = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 40px;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 function RecordingDetail() {
@@ -116,25 +101,6 @@ function RecordingDetail() {
   return (
     <>
       <DetailPanel>
-        {isModalOpen && (
-          <Modal onClose={() => setIsModalOpen(false)}>
-            <DeleteContent>
-              <h3>Delete Recording?</h3>
-              <div>This action cannot be undone</div>
-              <DeleteButtons>
-                <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
-                <Button
-                  variant="warning"
-                  onClick={() => deleteRecording({ id })}
-                  disabled={isDeleting}
-                >
-                  Delete
-                </Button>
-              </DeleteButtons>
-            </DeleteContent>
-          </Modal>
-        )}
-
         <DetailHeader>
           <Title>{recording.title}</Title>
           {user.id == currentUser.id && (
@@ -145,9 +111,7 @@ function RecordingDetail() {
               >
                 {isEditing ? "Cancel" : "Edit"}
               </Button>
-              <Button variant="tertiary" onClick={() => setIsModalOpen(true)}>
-                Delete
-              </Button>
+              <DeleteButton id={recording.id} />
             </HeaderButtons>
           )}
         </DetailHeader>
