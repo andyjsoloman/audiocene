@@ -3,10 +3,10 @@ import RecordingItem from "./RecordingItem";
 import { useRecordings } from "../features/recordings/useRecordings";
 
 function RecordingsList() {
-  const { isLoading, error, recordings } = useRecordings();
+  const { loadingRecordings, recordingsError, recordings } = useRecordings();
 
-  if (isLoading) return <p>Loading</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loadingRecordings) return <p>Loading</p>;
+  if (recordingsError) return <p>Error: {recordingsError.message}</p>;
   return (
     <ul>
       {recordings.map((recording) => (

@@ -3,12 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
-import { getProfileById } from "../services/apiProfiles"; // Updated import
+import { getProfileById } from "../services/apiProfiles";
+
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
 import styled from "styled-components";
 import Form from "./Form";
 import { useUser } from "../features/authentication/useUser";
+import { useRecordings } from "../features/recordings/useRecordings";
 
 import DeleteButton from "./DeleteButton";
 import FavouriteIcon from "./FavouriteIcon";
@@ -59,8 +61,18 @@ function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [isEditing, setIsEditing] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(false);
 
   const { user: currentUser } = useUser();
+
+  const {
+    loadingRecording,
+    recording,
+    recordingError,
+    loadingUser,
+    user,
+    userError,
+  } = useRecordings(null, id);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -73,36 +85,16 @@ function RecordingDetail() {
     return `${formattedDate} at ${formattedTime}`;
   };
 
-  const {
-    isLoading,
-    data: recording,
-    error,
-  } = useQuery({
-    queryKey: ["recording", id],
-    queryFn: () => getRecordingById(id),
-  });
+  const toggleFavourite = () => {
+    setIsFavourite(!isFavourite);
+  };
 
-  const {
-    data: user,
-    error: userError,
-    isLoading: loadingUser,
-  } = useQuery({
-    queryKey: ["user", recording?.user_id],
-    queryFn: () => {
-      if (recording && recording.user_id) {
-        return getProfileById(recording.user_id); // Fetch profile for the specific user
-      }
-      return null; // Prevent fetching if recording is not available
-    },
-    enabled: !!recording && !!recording.user_id, // Only fetch if the recording data and user_id are available
-  });
-
-  if (isLoading || loadingUser) {
+  if (loadingRecording || loadingUser) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (recordingError) {
+    return <div>Error: {recordingError.message}</div>;
   }
 
   if (userError) {
@@ -140,7 +132,10 @@ function RecordingDetail() {
                 {user && <div>Uploaded by: {user.display_name}</div>}
               </RecordingInfo>
               <FavouriteButton>
-                <FavouriteIcon isFavourite={true} />
+                <FavouriteIcon
+                  isFavourite={isFavourite}
+                  onClick={toggleFavourite}
+                />
               </FavouriteButton>
             </InfoPanel>
 
