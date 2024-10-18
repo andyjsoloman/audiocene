@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BackButton from "./BackButton";
 import { getRecordingById } from "../services/apiRecordings";
-import { useDeleteRecording } from "../features/recordings/useDeleteRecording";
 import { getProfileById } from "../services/apiProfiles"; // Updated import
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";
@@ -12,6 +11,7 @@ import Form from "./Form";
 import { useUser } from "../features/authentication/useUser";
 
 import DeleteButton from "./DeleteButton";
+import FavouriteIcon from "./FavouriteIcon";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -38,18 +38,29 @@ const ButtonRow = styled.div`
 `;
 
 const RecordingImage = styled.img`
-  height: 200px;
+  height: 180px;
   margin: auto;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
+
+const InfoPanel = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const RecordingInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FavouriteButton = styled.div``;
 
 function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { user: currentUser } = useUser();
-  const { isDeleting, deleteRecording } = useDeleteRecording();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -120,12 +131,19 @@ function RecordingDetail() {
         {!isEditing && (
           <>
             <RecordingImage src="/no-photo.svg"></RecordingImage>
+            <InfoPanel>
+              <RecordingInfo>
+                <div>Recorded at {formatDate(recording.date)}</div>
+                <div>
+                  {recording.locality}, {recording.country}
+                </div>
+                {user && <div>Uploaded by: {user.display_name}</div>}
+              </RecordingInfo>
+              <FavouriteButton>
+                <FavouriteIcon isFavourite={true} />
+              </FavouriteButton>
+            </InfoPanel>
 
-            <div>Recorded at {formatDate(recording.date)}</div>
-            <div>
-              {recording.locality}, {recording.country}
-            </div>
-            {user && <div>Uploaded by: {user.display_name}</div>}
             <ButtonRow>
               <BackButton />
               <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
