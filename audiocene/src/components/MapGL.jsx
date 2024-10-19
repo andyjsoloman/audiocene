@@ -7,7 +7,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
-import { getRecordings } from "../services/apiRecordings";
+
+import { useRecordings } from "../features/recordings/useRecordings";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -38,14 +39,8 @@ const GeolocateContainer = styled.div`
 
 export default function MapGL() {
   const navigate = useNavigate();
-  const {
-    isLoading,
-    data: recordings = [],
-    error,
-  } = useQuery({
-    queryKey: ["recordings"],
-    queryFn: getRecordings,
-  });
+
+  const { loadingRecordings, recordingsError, recordings } = useRecordings();
 
   const [mapPosition, setMapPosition] = useState([
     50.71733015526967, 1.8731689453125002,

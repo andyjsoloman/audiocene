@@ -1,9 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import BackButton from "./BackButton";
-import { getRecordingById } from "../services/apiRecordings";
-import { getProfileById } from "../services/apiProfiles";
 
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import Button from "./Button";

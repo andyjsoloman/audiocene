@@ -1,5 +1,3 @@
-import Button from "./Button";
-
 function Explore() {
   return (
     <div>

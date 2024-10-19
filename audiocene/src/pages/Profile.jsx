@@ -2,13 +2,14 @@ import NavBar from "../components/NavBar";
 import { Link } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 import styled from "styled-components";
-import { getProfileById } from "../services/apiProfiles";
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
 import Button from "../components/Button";
 import UserAvatar from "../components/UserAvatar";
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 import UserRecordings from "../components/UserRecordings";
+import { useProfile } from "../features/authentication/profiles/useProfiles";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -64,36 +65,15 @@ const ContentTab = styled.div`
 
 function Profile() {
   const user = useUser();
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
   const [activeTab, setActiveTab] = useState("recordings");
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
 
-  // Async function to fetch the profile
-  const fetchProfile = async (userId) => {
-    setLoading(true);
-    try {
-      const data = await getProfileById(userId);
-      setProfile(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user.user?.id) {
-      fetchProfile(user.user.id);
-    }
-  }, [user?.user?.id]);
+  const { profile, isLoading, error, refetch } = useProfile(user?.user?.id);
 
   const handleProfileUpdate = () => {
-    if (user.user?.id) {
-      fetchProfile(user.user.id);
-    }
+    refetch();
     setEditingProfile(false);
   };
 
@@ -112,7 +92,7 @@ function Profile() {
     );
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!profile) return <p>No profile found.</p>;
 
