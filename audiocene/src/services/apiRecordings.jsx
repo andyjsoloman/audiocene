@@ -41,8 +41,6 @@ export async function getRecordingById(id) {
 }
 
 export async function createEditRecording(newRecording, id, userId) {
-  console.log(newRecording, id);
-
   const hasAudioPath = newRecording.audio?.startsWith?.(supabaseUrl);
 
   const audioName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(

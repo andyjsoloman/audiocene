@@ -1,12 +1,12 @@
 import supabase from "./supabase";
 
-export async function getFavoriteByUserIdAndRecordingId(userId, recordingId) {
+export async function getFavoriteByIds(userId, recordingId) {
   const { data, error } = await supabase
     .from("favorites")
     .select("*")
     .eq("user_id", userId)
     .eq("recording_id", recordingId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(error);
@@ -28,4 +28,39 @@ export async function getFavoritesByUserId(userId) {
   }
 
   return data;
+}
+
+export async function createFavorite({ userId, recordingId }) {
+  console.log("userId:", userId);
+  console.log("recordingId:", recordingId);
+  const { data, error } = await supabase
+    .from("favorites")
+    .insert([
+      {
+        user_id: userId,
+        recording_id: recordingId,
+      },
+    ])
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Favorite could not be created");
+  }
+
+  return data;
+}
+
+export async function deleteFavorite({ userId, recordingId }) {
+  console.log(userId, recordingId);
+  const { error: deleteError } = await supabase
+    .from("favorites")
+    .delete()
+    .eq("user_id", userId)
+    .eq("recording_id", recordingId);
+
+  if (deleteError) {
+    console.error(deleteError);
+    throw new Error("Favourite could not be deleted");
+  }
 }

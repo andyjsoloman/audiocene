@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BackButton from "./BackButton";
 
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
@@ -12,6 +12,9 @@ import { useRecordings } from "../features/recordings/useRecordings";
 import DeleteButton from "./DeleteButton";
 import FavouriteIcon from "./FavouriteIcon";
 import { formatRecordingDate } from "../hooks/useDateTime";
+import { useFavoriteByIds } from "../features/favorites/useFavorites";
+import { useDeleteFavorite } from "../features/favorites/useDeleteFavorite";
+import { useCreateFavorite } from "../features/favorites/useCreateFavorite";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -72,7 +75,31 @@ function RecordingDetail() {
     userError,
   } = useRecordings(null, id);
 
+  const { isLoading, error, favorite } = useFavoriteByIds(
+    currentUser?.id,
+    recording?.id
+  );
+
+  const { isDeleting, deleteFavorite } = useDeleteFavorite();
+
+  const { isAdding, addFavorite } = useCreateFavorite();
+
+  useEffect(() => {
+    if (favorite) {
+      setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
+    }
+  }, [favorite]);
+
   const toggleFavourite = () => {
+    if (isFavourite) {
+      console.log("delete", recording.id, currentUser.id);
+      deleteFavorite({ userId: currentUser.id, recordingId: recording.id });
+    } else {
+      console.log("add", recording.id, currentUser.id);
+      addFavorite({ userId: currentUser.id, recordingId: recording.id });
+    }
     setIsFavourite(!isFavourite);
   };
 

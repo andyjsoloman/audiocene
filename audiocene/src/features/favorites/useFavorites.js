@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getFavoriteByUserIdAndRecordingId,
+  getFavoriteByIds,
   getFavoritesByUserId,
-} from "../../services/apiRecordings";
+} from "../../services/apiFavorites";
 
 // Hook to get a specific favorite by userId and recordingId
-export function useFavoriteByUserIdAndRecordingId(userId, recordingId) {
+export function useFavoriteByIds(userId, recordingId) {
   const {
     isLoading,
     data: favorite,
     error,
   } = useQuery({
     queryKey: ["favorite", userId, recordingId], // Caching based on both userId and recordingId
-    queryFn: () => getFavoriteByUserIdAndRecordingId(userId, recordingId), // Fetch function
+    queryFn: () => getFavoriteByIds(userId, recordingId), // Fetch function
     enabled: Boolean(userId && recordingId), // Only fetch if both userId and recordingId are present
   });
 
