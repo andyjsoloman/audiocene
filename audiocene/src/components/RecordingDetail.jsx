@@ -11,6 +11,7 @@ import { useRecordings } from "../features/recordings/useRecordings";
 
 import DeleteButton from "./DeleteButton";
 import FavouriteIcon from "./FavouriteIcon";
+import { formatRecordingDate } from "../hooks/useDateTime";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -71,17 +72,6 @@ function RecordingDetail() {
     userError,
   } = useRecordings(null, id);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = date.toLocaleDateString("en-US", options);
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const ampm = hours >= 12 ? "p.m." : "a.m.";
-    const formattedTime = `${hours % 12 || 12}:${minutes} ${ampm}`;
-    return `${formattedDate} at ${formattedTime}`;
-  };
-
   const toggleFavourite = () => {
     setIsFavourite(!isFavourite);
   };
@@ -122,7 +112,7 @@ function RecordingDetail() {
             <RecordingImage src="/no-photo.svg"></RecordingImage>
             <InfoPanel>
               <RecordingInfo>
-                <div>Recorded at {formatDate(recording.date)}</div>
+                <div>Recorded at {formatRecordingDate(recording.date)}</div>
                 <div>
                   {recording.locality}, {recording.country}
                 </div>

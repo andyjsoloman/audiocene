@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
-import { getRecordingById } from "../services/apiRecordings";
+
 import styled from "styled-components";
 import PlayButton from "./PlayButton";
 import VolumeControl from "./VolumeControl";
+import { useRecordings } from "../features/recordings/useRecordings";
+import { formatAudioTime } from "../hooks/useDateTime";
 
 const AudioContainer = styled.div`
   width: 600px;
@@ -96,8 +98,6 @@ const Title = styled.h4`
 `;
 
 function AudioPlayer() {
-  const { currentRecordingId } = useCurrentlyPlaying();
-  const [audioSrc, setAudioSrc] = useState(null);
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -105,12 +105,24 @@ function AudioPlayer() {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
 
+  const { currentRecordingId } = useCurrentlyPlaying();
+
+  const {
+    loadingRecording,
+    recording: audioSrc,
+    recordingError,
+  } = useRecordings(null, currentRecordingId);
+
   useEffect(() => {
     const audio = audioRef.current;
 
     if (!audio) return;
 
-    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+      setIsPlaying(true);
+      audio.play();
+    };
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
 
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -122,6 +134,9 @@ function AudioPlayer() {
     };
   }, [audioSrc]);
 
+  if (loadingRecording) return <p>Loading...</p>;
+  if (recordingError) return <p>Error loading audio</p>;
+  if (!audioSrc) return null;
   const togglePlayPause = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -142,7 +157,9 @@ function AudioPlayer() {
 
   const handleMute = () => {
     const audio = audioRef.current;
-    isMuted ? setVolume(1) : setVolume(0);
+    if (!audio) return;
+    isMuted ? (audio.volume = 1) : (audio.volume = 0);
+    setVolume(audio.volume);
     setIsMuted(!isMuted);
   };
 
@@ -151,29 +168,14 @@ function AudioPlayer() {
     if (!audio) return; // Ensure audio element exists
     audio.volume = e.target.value / 100;
     setVolume(audio.volume);
+    if (audio.volume > 0) {
+      setIsMuted(false);
+    }
   };
 
-  useEffect(() => {
-    if (currentRecordingId) {
-      // Fetch the recording when the currentRecordingId changes
-      getRecordingById(currentRecordingId).then((recording) => {
-        setAudioSrc(recording);
-      });
-    } else {
-      setAudioSrc(null); // Reset audioSrc if there is no currentRecordingId
-    }
-  }, [currentRecordingId]);
-
-  const formatTime = (time) => {
-    if (typeof time === "number" && !isNaN(time)) {
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-      // Convert to string and pad with leading zeros if necessary
-      const formatMinutes = minutes.toString().padStart(2, "0");
-      const formatSeconds = seconds.toString().padStart(2, "0");
-      return `${formatMinutes}:${formatSeconds}`;
-    }
-    return "00:00";
+  const handleEnd = () => {
+    setCurrentTime(0);
+    setIsPlaying(false);
   };
 
   if (!audioSrc) return null;
@@ -184,8 +186,8 @@ function AudioPlayer() {
       <InfoContainer>
         <Title>{audioSrc.title}</Title>
         <DurationContainer>
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+          <span>{formatAudioTime(currentTime)}</span>
+          <span>{formatAudioTime(duration)}</span>
         </DurationContainer>
         <ProgressContainer>
           <ProgressBar
@@ -205,7 +207,7 @@ function AudioPlayer() {
           handleMute={handleMute}
         />
       </VolumeContainer>
-      <audio autoPlay ref={audioRef} src={audioSrc.audio} />
+      <audio autoPlay ref={audioRef} src={audioSrc.audio} onEnded={handleEnd} />
     </AudioContainer>
   );
 }

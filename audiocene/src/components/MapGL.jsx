@@ -55,7 +55,6 @@ export default function MapGL() {
   const [done, setDone] = useState(false);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
-  const [reverseGeocodeError, setReverseGeocodeError] = useState("");
 
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
@@ -107,29 +106,6 @@ export default function MapGL() {
       "star-intensity": 1.0,
     });
   };
-
-  //MOVE REVERSE GEOCODING LOGIC INTO FORM, REPLACE EXISTING API WIHT MAPBOX
-
-  async function reverseGeocode(lng, lat) {
-    try {
-      const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}`
-      );
-
-      const data = await response.json();
-
-      return data.features;
-    } catch (err) {
-      setReverseGeocodeError(err.message);
-      console.log(err.message);
-      return null;
-    }
-  }
-
-  // const locationData = await reverseGeocode(lng, lat);
-
-  // if (locationData) {
-  //   console.log(locationData);
 
   const handleMapClick = async (event) => {
     if (event.originalEvent.target.closest(".mapboxgl-marker")) {
