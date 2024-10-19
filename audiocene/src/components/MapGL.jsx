@@ -53,6 +53,8 @@ export default function MapGL() {
   const [mapLat, mapLng] = useUrlPositon();
   const markerRefs = useRef({});
   const [done, setDone] = useState(false);
+  const [tempLat, setTempLat] = useState(null);
+  const [tempLng, setTempLng] = useState(null);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
 
@@ -96,6 +98,13 @@ export default function MapGL() {
     }
   }, [activeMarkerId, done]);
 
+  useEffect(() => {
+    if (!location.pathname.includes("/add")) {
+      setTempLat(null);
+      setTempLng(null);
+    }
+  }, [searchParams]);
+
   const handleMapLoad = (map) => {
     // Set padding when the map is loaded
     map.setPadding({ top: 50, bottom: 50, left: 50, right: 500 });
@@ -113,6 +122,8 @@ export default function MapGL() {
     }
     const { lng, lat } = event.lngLat;
 
+    setTempLng(lng);
+    setTempLat(lat);
     navigate(`add?lat=${lat}&lng=${lng}`);
   };
 
@@ -160,6 +171,15 @@ export default function MapGL() {
                 )}
               </Marker>
             ))}
+          {tempLat && (
+            <Marker longitude={tempLng} latitude={tempLat} anchor="bottom">
+              <img
+                src="/mapMarkerAdd.svg"
+                alt="New Recording Marker"
+                style={{ width: 45, height: 60 }}
+              />
+            </Marker>
+          )}
         </Map>
 
         <GeolocateContainer>
