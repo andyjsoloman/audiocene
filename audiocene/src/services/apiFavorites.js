@@ -31,8 +31,6 @@ export async function getFavoritesByUserId(userId) {
 }
 
 export async function createFavorite({ userId, recordingId }) {
-  console.log("userId:", userId);
-  console.log("recordingId:", recordingId);
   const { data, error } = await supabase
     .from("favorites")
     .insert([
@@ -52,7 +50,6 @@ export async function createFavorite({ userId, recordingId }) {
 }
 
 export async function deleteFavorite({ userId, recordingId }) {
-  console.log(userId, recordingId);
   const { error: deleteError } = await supabase
     .from("favorites")
     .delete()

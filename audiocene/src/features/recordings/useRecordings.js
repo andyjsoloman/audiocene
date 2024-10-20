@@ -56,3 +56,22 @@ export function useRecordings(userId, recordingId) {
     userError,
   };
 }
+
+export function useRecordingsByIds(recordingIds) {
+  const {
+    isLoading: loadingRecordingsByIds,
+    data: recordingsByIds,
+    error: recordingsByIdsError,
+  } = useQuery({
+    queryKey: ["recordingsByIds", recordingIds],
+    queryFn: async () => {
+      if (recordingIds && recordingIds.length > 0) {
+        return Promise.all(recordingIds.map((id) => getRecordingById(id)));
+      }
+      return [];
+    },
+    enabled: !!recordingIds && recordingIds.length > 0, // Only run if recordingIds exist
+  });
+
+  return { loadingRecordingsByIds, recordingsByIds, recordingsByIdsError };
+}

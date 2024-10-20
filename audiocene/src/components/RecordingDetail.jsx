@@ -94,10 +94,8 @@ function RecordingDetail() {
 
   const toggleFavourite = () => {
     if (isFavourite) {
-      console.log("delete", recording.id, currentUser.id);
       deleteFavorite({ userId: currentUser.id, recordingId: recording.id });
     } else {
-      console.log("add", recording.id, currentUser.id);
       addFavorite({ userId: currentUser.id, recordingId: recording.id });
     }
     setIsFavourite(!isFavourite);

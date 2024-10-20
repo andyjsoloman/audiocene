@@ -19,6 +19,7 @@ import Explore from "./components/Explore";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import { CurrentlyPlayingProvider } from "./contexts/CurrentlyPlayingContext";
+import FavoritesList from "./components/FavoritesList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,7 +50,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="favourites" element={<RecordingsList />} />
+              <Route path="favourites" element={<FavoritesList />} />
             </Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="about" element={<About />}></Route>
