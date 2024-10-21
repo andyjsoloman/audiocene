@@ -8,7 +8,7 @@ const NavWrapper = styled.ul`
   padding-inline-start: 0px;
   margin-bottom: 20px;
   padding-bottom: 6px;
-  border-bottom: 1px solid var(--color-grey);
+  border-bottom: 1px solid var(--color-dkgrey);
 `;
 
 const NavItem = styled.li`

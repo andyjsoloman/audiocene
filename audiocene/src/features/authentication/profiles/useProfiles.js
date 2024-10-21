@@ -6,6 +6,7 @@ export function useProfile(userId) {
     data: profile,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["profile", userId],
     queryFn: () => getProfileById(userId),
@@ -16,5 +17,6 @@ export function useProfile(userId) {
     profile,
     isLoading,
     error,
+    refetch,
   };
 }

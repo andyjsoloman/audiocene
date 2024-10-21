@@ -3,6 +3,12 @@
 import { useUser } from "../features/authentication/useUser";
 import { useFavoritesByUserId } from "../features/favorites/useFavorites";
 import { useRecordingsByIds } from "../features/recordings/useRecordings";
+import FavoritesItem from "./FavoritesItem";
+import styled from "styled-components";
+
+const List = styled.ul`
+  padding-inline-start: 0px;
+`;
 
 function FavoritesList() {
   const user = useUser();
@@ -20,11 +26,11 @@ function FavoritesList() {
   if (isLoading) return <p>Loading</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (
-    <ul>
+    <List>
       {recordingsByIds?.map((recording) => (
-        <h3 key={Math.random()}>{recording.title}</h3>
+        <FavoritesItem key={recording.id} recording={recording} />
       ))}
-    </ul>
+    </List>
   );
 }
 

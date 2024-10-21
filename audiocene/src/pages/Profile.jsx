@@ -10,6 +10,7 @@ import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 import UserRecordings from "../components/UserRecordings";
 import { useProfile } from "../features/authentication/profiles/useProfiles";
+import FavoritesList from "../components/FavoritesList";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -29,7 +30,7 @@ const ProfileContainer = styled.div`
   display: flex;
   justify-content: space-between;
 
-  width: 50%;
+  width: 100%;
 `;
 const ProfileInfo = styled.div`
   display: flex;
@@ -41,13 +42,13 @@ const EditButtons = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 20px;
 `;
 
 const ContentHeader = styled.div`
   padding-bottom: 12px;
-  margin: 80px 120px;
-  border-bottom: 1px solid var(--color-grey);
+  margin: 80px 120px 40px 120px;
+  border-bottom: 1px solid var(--color-dkgrey);
 `;
 
 const ContentTab = styled.div`
@@ -61,6 +62,10 @@ const ContentTab = styled.div`
   transition: border-bottom 0.2s;
   border-bottom: ${(props) =>
     props.$isActive ? "3px solid var(--color-primary)" : "none"};
+`;
+
+const Content = styled.div`
+  margin: 0px 160px;
 `;
 
 function Profile() {
@@ -142,13 +147,17 @@ function Profile() {
           Recordings
         </ContentTab>
         <ContentTab
-          $isActive={activeTab === "favourites"}
-          onClick={() => setActiveTab("favourites")}
+          $isActive={activeTab === "favorites"}
+          onClick={() => setActiveTab("favorites")}
         >
           Favourites
         </ContentTab>
       </ContentHeader>
-      <UserRecordings userId={user.user.id} />
+      <Content>
+        {activeTab === "favorites" && <FavoritesList />}
+
+        {activeTab === "recordings" && <UserRecordings userId={user.user.id} />}
+      </Content>
     </>
   );
 }

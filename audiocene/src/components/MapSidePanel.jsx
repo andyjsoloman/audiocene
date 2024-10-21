@@ -9,7 +9,7 @@ const PanelContainer = styled.div`
   z-index: 500;
   width: 500px;
   height: 500px;
-  background-color: white;
+  background-color: var(--color-bg);
   border: 1px solid var(--color-black);
   border-radius: 12px;
   padding: 20px;
