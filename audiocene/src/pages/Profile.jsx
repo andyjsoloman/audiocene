@@ -154,7 +154,7 @@ function Profile() {
         </ContentTab>
       </ContentHeader>
       <Content>
-        {activeTab === "favorites" && <FavoritesList />}
+        {activeTab === "favorites" && <FavoritesList renderedBy="profile" />}
 
         {activeTab === "recordings" && <UserRecordings userId={user.user.id} />}
       </Content>

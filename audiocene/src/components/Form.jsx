@@ -118,11 +118,13 @@ export default function Form({ recordingToEdit = {} }) {
   function onSubmit(data) {
     const audio = typeof data.audio === "string" ? data.audio : data.audio[0];
 
+    const image = data.image[0];
+
     if (isEditSession) {
       delete data.lat;
       delete data.lng;
       editRecording(
-        { newRecordingData: { ...data, audio }, id: editId },
+        { newRecordingData: { ...data, audio, image }, id: editId },
         {
           onSuccess: (data) => reset(),
         }
@@ -132,7 +134,7 @@ export default function Form({ recordingToEdit = {} }) {
       recordingData.position = { lat, lng };
 
       createRecording(
-        { ...recordingData, audio: audio },
+        { ...recordingData, audio: audio, image: image },
         {
           onSuccess: (data) => reset(),
         }
@@ -178,6 +180,15 @@ export default function Form({ recordingToEdit = {} }) {
           {...register("audio", {
             required: isEditSession ? false : "This field is required",
           })}
+        />
+      </FormRow>
+      <FormRow label="Photo (optional)" error={errors?.title?.message}>
+        <input
+          id="image"
+          defaultValue=""
+          type="file"
+          accept="image/*"
+          {...register("image")}
         />
       </FormRow>
       <FormRow label="Notes">

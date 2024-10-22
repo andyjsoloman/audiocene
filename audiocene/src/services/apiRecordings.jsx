@@ -42,8 +42,14 @@ export async function getRecordingById(id) {
 
 export async function createEditRecording(newRecording, id, userId) {
   const hasAudioPath = newRecording.audio?.startsWith?.(supabaseUrl);
+  const hasImagePath = newRecording.image?.startsWith?.(supabaseUrl);
 
   const audioName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
+    "/",
+    ""
+  );
+
+  const imageName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
     "/",
     ""
   );
@@ -52,12 +58,18 @@ export async function createEditRecording(newRecording, id, userId) {
     ? newRecording.audio
     : `${supabaseUrl}/storage/v1/object/public/recordings-audio/${audioName}`;
 
+  const imagePath = hasImagePath
+    ? newRecording.image
+    : `${supabaseUrl}/storage/v1/object/public/images/${imageName}`;
+
   // 1. Create / Edit Recording
   let query = supabase.from("recordings");
 
   // A) CREATE
   if (!id) {
-    query = query.insert([{ ...newRecording, audio: audioPath }]);
+    query = query.insert([
+      { ...newRecording, audio: audioPath, image: imagePath },
+    ]);
   }
 
   // B) EDIT
@@ -82,7 +94,9 @@ export async function createEditRecording(newRecording, id, userId) {
       throw new Error("You are not authorized to edit this recording");
     }
 
-    query = query.update({ ...newRecording, audio: audioPath }).eq("id", id);
+    query = query
+      .update({ ...newRecording, audio: audioPath, image: imagePath })
+      .eq("id", id);
   }
 
   const { data, error } = await query.select().single();
@@ -93,15 +107,32 @@ export async function createEditRecording(newRecording, id, userId) {
   }
 
   // 2. Upload Audio
-  const { error: storageError } = await supabase.storage
+  const { error: audioStorageError } = await supabase.storage
     .from("recordings-audio")
     .upload(audioName, newRecording.audio);
 
   // 3. Delete the recording IF there was an error uploading audio
-  if (storageError) {
+  if (audioStorageError) {
     await supabase.from("recordings").delete().eq("id", data.id);
-    console.log(storageError);
+    console.log(audioStorageError);
     throw new Error("Problem with uploading audio");
+  }
+
+  // 2. Upload Image
+  const { error: imageStorageError } = await supabase.storage
+    .from("images")
+    .upload(imageName, newRecording.image);
+
+  // 3. Delete the recording and audio IF there was an error uploading image
+  if (imageStorageError) {
+    await supabase.from("recordings").delete().eq("id", data.id);
+    const recordingUrl = newRecording.audio.replace(
+      "https://naiqpffpxlusflmdzeqa.supabase.co/storage/v1/object/public/recordings-audio/",
+      ""
+    );
+    await supabase.storage.from("recordings-audio").remove([recordingUrl]);
+    console.log(imageStorageError);
+    throw new Error("Problem with uploading image");
   }
 }
 

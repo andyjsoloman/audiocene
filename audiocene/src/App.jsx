@@ -50,7 +50,10 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="favourites" element={<FavoritesList />} />
+              <Route
+                path="favourites"
+                element={<FavoritesList renderedBy="map" />}
+              />
             </Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="about" element={<About />}></Route>

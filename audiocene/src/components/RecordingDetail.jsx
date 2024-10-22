@@ -134,7 +134,9 @@ function RecordingDetail() {
 
         {!isEditing && (
           <>
-            <RecordingImage src="/no-photo.svg"></RecordingImage>
+            <RecordingImage
+              src={recording.image || "/no-photo.svg"}
+            ></RecordingImage>
             <InfoPanel>
               <RecordingInfo>
                 <div>Recorded at {formatRecordingDate(recording.date)}</div>

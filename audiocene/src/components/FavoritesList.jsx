@@ -10,7 +10,7 @@ const List = styled.ul`
   padding-inline-start: 0px;
 `;
 
-function FavoritesList() {
+function FavoritesList({ renderedBy }) {
   const user = useUser();
 
   const { isLoading, error, favorites } = useFavoritesByUserId(user?.user?.id);
@@ -28,7 +28,11 @@ function FavoritesList() {
   return (
     <List>
       {recordingsByIds?.map((recording) => (
-        <FavoritesItem key={recording.id} recording={recording} />
+        <FavoritesItem
+          key={recording.id}
+          recording={recording}
+          renderedBy={renderedBy}
+        />
       ))}
     </List>
   );

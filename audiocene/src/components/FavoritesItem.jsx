@@ -29,18 +29,28 @@ const Buttons = styled.div`
   justify-content: flex-end;
 `;
 
-function FavoritesItem({ recording }) {
+function FavoritesItem({ recording, renderedBy }) {
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    renderedBy === "map" &&
+      navigate(
+        `../explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
+      );
+    renderedBy === "profile" &&
+      navigate(
+        `../app/explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
+      );
+    //Back button does not work as intended after this navigate
+  };
 
   return (
     <Container>
       <Info>
         <Title
           onClick={() => {
-            navigate(
-              `../explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
-            );
+            handleClick();
           }}
         >
           {recording.title}
