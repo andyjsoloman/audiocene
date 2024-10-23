@@ -49,7 +49,7 @@ export async function createEditRecording(newRecording, id, userId) {
     ""
   );
 
-  const imageName = `${Math.random()}-${newRecording.audio.name}`.replaceAll(
+  const imageName = `${Math.random()}-${newRecording.image.name}`.replaceAll(
     "/",
     ""
   );
@@ -118,12 +118,12 @@ export async function createEditRecording(newRecording, id, userId) {
     throw new Error("Problem with uploading audio");
   }
 
-  // 2. Upload Image
+  // 4. Upload Image
   const { error: imageStorageError } = await supabase.storage
     .from("images")
     .upload(imageName, newRecording.image);
 
-  // 3. Delete the recording and audio IF there was an error uploading image
+  // 5. Delete the recording and audio IF there was an error uploading image
   if (imageStorageError) {
     await supabase.from("recordings").delete().eq("id", data.id);
     const recordingUrl = newRecording.audio.replace(

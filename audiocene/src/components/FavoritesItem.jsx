@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const Title = styled.h4`
   color: var(--color-primary);
-  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -18,6 +17,18 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
+const LeftSection = styled.div`
+  display: flex;
+`;
+
+const Image = styled.img`
+  width: 140px;
+  height: 100px;
+  margin-right: 20px;
+  border-radius: 8px;
+  object-fit: cover;
+`;
+
 const Info = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,7 +37,8 @@ const Info = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+
+  gap: 8px;
 `;
 
 function FavoritesItem({ recording, renderedBy }) {
@@ -47,20 +59,26 @@ function FavoritesItem({ recording, renderedBy }) {
 
   return (
     <Container>
-      <Info>
-        <Title
+      <LeftSection>
+        <Image src={recording.image || "/no-photo.svg"} />
+
+        <Info>
+          <Title>{recording.title}</Title>
+          <div>Recorded at {formatRecordingDate(recording.date)}</div>
+          <div>
+            {recording.locality}, {recording.country}
+          </div>
+        </Info>
+      </LeftSection>
+      <Buttons>
+        <Button
+          variant="secondary"
           onClick={() => {
             handleClick();
           }}
         >
-          {recording.title}
-        </Title>
-        <div>Recorded at {formatRecordingDate(recording.date)}</div>
-        <div>
-          {recording.locality}, {recording.country}
-        </div>
-      </Info>
-      <Buttons>
+          View On Map
+        </Button>
         <Button onClick={() => setCurrentRecordingId(recording.id)}>
           Play
         </Button>

@@ -15,6 +15,7 @@ import { formatRecordingDate } from "../hooks/useDateTime";
 import { useFavoriteByIds } from "../features/favorites/useFavorites";
 import { useDeleteFavorite } from "../features/favorites/useDeleteFavorite";
 import { useCreateFavorite } from "../features/favorites/useCreateFavorite";
+import { useTransformImage } from "../hooks/useTransformImage";
 
 const DetailPanel = styled.div`
   position: flex;
@@ -42,6 +43,14 @@ const ButtonRow = styled.div`
 
 const RecordingImage = styled.img`
   height: 180px;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 24px;
+  object-fit: cover;
+`;
+const PlaceHolderImage = styled.img`
+  height: 180px;
+
   margin: auto;
   margin-bottom: 24px;
 `;
@@ -79,6 +88,8 @@ function RecordingDetail() {
     currentUser?.id,
     recording?.id
   );
+
+  const transformedImage = useTransformImage(recording?.image, 450);
 
   const { isDeleting, deleteFavorite } = useDeleteFavorite();
 
@@ -134,9 +145,11 @@ function RecordingDetail() {
 
         {!isEditing && (
           <>
-            <RecordingImage
-              src={recording.image || "/no-photo.svg"}
-            ></RecordingImage>
+            {recording.image ? (
+              <RecordingImage src={recording.image} alt="recording photo" />
+            ) : (
+              <PlaceHolderImage src="/no-photo.svg" alt="no photo uploaded" />
+            )}
             <InfoPanel>
               <RecordingInfo>
                 <div>Recorded at {formatRecordingDate(recording.date)}</div>
