@@ -91,27 +91,6 @@ function RecordingDetail() {
 
   const transformedImage = useTransformImage(recording?.image, 450);
 
-  const { isDeleting, deleteFavorite } = useDeleteFavorite();
-
-  const { isAdding, addFavorite } = useCreateFavorite();
-
-  useEffect(() => {
-    if (favorite) {
-      setIsFavourite(true);
-    } else {
-      setIsFavourite(false);
-    }
-  }, [favorite]);
-
-  const toggleFavourite = () => {
-    if (isFavourite) {
-      deleteFavorite({ userId: currentUser.id, recordingId: recording.id });
-    } else {
-      addFavorite({ userId: currentUser.id, recordingId: recording.id });
-    }
-    setIsFavourite(!isFavourite);
-  };
-
   if (loadingRecording || loadingUser) {
     return <div>Loading...</div>;
   }
@@ -159,10 +138,7 @@ function RecordingDetail() {
                 {user && <div>Uploaded by: {user.display_name}</div>}
               </RecordingInfo>
               <FavouriteButton>
-                <FavouriteIcon
-                  isFavourite={isFavourite}
-                  onClick={toggleFavourite}
-                />
+                <FavouriteIcon recordingId={recording.id} />
               </FavouriteButton>
             </InfoPanel>
 

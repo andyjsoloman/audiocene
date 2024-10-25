@@ -3,6 +3,7 @@ import { formatRecordingDate } from "../hooks/useDateTime";
 import Button from "./Button";
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import { useNavigate } from "react-router-dom";
+import FavouriteIcon from "./FavouriteIcon";
 
 const Title = styled.h4`
   color: var(--color-primary);
@@ -21,8 +22,14 @@ const LeftSection = styled.div`
   display: flex;
 `;
 
+const RightSection = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+`;
+
 const Image = styled.img`
-  width: 140px;
+  min-width: 140px;
   height: 100px;
   margin-right: 20px;
   border-radius: 8px;
@@ -37,7 +44,7 @@ const Info = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;
-
+  margin: 0px 32px 0px 32px;
   gap: 8px;
 `;
 
@@ -64,25 +71,30 @@ function FavoritesItem({ recording, renderedBy }) {
 
         <Info>
           <Title>{recording.title}</Title>
-          <div>Recorded at {formatRecordingDate(recording.date)}</div>
+          <div>Recorded {formatRecordingDate(recording.date)}</div>
           <div>
             {recording.locality}, {recording.country}
           </div>
         </Info>
       </LeftSection>
-      <Buttons>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            handleClick();
-          }}
-        >
-          View On Map
-        </Button>
-        <Button onClick={() => setCurrentRecordingId(recording.id)}>
-          Play
-        </Button>
-      </Buttons>
+      <RightSection>
+        <Buttons>
+          {renderedBy == "profile" && (
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleClick();
+              }}
+            >
+              View On Map
+            </Button>
+          )}
+          <Button onClick={() => setCurrentRecordingId(recording.id)}>
+            Play
+          </Button>
+        </Buttons>
+        <FavouriteIcon recordingId={recording.id} />
+      </RightSection>
     </Container>
   );
 }
