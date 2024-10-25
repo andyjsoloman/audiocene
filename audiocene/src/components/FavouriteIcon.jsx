@@ -6,10 +6,9 @@ import { useDeleteFavorite } from "../features/favorites/useDeleteFavorite";
 import { useCreateFavorite } from "../features/favorites/useCreateFavorite";
 
 const Container = styled.div`
-  position: absolute;
-  top: 12px;
-
-  right: 0px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
 `;
 
 const FavouriteSVG = styled.svg`

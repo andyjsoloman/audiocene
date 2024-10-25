@@ -27,6 +27,7 @@ const ButtonBase = styled.button`
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  min-width: max-content;
 
   &:hover,
   &:focus {

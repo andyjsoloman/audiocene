@@ -26,6 +26,7 @@ const RightSection = styled.div`
   display: flex;
   flex-direction: column-reverse;
   position: relative;
+  flex-grow: 0.25;
 `;
 
 const Image = styled.img`
@@ -43,9 +44,13 @@ const Info = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  flex-direction: column;
-  margin: 0px 32px 0px 32px;
+  justify-content: space-evenly;
+  margin: 0px 0px 0px 32px;
   gap: 8px;
+
+  & > button {
+    flex: 1;
+  }
 `;
 
 function FavoritesItem({ recording, renderedBy }) {
