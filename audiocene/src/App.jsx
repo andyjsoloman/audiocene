@@ -58,7 +58,7 @@ function App() {
             <Route path="login" element={<Login />}></Route>
             <Route path="about" element={<About />}></Route>
             <Route path="signup" element={<Signup />}></Route>
-            <Route path="profile" element={<Profile />}></Route>
+            <Route path="profile/:id" element={<Profile />}></Route>
           </Routes>
         </BrowserRouter>
       </CurrentlyPlayingProvider>

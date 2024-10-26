@@ -31,11 +31,8 @@ const AvatarImg = styled.img`
   width: var(--width);
 `;
 
-function UserAvatar({ size }) {
-  const { user } = useUser();
+function UserAvatar({ size, avatar }) {
   const styles = SIZES[size];
-
-  const { avatar } = user.user_metadata;
 
   return (
     <AvatarImg

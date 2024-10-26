@@ -1,7 +1,6 @@
 import NavBar from "../components/NavBar";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import styled from "styled-components";
 
 import { useState } from "react";
 import Button from "../components/Button";
@@ -11,6 +10,7 @@ import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
 import UserRecordings from "../components/UserRecordings";
 import { useProfile } from "../features/authentication/profiles/useProfiles";
 import FavoritesList from "../components/FavoritesList";
+import styled from "styled-components";
 
 const PleaseLogin = styled.h3`
   display: flex;
@@ -70,12 +70,19 @@ const Content = styled.div`
 
 function Profile() {
   const user = useUser();
+  const profileUrl = useParams();
+
+  const isCurrentUser = user?.user?.id == profileUrl.id;
+
+  //The profile should be fetched with profileUrl, and conditional rendering based on if user = profileUrl
 
   const [activeTab, setActiveTab] = useState("recordings");
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
 
-  const { profile, isLoading, error, refetch } = useProfile(user?.user?.id);
+  const { profile, isLoading, error, refetch } = useProfile(profileUrl.id);
+
+  const avatar = profile?.avatar_url;
 
   const handleProfileUpdate = () => {
     refetch();
@@ -108,22 +115,24 @@ function Profile() {
       <ProfileSection>
         <ProfileContainer>
           <ProfileInfo>
-            <UserAvatar size="large" />
+            <UserAvatar avatar={avatar} size="large" />
             <h1>Profile for {profile.display_name || "User"}</h1>
             <p>Email: {profile.email_address}</p>
           </ProfileInfo>
-          <EditButtons>
-            {!editingProfile && !editingPassword && (
-              <>
-                <Button onClick={() => setEditingProfile(true)}>
-                  Edit Profile
-                </Button>
-                <Button onClick={() => setEditingPassword(true)}>
-                  Edit Password
-                </Button>
-              </>
-            )}
-          </EditButtons>
+          {isCurrentUser && (
+            <EditButtons>
+              {!editingProfile && !editingPassword && (
+                <>
+                  <Button onClick={() => setEditingProfile(true)}>
+                    Edit Profile
+                  </Button>
+                  <Button onClick={() => setEditingPassword(true)}>
+                    Edit Password
+                  </Button>
+                </>
+              )}
+            </EditButtons>
+          )}
         </ProfileContainer>
       </ProfileSection>
       {editingProfile && (
@@ -146,12 +155,14 @@ function Profile() {
         >
           Recordings
         </ContentTab>
-        <ContentTab
-          $isActive={activeTab === "favorites"}
-          onClick={() => setActiveTab("favorites")}
-        >
-          Favourites
-        </ContentTab>
+        {isCurrentUser && (
+          <ContentTab
+            $isActive={activeTab === "favorites"}
+            onClick={() => setActiveTab("favorites")}
+          >
+            Favourites
+          </ContentTab>
+        )}
       </ContentHeader>
       <Content>
         {activeTab === "favorites" && <FavoritesList renderedBy="profile" />}

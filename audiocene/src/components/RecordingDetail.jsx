@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BackButton from "./BackButton";
 
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
@@ -12,9 +12,7 @@ import { useRecordings } from "../features/recordings/useRecordings";
 import DeleteButton from "./DeleteButton";
 import FavouriteIcon from "./FavouriteIcon";
 import { formatRecordingDate } from "../hooks/useDateTime";
-import { useFavoriteByIds } from "../features/favorites/useFavorites";
-import { useDeleteFavorite } from "../features/favorites/useDeleteFavorite";
-import { useCreateFavorite } from "../features/favorites/useCreateFavorite";
+
 import { useTransformImage } from "../hooks/useTransformImage";
 
 const DetailPanel = styled.div`
@@ -71,7 +69,6 @@ function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [isEditing, setIsEditing] = useState(false);
-  const [isFavourite, setIsFavourite] = useState(false);
 
   const { user: currentUser } = useUser();
 
@@ -83,11 +80,6 @@ function RecordingDetail() {
     user,
     userError,
   } = useRecordings(null, id);
-
-  const { isLoading, error, favorite } = useFavoriteByIds(
-    currentUser?.id,
-    recording?.id
-  );
 
   const transformedImage = useTransformImage(recording?.image, 450);
 

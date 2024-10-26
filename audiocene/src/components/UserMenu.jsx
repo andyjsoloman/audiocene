@@ -96,18 +96,20 @@ function UserMenu() {
 
   const fullName = session?.user?.user_metadata?.fullName || "Guest";
 
+  const { avatar } = user.user_metadata;
+
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
   }
 
   function goToProfile() {
-    navigate("/profile");
+    navigate(`/profile/${user.id}`);
   }
 
   return (
     <>
       <UserContainer onClick={toggleDropdown}>
-        <UserAvatar size="small" />
+        <UserAvatar avatar={avatar} size="small" />
         <span>Welcome, {fullName} </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (
