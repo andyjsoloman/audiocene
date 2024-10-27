@@ -167,7 +167,9 @@ function Profile() {
       <Content>
         {activeTab === "favorites" && <FavoritesList renderedBy="profile" />}
 
-        {activeTab === "recordings" && <UserRecordings userId={user.user.id} />}
+        {activeTab === "recordings" && (
+          <UserRecordings userId={user.user.id} renderedBy="profile" />
+        )}
       </Content>
     </>
   );
