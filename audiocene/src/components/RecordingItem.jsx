@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useDeleteRecording } from "../features/recordings/useDeleteRecording";
+
 import { useCurrentlyPlaying } from "../contexts/CurrentlyPlayingContext";
 import { formatRecordingDate } from "../hooks/useDateTime";
 import Button from "./Button";
@@ -102,7 +102,9 @@ function RecordingItem({ recording, renderedBy }) {
               View On Map
             </Button>
           )}
-          <Button onClick={() => setCurrentRecordingId(id)}>Play</Button>
+          <Button onClick={() => setCurrentRecordingId(recording.id)}>
+            Play
+          </Button>
         </Buttons>
         {renderedBy == "profile" && (
           <DeleteContainer>

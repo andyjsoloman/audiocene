@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import CloseIcon from "./CloseIcon";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
@@ -62,11 +62,59 @@ function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
   const ref = useOutsideClick(close);
 
+  useEffect(() => {
+    if (name === openName && ref.current) {
+      // Focus on the modal when it opens
+      ref.current.focus();
+
+      // Function to trap focus within the modal
+      const handleTabKey = (e) => {
+        const focusableElements = ref.current.querySelectorAll(
+          "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.key === "Tab") {
+          if (e.shiftKey) {
+            // Shift + Tab: focus the last element if we're on the first one
+            if (document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else {
+            // Tab: focus the first element if we're on the last one
+            if (document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+        }
+      };
+
+      // Handle ESC key to close modal
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+          close();
+        } else {
+          handleTabKey(e);
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+
+      // Cleanup event listener when modal is closed
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [name, openName, close, ref]);
+
+  if (name !== openName) return null;
+
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal ref={ref}>
+      <StyledModal ref={ref} tabIndex={-1} aria-modal="true" role="dialog">
         <CloseButton onClick={close}>
           <CloseIcon />
         </CloseButton>

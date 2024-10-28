@@ -108,7 +108,16 @@ function UserMenu() {
 
   return (
     <>
-      <UserContainer onClick={toggleDropdown}>
+      <UserContainer
+        onClick={toggleDropdown}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleDropdown();
+          }
+        }}
+      >
         <UserAvatar avatar={avatar} size="small" />
         <span>Welcome, {fullName} </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
