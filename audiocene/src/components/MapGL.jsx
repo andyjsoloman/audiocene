@@ -121,6 +121,7 @@ export default function MapGL() {
       return; // Click target was a marker so do nothing…
     }
     const { lng, lat } = event.lngLat;
+    console.log("clik");
 
     setTempLng(lng);
     setTempLat(lat);

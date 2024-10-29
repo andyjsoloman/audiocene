@@ -6,6 +6,7 @@ const PanelContainer = styled.div`
   position: absolute;
 
   right: 100px;
+
   z-index: 500;
   width: 500px;
   height: 500px;

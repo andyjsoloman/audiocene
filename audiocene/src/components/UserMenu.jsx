@@ -18,16 +18,13 @@ const UserContainer = styled.div`
   cursor: pointer;
 `;
 
-const UserImg = styled.img`
-  height: 2rem;
-`;
-
-const Dropdown = styled.div`
+const Dropdown = styled.ul`
   position: absolute;
   display: block;
   top: 100%;
   right: -40px;
   margin-top: 0.8rem;
+  padding-inline-start: 0px;
   background-color: var(--color-bg);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -36,7 +33,7 @@ const Dropdown = styled.div`
   min-width: 160px;
 `;
 
-const DropdownItem = styled.div`
+const DropdownItem = styled.li`
   font-family: var(--font-body);
   display: block;
 
@@ -122,9 +119,33 @@ function UserMenu() {
         <span>Welcome, {fullName} </span>
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (
-          <Dropdown>
-            <DropdownItem onClick={goToProfile}>Profile</DropdownItem>
-            <DropdownItem onClick={logout}>Logout</DropdownItem>
+          <Dropdown role="menu">
+            <DropdownItem
+              role="menuitem"
+              tabIndex={0}
+              onClick={goToProfile}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  goToProfile();
+                }
+              }}
+            >
+              Profile
+            </DropdownItem>
+            <DropdownItem
+              role="menuitem"
+              tabIndex={0}
+              onClick={logout}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  logout();
+                }
+              }}
+            >
+              Logout
+            </DropdownItem>
           </Dropdown>
         )}
       </UserContainer>

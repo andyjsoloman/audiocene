@@ -24,7 +24,6 @@ function AppLayout() {
     <>
       <NavBar />
       <AppContainer>
-        {/* <Map /> */}
         <MapGL />
         <MapSidePanel />
       </AppContainer>

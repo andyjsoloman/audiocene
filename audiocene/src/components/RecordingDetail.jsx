@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import BackButton from "./BackButton";
 
@@ -69,7 +69,7 @@ function RecordingDetail() {
   const { id } = useParams();
   const { setCurrentRecordingId } = useCurrentlyPlaying();
   const [isEditing, setIsEditing] = useState(false);
-
+  const navigate = useNavigate();
   const { user: currentUser } = useUser();
 
   const {
@@ -80,6 +80,16 @@ function RecordingDetail() {
     user,
     userError,
   } = useRecordings(null, id);
+
+  const handleProfileLink = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log(event);
+    navigate(`/profile/${user.id}`);
+    console.log(`/profile/${user.id}`);
+
+    // I think this fails because of something to do with the nesting of routes. Everything above /app seems to redirect
+  };
 
   const transformedImage = useTransformImage(recording?.image, 450);
 
@@ -127,7 +137,19 @@ function RecordingDetail() {
                 <div>
                   {recording.locality}, {recording.country}
                 </div>
-                {user && <div>Uploaded by: {user.display_name}</div>}
+                {user && (
+                  <div>
+                    Uploaded by:
+                    <Button
+                      variant="tertiary"
+                      type="button"
+                      onClick={handleProfileLink}
+                    >
+                      {user.display_name}
+                    </Button>
+                    <Link to="/about">Go to About</Link>
+                  </div>
+                )}
               </RecordingInfo>
               <FavouriteButton>
                 <FavouriteIcon recordingId={recording.id} />
