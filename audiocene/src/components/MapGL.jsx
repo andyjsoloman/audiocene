@@ -121,7 +121,6 @@ export default function MapGL() {
       return; // Click target was a marker so do nothing…
     }
     const { lng, lat } = event.lngLat;
-    console.log("clik");
 
     setTempLng(lng);
     setTempLat(lat);
@@ -165,7 +164,7 @@ export default function MapGL() {
                     latitude={recording.position.lat}
                     closeOnClick={false}
                     offset={[0, -60]}
-                    onClose={() => navigate(`/app/explore`)}
+                    // onClose={() => navigate(`/app/explore`)}
                   >
                     <PopupContent>{recording.title}</PopupContent>
                   </Popup>

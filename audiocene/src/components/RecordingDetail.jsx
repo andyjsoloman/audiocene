@@ -81,14 +81,8 @@ function RecordingDetail() {
     userError,
   } = useRecordings(null, id);
 
-  const handleProfileLink = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log(event);
+  const handleProfileLink = () => {
     navigate(`/profile/${user.id}`);
-    console.log(`/profile/${user.id}`);
-
-    // I think this fails because of something to do with the nesting of routes. Everything above /app seems to redirect
   };
 
   const transformedImage = useTransformImage(recording?.image, 450);
@@ -147,7 +141,6 @@ function RecordingDetail() {
                     >
                       {user.display_name}
                     </Button>
-                    <Link to="/about">Go to About</Link>
                   </div>
                 )}
               </RecordingInfo>
