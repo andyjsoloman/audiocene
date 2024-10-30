@@ -8,7 +8,11 @@ import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
 
-import { useRecordings } from "../features/recordings/useRecordings";
+import {
+  useRecordings,
+  useRecordingsByMapBounds,
+} from "../features/recordings/useRecordings";
+import useDebounce from "../hooks/useDebounce";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -52,17 +56,26 @@ export default function MapGL() {
   } = useGeoLocation();
   const [mapLat, mapLng] = useUrlPositon();
   const markerRefs = useRef({});
+  const mapRef = useRef(null);
   const [done, setDone] = useState(false);
   const [tempLat, setTempLat] = useState(null);
   const [tempLng, setTempLng] = useState(null);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
-
+  const [bounds, setBounds] = useState(null);
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
     latitude: mapPosition[0],
     zoom: 3,
   });
+
+  // THE FOLLOWING API CALL SEEMS TO TRIGGER CONSTANTLY AND ALSO DOES NOT RETURN THE EXPECTED RESULTS.
+  // CHECK THE LNG & LAT? IT'S ALSO POSSIBLE THE THIS WON'T WORK IN GLOBE MAP
+  // const {
+  //   loadingRecordingsByBounds,
+  //   recordingsByBounds,
+  //   recordingsByBoundsError,
+  // } = useRecordingsByMapBounds(bounds);
 
   useEffect(() => {
     if (mapLat && mapLng) {
@@ -105,7 +118,24 @@ export default function MapGL() {
     }
   }, [searchParams]);
 
+  const getBounds = () => {
+    const mapBounds = mapRef.current?.getBounds();
+    if (mapBounds) {
+      setBounds({
+        _sw: mapBounds.getSouthWest(),
+        _ne: mapBounds.getNorthEast(),
+      });
+    }
+  };
+
+  const debouncedGetBounds = useDebounce(getBounds, 500);
+
+  useEffect(() => {
+    debouncedGetBounds();
+  }, [viewState, debouncedGetBounds]);
+
   const handleMapLoad = (map) => {
+    mapRef.current = map;
     // Set padding when the map is loaded
     map.setPadding({ top: 50, bottom: 50, left: 50, right: 500 });
     map.setFog({
@@ -164,7 +194,7 @@ export default function MapGL() {
                     latitude={recording.position.lat}
                     closeOnClick={false}
                     offset={[0, -60]}
-                    // onClose={() => navigate(`/app/explore`)}
+                    // onClose={() => navigate(`/app/explore`)} ---> this will get triggered by (and override) any navigation away from activeMarker
                   >
                     <PopupContent>{recording.title}</PopupContent>
                   </Popup>

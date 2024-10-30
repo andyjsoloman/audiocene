@@ -3,6 +3,7 @@ import {
   getRecordings,
   getRecordingById,
   getRecordingsByUserId,
+  getRecordingsByMapBounds,
 } from "../../services/apiRecordings";
 import { getProfileById } from "../../services/apiProfiles";
 
@@ -74,4 +75,27 @@ export function useRecordingsByIds(recordingIds) {
   });
 
   return { loadingRecordingsByIds, recordingsByIds, recordingsByIdsError };
+}
+
+export function useRecordingsByMapBounds(bounds) {
+  const {
+    isLoading: loadingRecordingsByBounds,
+    data: recordingsByBounds,
+    error: recordingsByBoundsError,
+  } = useQuery({
+    queryKey: ["recordingsByBounds", bounds],
+    queryFn: async () => {
+      if (bounds && bounds._sw && bounds._ne) {
+        return getRecordingsByMapBounds(bounds);
+      }
+      return [];
+    },
+    enabled: !!bounds, // Only run if bounds object is valid
+  });
+
+  return {
+    loadingRecordingsByBounds,
+    recordingsByBounds,
+    recordingsByBoundsError,
+  };
 }

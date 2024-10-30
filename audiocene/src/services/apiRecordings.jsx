@@ -40,6 +40,27 @@ export async function getRecordingById(id) {
   return data;
 }
 
+export async function getRecordingsByMapBounds(bounds) {
+  const { _sw, _ne } = bounds;
+
+  const { data, error } = await supabase
+    .from("recordings")
+    .select("*")
+    .filter("position->>lng", "gte", _sw.lng)
+    .filter("position->>lng", "lte", _ne.lng)
+    .filter("position->>lat", "gte", _sw.lat)
+    .filter("position->>lat", "lte", _ne.lat);
+
+  if (error) {
+    console.error(error);
+    throw new Error(
+      "Recordings could not be loaded within the specified bounds"
+    );
+  }
+
+  return data;
+}
+
 export async function createEditRecording(newRecording, id, userId) {
   const hasAudioPath = newRecording.audio?.startsWith?.(supabaseUrl);
   const hasImagePath = newRecording.image?.startsWith?.(supabaseUrl);
