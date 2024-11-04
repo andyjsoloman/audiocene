@@ -22,7 +22,7 @@ function RecordingsList() {
     return <p>Error: {recordingsByBoundsError.message}</p>;
   return (
     <List>
-      {recordingsByBounds.map((recording) => (
+      {recordingsByBounds?.map((recording) => (
         <RecordingItem
           recording={recording}
           key={recording.id}

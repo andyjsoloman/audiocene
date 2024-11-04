@@ -40,16 +40,17 @@ export async function getRecordingById(id) {
   return data;
 }
 
+//The following uses a supabase Remote Procedure Call to circumvent no support in javascript API for type casting within .filter
+//Before this, negative lng lat values were returning unexpected table entries
 export async function getRecordingsByMapBounds(bounds) {
   const { _sw, _ne } = bounds;
 
-  const { data, error } = await supabase
-    .from("recordings")
-    .select("*")
-    .filter("position->>lng", "gte", _sw.lng.toString())
-    .filter("position->>lng", "lte", _ne.lng.toString())
-    .filter("position->>lat", "gte", _sw.lat.toString())
-    .filter("position->>lat", "lte", _ne.lat.toString());
+  const { data, error } = await supabase.rpc("get_recordings_by_bounds", {
+    sw_lng: _sw.lng,
+    ne_lng: _ne.lng,
+    sw_lat: _sw.lat,
+    ne_lat: _ne.lat,
+  });
 
   if (error) {
     console.error(error);
