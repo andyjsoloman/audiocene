@@ -1,20 +1,28 @@
 /* eslint-disable react/prop-types */
 import RecordingItem from "./RecordingItem";
-import { useRecordings } from "../features/recordings/useRecordings";
+
 import styled from "styled-components";
+import { useCurrentBounds } from "../contexts/RecordingsByBoundsContext";
+import { useRecordingsByMapBounds } from "../features/recordings/useRecordings";
 
 const List = styled.ul`
   padding-inline-start: 0px;
 `;
 
 function RecordingsList() {
-  const { loadingRecordings, recordingsError, recordings } = useRecordings();
+  const { currentBounds } = useCurrentBounds();
+  const {
+    loadingRecordingsByBounds,
+    recordingsByBounds,
+    recordingsByBoundsError,
+  } = useRecordingsByMapBounds(currentBounds);
 
-  if (loadingRecordings) return <p>Loading</p>;
-  if (recordingsError) return <p>Error: {recordingsError.message}</p>;
+  if (loadingRecordingsByBounds) return <p>Loading</p>;
+  if (recordingsByBoundsError)
+    return <p>Error: {recordingsByBoundsError.message}</p>;
   return (
     <List>
-      {recordings.map((recording) => (
+      {recordingsByBounds.map((recording) => (
         <RecordingItem
           recording={recording}
           key={recording.id}

@@ -46,10 +46,10 @@ export async function getRecordingsByMapBounds(bounds) {
   const { data, error } = await supabase
     .from("recordings")
     .select("*")
-    .filter("position->>lng", "gte", _sw.lng)
-    .filter("position->>lng", "lte", _ne.lng)
-    .filter("position->>lat", "gte", _sw.lat)
-    .filter("position->>lat", "lte", _ne.lat);
+    .filter("position->>lng", "gte", _sw.lng.toString())
+    .filter("position->>lng", "lte", _ne.lng.toString())
+    .filter("position->>lat", "gte", _sw.lat.toString())
+    .filter("position->>lat", "lte", _ne.lat.toString());
 
   if (error) {
     console.error(error);

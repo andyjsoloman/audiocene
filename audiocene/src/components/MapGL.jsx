@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import {
   useRecordingsByMapBounds,
 } from "../features/recordings/useRecordings";
 import useDebounce from "../hooks/useDebounce";
+import { useCurrentBounds } from "../contexts/RecordingsByBoundsContext";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -57,17 +58,20 @@ export default function MapGL() {
   const [mapLat, mapLng] = useUrlPositon();
   const markerRefs = useRef({});
   const mapRef = useRef(null);
+  const bounds = useRef(null);
   const [done, setDone] = useState(false);
   const [tempLat, setTempLat] = useState(null);
   const [tempLng, setTempLng] = useState(null);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
-  const [bounds, setBounds] = useState(null);
+  const { setCurrentBounds } = useCurrentBounds();
+
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
     latitude: mapPosition[0],
     zoom: 3,
   });
+  const [visibleRecordings, setVisibleRecordings] = useState([]);
 
   // THE FOLLOWING API CALL SEEMS TO TRIGGER CONSTANTLY AND ALSO DOES NOT RETURN THE EXPECTED RESULTS.
   // CHECK THE LNG & LAT? IT'S ALSO POSSIBLE THE THIS WON'T WORK IN GLOBE MAP
@@ -75,7 +79,9 @@ export default function MapGL() {
   //   loadingRecordingsByBounds,
   //   recordingsByBounds,
   //   recordingsByBoundsError,
-  // } = useRecordingsByMapBounds(bounds);
+  // } = useRecordingsByMapBounds(bounds.current);
+
+  // console.log("list", recordingsByBounds);
 
   useEffect(() => {
     if (mapLat && mapLng) {
@@ -118,15 +124,27 @@ export default function MapGL() {
     }
   }, [searchParams]);
 
-  const getBounds = () => {
+  const getBounds = useCallback(() => {
     const mapBounds = mapRef.current?.getBounds();
     if (mapBounds) {
-      setBounds({
+      const newBounds = {
         _sw: mapBounds.getSouthWest(),
         _ne: mapBounds.getNorthEast(),
-      });
+      };
+      // Only update context if bounds are different
+      if (
+        !bounds.current ||
+        bounds.current._sw.lat !== newBounds._sw.lat ||
+        bounds.current._sw.lng !== newBounds._sw.lng ||
+        bounds.current._ne.lat !== newBounds._ne.lat ||
+        bounds.current._ne.lng !== newBounds._ne.lng
+      ) {
+        bounds.current = newBounds;
+        setCurrentBounds(newBounds);
+        console.log(newBounds);
+      }
     }
-  };
+  }, [setCurrentBounds]);
 
   const debouncedGetBounds = useDebounce(getBounds, 500);
 
