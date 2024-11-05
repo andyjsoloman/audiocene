@@ -83,7 +83,13 @@ function RecordingItem({ recording, renderedBy }) {
         <Image src={recording.image || "/no-photo.svg"} />
 
         <Info>
-          <Title>{recording.title}</Title>
+          <Title
+            onClick={() => {
+              handleClick();
+            }}
+          >
+            {recording.title}
+          </Title>
           <div>Recorded {formatRecordingDate(recording.date)}</div>
           <div>
             {recording.locality}, {recording.country}

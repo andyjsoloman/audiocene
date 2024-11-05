@@ -26,7 +26,7 @@ function RecordingsList() {
         <RecordingItem
           recording={recording}
           key={recording.id}
-          renderedBy="app"
+          renderedBy="map"
         />
       ))}
     </List>
