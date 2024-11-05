@@ -15,6 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { useCreateRecording } from "../features/recordings/useCreateRecording";
 import { useEditRecording } from "../features/recordings/useEditRecording";
+import FileInput from "./FileInput";
 
 // const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -32,6 +33,45 @@ const LocationInfo = styled.div`
   label {
     font-weight: 500;
   }
+`;
+
+const Input = styled.input`
+  &::file-selector-button {
+    /* background-color: var(--color-primary);
+    
+    border-style: none;
+    box-sizing: border-box;
+    color: var(--color-bg); */
+
+    cursor: pointer;
+    display: inline-block;
+    font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
+      source-sans-pro, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    list-style: none;
+    margin-right: 12px;
+    /* outline: none; */
+    padding: 10px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    min-width: max-content;
+  }
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 20px;
 `;
 
 export default function Form({ recordingToEdit = {} }) {
@@ -164,7 +204,7 @@ export default function Form({ recordingToEdit = {} }) {
       <input type="hidden" {...register("lng")} />
 
       <FormRow label="Recording Title" error={errors?.title?.message}>
-        <input
+        <Input
           id="title"
           defaultValue=""
           disabled={isWorking}
@@ -172,7 +212,7 @@ export default function Form({ recordingToEdit = {} }) {
         />
       </FormRow>
       <FormRow label="Audio File" error={errors?.title?.message}>
-        <input
+        <FileInput
           id="audio"
           defaultValue=""
           type="file"
@@ -183,7 +223,7 @@ export default function Form({ recordingToEdit = {} }) {
         />
       </FormRow>
       <FormRow label="Photo (optional)" error={errors?.title?.message}>
-        <input
+        <FileInput
           id="image"
           defaultValue=""
           type="file"
@@ -217,10 +257,11 @@ export default function Form({ recordingToEdit = {} }) {
           )}
         />
       </FormRow>
-
-      <Button disabled={isCreating}>
-        {isEditSession ? "Save Changes" : "Add Recording"}
-      </Button>
+      <ButtonRow>
+        <Button disabled={isCreating}>
+          {isEditSession ? "Save Changes" : "Add Recording"}
+        </Button>
+      </ButtonRow>
     </form>
   );
 }

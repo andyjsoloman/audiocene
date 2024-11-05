@@ -4,9 +4,42 @@ import Button from "../../components/Button";
 import FormRow from "../../components/FormRow";
 import { useUpdateUser } from "./useUpdateUser";
 import styled from "styled-components";
+import FileInput from "../../components/FileInput";
 
 const FormContainer = styled.div`
   margin: 80px 120px;
+`;
+
+const Input = styled.input`
+  &::file-selector-button {
+    /* background-color: var(--color-primary);
+    
+    border-style: none;
+    box-sizing: border-box;
+    color: var(--color-bg); */
+
+    cursor: pointer;
+    display: inline-block;
+    font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans",
+      source-sans-pro, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    list-style: none;
+    margin-right: 12px;
+    /* outline: none; */
+    padding: 10px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    min-width: max-content;
+  }
 `;
 
 export default function UpdateUserDataForm({
@@ -67,7 +100,7 @@ export default function UpdateUserDataForm({
           />
         </FormRow>
         <FormRow label="Avatar image">
-          <input
+          <FileInput
             disabled={isUpdating}
             id="avatar"
             type="file"
