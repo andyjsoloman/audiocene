@@ -129,9 +129,14 @@ export async function createEditRecording(newRecording, id, userId) {
   }
 
   // 2. Upload Audio
-  const { error: audioStorageError } = await supabase.storage
-    .from("recordings-audio")
-    .upload(audioName, newRecording.audio);
+  let audioStorageError;
+  if (newRecording.audio.name !== undefined) {
+    const { error } = await supabase.storage
+      .from("recordings-audio")
+      .upload(audioName, newRecording.audio);
+
+    audioStorageError = error;
+  }
 
   // 3. Delete the recording IF there was an error uploading audio
   if (audioStorageError) {
@@ -141,11 +146,16 @@ export async function createEditRecording(newRecording, id, userId) {
   }
 
   // 4. Upload Image
-  const { error: imageStorageError } = await supabase.storage
-    .from("images")
-    .upload(imageName, newRecording.image);
+  let imageStorageError;
+  if (newRecording.image.name !== undefined) {
+    const { error } = await supabase.storage
+      .from("images")
+      .upload(imageName, newRecording.image);
 
-  // 5. Delete the recording and audio IF there was an error uploading image
+    imageStorageError = error;
+  }
+
+  // 5. Delete the recording and image IF there was an error uploading image
   if (imageStorageError) {
     await supabase.from("recordings").delete().eq("id", data.id);
     const recordingUrl = newRecording.audio.replace(

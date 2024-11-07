@@ -158,7 +158,7 @@ export default function Form({ recordingToEdit = {} }) {
   function onSubmit(data) {
     const audio = typeof data.audio === "string" ? data.audio : data.audio[0];
 
-    const image = data.image[0];
+    const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession) {
       delete data.lat;
