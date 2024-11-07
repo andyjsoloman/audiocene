@@ -33,6 +33,10 @@ const ButtonBase = styled.button`
   &:focus {
     background-color: var(--color-primary-hover);
   }
+
+  &:disabled {
+    background-color: var(--color-dkgrey);
+  }
 `;
 
 const SecondaryButton = styled(ButtonBase)`

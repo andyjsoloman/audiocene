@@ -117,7 +117,7 @@ function Profile() {
           <ProfileInfo>
             <UserAvatar avatar={avatar} size="large" />
             <h1>Profile for {profile.display_name || "User"}</h1>
-            <p>Email: {profile.email_address}</p>
+            {isCurrentUser && <p>Email: {profile.email_address}</p>}
           </ProfileInfo>
           {isCurrentUser && (
             <EditButtons>

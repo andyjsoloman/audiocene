@@ -6,7 +6,7 @@ import supabase from "../../services/supabase";
 export function useEditRecording() {
   const queryClient = useQueryClient();
 
-  const { mutate: editRecording, isLoading: isEditing } = useMutation({
+  const { mutate: editRecording, isPending: isEditing } = useMutation({
     mutationFn: async ({ newRecordingData, id }) => {
       // Fetch the current authenticated user from Supabase
       const {

@@ -22,6 +22,7 @@ const LeftSection = styled.div`
 
 const Title = styled.h4`
   color: var(--color-primary);
+  cursor: pointer;
 `;
 
 const Image = styled.img`

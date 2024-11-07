@@ -5,7 +5,7 @@ import { createFavorite } from "../../services/apiFavorites";
 export function useCreateFavorite() {
   const queryClient = useQueryClient();
 
-  const { mutate: addFavorite, isLoading: isAdding } = useMutation({
+  const { mutate: addFavorite, isPending: isAdding } = useMutation({
     mutationFn: createFavorite,
     onSuccess: () => {
       toast.success("Saved to favourites");

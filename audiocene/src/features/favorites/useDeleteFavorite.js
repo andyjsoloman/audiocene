@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export function useDeleteFavorite() {
   const queryClient = useQueryClient();
 
-  const { isLoading: isDeleting, mutate: deleteFavorite } = useMutation({
+  const { isPending: isDeleting, mutate: deleteFavorite } = useMutation({
     mutationFn: async ({ userId, recordingId }) => {
       if (!userId) throw new Error("Recording ID is required.");
 

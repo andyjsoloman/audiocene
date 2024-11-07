@@ -5,7 +5,7 @@ import { createEditRecording } from "../../services/apiRecordings";
 export function useCreateRecording() {
   const queryClient = useQueryClient();
 
-  const { mutate: createRecording, isLoading: isCreating } = useMutation({
+  const { mutate: createRecording, isPending: isCreating } = useMutation({
     mutationFn: createEditRecording,
     onSuccess: () => {
       toast.success("New recording created");

@@ -259,7 +259,11 @@ export default function Form({ recordingToEdit = {} }) {
       </FormRow>
       <ButtonRow>
         <Button disabled={isCreating}>
-          {isEditSession ? "Save Changes" : "Add Recording"}
+          {isEditing
+            ? "Loading"
+            : isEditSession
+            ? "Save Changes"
+            : "Add Recording"}
         </Button>
       </ButtonRow>
     </form>

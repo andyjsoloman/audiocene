@@ -8,7 +8,7 @@ export function useDeleteRecording() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { isLoading: isDeleting, mutate: deleteRecording } = useMutation({
+  const { isPending: isDeleting, mutate: deleteRecording } = useMutation({
     mutationFn: async ({ id }) => {
       // Ensure id is provided
       if (!id) throw new Error("Recording ID is required.");

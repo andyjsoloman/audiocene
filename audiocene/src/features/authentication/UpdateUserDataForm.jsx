@@ -57,12 +57,12 @@ export default function UpdateUserDataForm({
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
 
-  const { updateUser, isLoading: isUpdating } = useUpdateUser();
+  const { updateUser, isLoading } = useUpdateUser();
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
-
+    console.log(isLoading);
     updateUser(
       { fullName, avatar, userID },
       {
@@ -77,8 +77,7 @@ export default function UpdateUserDataForm({
     );
   }
 
-  function handleCancel(e) {
-    // We don't even need preventDefault because this button was designed to reset the form (remember, it has the HTML attribute 'reset')
+  function handleCancel() {
     setFullName(currentFullName);
     setAvatar(null);
     setEditingProfile(false);
@@ -95,13 +94,13 @@ export default function UpdateUserDataForm({
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            disabled={isUpdating}
+            disabled={isLoading}
             id="fullName"
           />
         </FormRow>
         <FormRow label="Avatar image">
           <FileInput
-            disabled={isUpdating}
+            disabled={isLoading}
             id="avatar"
             type="file"
             accept="image/*"
@@ -113,7 +112,9 @@ export default function UpdateUserDataForm({
           <Button onClick={handleCancel} type="reset" variant="secondary">
             Cancel
           </Button>
-          <Button disabled={isUpdating}>Update account</Button>
+          <Button disabled={isLoading}>
+            {isLoading ? "Loading" : "Update account"}
+          </Button>
         </FormRow>
       </form>
     </FormContainer>
