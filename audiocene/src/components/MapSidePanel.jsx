@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import AppNav from "./AppNav";
+import { QUERIES } from "../constants";
 
 const OuterContainer = styled.div`
   position: absolute;
@@ -12,6 +13,14 @@ const OuterContainer = styled.div`
   border: 1px solid var(--color-black);
   border-radius: 12px;
   overflow: hidden;
+
+  @media ${QUERIES.tablet} {
+    width: 90%;
+    height: 30%;
+
+    left: 5%;
+    bottom: 140px;
+  }
 `;
 
 const PanelContainer = styled.div`

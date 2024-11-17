@@ -5,12 +5,17 @@ import MapSidePanel from "../components/MapSidePanel";
 import NavBar from "../components/NavBar";
 
 import styled from "styled-components";
+import { QUERIES } from "../constants";
 
 const AppContainer = styled.div`
   padding: 40px 40px 20px 40px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  @media ${QUERIES.tablet} {
+    padding: 20px 12px 12px 12px;
+  }
 `;
 
 const Footer = styled.div`
