@@ -29,6 +29,7 @@ const AvatarImg = styled.img`
 
   height: var(--height);
   width: var(--width);
+  min-width: 2rem;
 `;
 
 function UserAvatar({ size, avatar }) {

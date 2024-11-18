@@ -116,7 +116,7 @@ function UserMenu() {
         }}
       >
         <UserAvatar avatar={avatar} size="small" />
-        <span>Welcome, {fullName} </span>
+        {/* <span>Welcome, {fullName} </span> */}
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropdownOpen && (
           <Dropdown role="menu">

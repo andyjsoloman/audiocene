@@ -4,12 +4,17 @@ import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
+import { QUERIES } from "../constants";
 
 const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 40px;
+  padding: 20px 60px;
+
+  @media ${QUERIES.mobile} {
+    padding: 12px 20px;
+  }
 `;
 
 const NavUl = styled.ul`

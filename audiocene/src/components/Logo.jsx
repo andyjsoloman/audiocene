@@ -5,11 +5,15 @@ const LogoContainer = styled.div`
   width: 150px;
 `;
 
+const LogoImg = styled.img`
+  min-width: 100px;
+`;
+
 function Logo() {
   return (
     <LogoContainer>
       <Link to="/">
-        <img src="/header_logo.svg" alt="Audiocene logo" />
+        <LogoImg src="/header_logo.svg" alt="Audiocene logo" />
       </Link>
     </LogoContainer>
   );

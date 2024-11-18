@@ -7,13 +7,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useGeoLocation } from "../hooks/useGeolocation";
 import Button from "./Button";
 import useUrlPositon from "../hooks/useUrlPosition";
-
 import {
   useRecordings,
   useRecordingsByMapBounds,
 } from "../features/recordings/useRecordings";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrentBounds } from "../contexts/RecordingsByBoundsContext";
+import { QUERIES } from "../constants";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -25,6 +25,9 @@ const MapCont = styled.div`
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid var(--color-dkgrey);
+  @media ${QUERIES.tablet} {
+    height: 80vh;
+  }
 `;
 
 const PopupContent = styled.span`
@@ -39,7 +42,13 @@ const GeolocateContainer = styled.div`
   position: absolute;
   z-index: 1000;
   bottom: 4rem;
-  left: 30%;
+  left: 25%;
+
+  @media ${QUERIES.tablet} {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1rem;
+  }
 `;
 
 export default function MapGL() {

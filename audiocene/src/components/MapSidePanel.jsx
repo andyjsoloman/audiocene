@@ -19,7 +19,7 @@ const OuterContainer = styled.div`
     height: 30%;
 
     left: 5%;
-    bottom: 140px;
+    bottom: 4rem;
   }
 `;
 
