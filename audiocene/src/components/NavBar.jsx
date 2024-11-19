@@ -5,6 +5,7 @@ import UserMenu from "./UserMenu";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
 import { QUERIES } from "../constants";
+import HamburgerMenu from "./HamburgerMenu";
 
 const Nav = styled.nav`
   display: flex;
@@ -27,6 +28,10 @@ const NavLi = styled.li`
   list-style: none;
   display: flex;
   /* text-transform: uppercase; */
+
+  @media ${QUERIES.tablet} {
+    display: none;
+  }
 `;
 
 const NavLink = styled(BaseNavLink)`
@@ -51,7 +56,9 @@ function NavBar() {
   return (
     <Nav>
       <Logo />
+
       <NavUl>
+        <HamburgerMenu />
         <NavLi>
           <NavLink to="/app/explore">Explore</NavLink>
         </NavLi>

@@ -8,12 +8,6 @@ import UserAvatar from "./UserAvatar";
 
 const UserContainer = styled.div`
   background-color: var(--color-bg);
-  font-size: 1.2rem;
-  font-weight: 400;
-  font-family: "metallophile-sp8", sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
   position: relative;
   cursor: pointer;
 `;
@@ -22,7 +16,7 @@ const Dropdown = styled.ul`
   position: absolute;
   display: block;
   top: 100%;
-  right: -40px;
+  right: 0px;
   margin-top: 0.8rem;
   padding-inline-start: 0px;
   background-color: var(--color-bg);
@@ -130,6 +124,10 @@ function UserMenu() {
         ref={triggerRef}
         onClick={toggleDropdown}
         tabIndex={0}
+        aria-haspopup="menu"
+        aria-expanded={dropDownOpen}
+        aria-label="User menu"
+        id="user-menu-trigger"
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -141,7 +139,11 @@ function UserMenu() {
         {/* <span>Welcome, {fullName} </span> */}
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
         {dropDownOpen && (
-          <Dropdown role="menu" ref={dropDownRef}>
+          <Dropdown
+            role="menu"
+            ref={dropDownRef}
+            aria-labelledby="user-menu-trigger"
+          >
             <DropdownItem
               role="menuitem"
               tabIndex={0}
