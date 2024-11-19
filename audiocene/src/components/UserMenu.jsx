@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useUser } from "../features/authentication/useUser";
 import { useLogout } from "../features/authentication/useLogout";
 import supabase from "../services/supabase";
@@ -57,8 +57,28 @@ function UserMenu() {
   const { logout, isLoading } = useLogout();
   const { user } = useUser();
   const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropDownOpen, setDropDownOpen] = useState(false);
   const [session, setSession] = useState(null);
+  const dropDownRef = useRef(null);
+
+  function toggleDropdown() {
+    setDropDownOpen(!dropDownOpen);
+  }
+
+  const handleClickOustide = (event) => {
+    if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+      setDropDownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (dropDownOpen) {
+      document.addEventListener("mousedown", handleClickOustide);
+    } else {
+      document.removeEventListener("mousedown", handleClickOustide);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOustide);
+  }, [dropDownOpen]);
 
   useEffect(() => {
     // Fetch the current session when the component mounts
@@ -95,10 +115,6 @@ function UserMenu() {
 
   const { avatar } = user.user_metadata;
 
-  function toggleDropdown() {
-    setDropdownOpen(!dropdownOpen);
-  }
-
   function goToProfile() {
     navigate(`/profile/${user.id}`);
   }
@@ -118,8 +134,8 @@ function UserMenu() {
         <UserAvatar avatar={avatar} size="small" />
         {/* <span>Welcome, {fullName} </span> */}
         {/* <UserButton onClick={handleClick}>Logout</UserButton> */}
-        {dropdownOpen && (
-          <Dropdown role="menu">
+        {dropDownOpen && (
+          <Dropdown role="menu" ref={dropDownRef}>
             <DropdownItem
               role="menuitem"
               tabIndex={0}
