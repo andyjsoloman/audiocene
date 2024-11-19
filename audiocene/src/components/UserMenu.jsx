@@ -60,13 +60,18 @@ function UserMenu() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [session, setSession] = useState(null);
   const dropDownRef = useRef(null);
+  const triggerRef = useRef(null);
 
   function toggleDropdown() {
     setDropDownOpen(!dropDownOpen);
   }
 
   const handleClickOustide = (event) => {
-    if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+    if (
+      dropDownRef.current &&
+      !dropDownRef.current.contains(event.target) &&
+      !triggerRef.current.contains(event.target)
+    ) {
       setDropDownOpen(false);
     }
   };
@@ -122,6 +127,7 @@ function UserMenu() {
   return (
     <>
       <UserContainer
+        ref={triggerRef}
         onClick={toggleDropdown}
         tabIndex={0}
         onKeyDown={(e) => {
