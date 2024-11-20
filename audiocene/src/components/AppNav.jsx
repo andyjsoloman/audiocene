@@ -1,6 +1,7 @@
 import { NavLink as BaseNavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
+import { QUERIES } from "../constants";
 
 const NavWrapper = styled.ul`
   display: flex;
@@ -25,6 +26,10 @@ const NavLink = styled(BaseNavLink)`
 
   &.active {
     border-bottom: 3px solid var(--color-primary);
+  }
+
+  @media ${QUERIES.mobile} {
+    font-size: 1rem;
   }
 `;
 

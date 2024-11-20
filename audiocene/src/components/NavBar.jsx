@@ -22,6 +22,10 @@ const NavUl = styled.ul`
   display: flex;
   align-items: center;
   gap: 4rem;
+
+  @media ${QUERIES.mobile} {
+    gap: 2rem;
+  }
 `;
 
 const NavLi = styled.li`

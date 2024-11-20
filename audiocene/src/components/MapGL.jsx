@@ -14,11 +14,12 @@ import {
 import useDebounce from "../hooks/useDebounce";
 import { useCurrentBounds } from "../contexts/RecordingsByBoundsContext";
 import { QUERIES } from "../constants";
+import GeoLocateButton from "./GeoLocateButton";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_KEY;
 
 const MapCont = styled.div`
-  height: 600px;
+  height: 70vh;
   width: 100%;
   flex: 1;
   z-index: 1;
@@ -26,7 +27,7 @@ const MapCont = styled.div`
   overflow: hidden;
   border: 1px solid var(--color-dkgrey);
   @media ${QUERIES.tablet} {
-    height: 80vh;
+    height: 85vh;
   }
 `;
 
@@ -36,19 +37,6 @@ const PopupContent = styled.span`
     source-sans-pro, sans-serif;
   font-size: 10px;
   font-weight: 300;
-`;
-
-const GeolocateContainer = styled.div`
-  position: absolute;
-  z-index: 1000;
-  bottom: 4rem;
-  left: 25%;
-
-  @media ${QUERIES.tablet} {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 1rem;
-  }
 `;
 
 export default function MapGL() {
@@ -239,11 +227,10 @@ export default function MapGL() {
           )}
         </Map>
 
-        <GeolocateContainer>
-          <Button onClick={getPosition} variant={"secondary"}>
-            {isLoadingPosition ? "Loading..." : "Get your position"}
-          </Button>
-        </GeolocateContainer>
+        <GeoLocateButton
+          getPosition={getPosition}
+          isLoadingPosition={isLoadingPosition}
+        />
       </MapCont>
     </>
   );

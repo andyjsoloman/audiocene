@@ -15,11 +15,10 @@ const OuterContainer = styled.div`
   overflow: hidden;
 
   @media ${QUERIES.tablet} {
-    width: 90%;
+    width: calc(100% - 24px);
     height: 30%;
-
-    left: 5%;
-    bottom: 4rem;
+    left: 12px;
+    bottom: 2rem;
   }
 `;
 
