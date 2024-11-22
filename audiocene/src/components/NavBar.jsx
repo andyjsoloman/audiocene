@@ -15,6 +15,7 @@ const Nav = styled.nav`
 
   @media ${QUERIES.mobile} {
     padding: 12px 20px;
+    align-items: baseline;
   }
 `;
 
