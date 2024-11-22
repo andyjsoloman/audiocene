@@ -6,6 +6,7 @@ import PlayButton from "./PlayButton";
 import VolumeControl from "./VolumeControl";
 import { useRecordings } from "../features/recordings/useRecordings";
 import { formatAudioTime } from "../hooks/useDateTime";
+import { QUERIES } from "../constants";
 
 const AudioContainer = styled.div`
   width: 600px;
@@ -20,16 +21,34 @@ const AudioContainer = styled.div`
   gap: 12px;
   justify-content: space-between;
   align-items: center;
+
+  @media ${QUERIES.tablet} {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    bottom: 0;
+    margin: 0;
+    border-radius: 0;
+    background: var(--color-bg);
+    /* justify-content: center; */
+    gap: 1.5rem;
+  }
 `;
 
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media ${QUERIES.tablet} {
+    flex-grow: 1;
+  }
 `;
 
 const ProgressContainer = styled.div`
   display: flex;
+  @media ${QUERIES.tablet} {
+    flex-grow: 1;
+  }
 `;
 
 const ProgressBar = styled.input.attrs({ type: "range" })`
@@ -76,6 +95,9 @@ const ProgressBar = styled.input.attrs({ type: "range" })`
   width: 400px;
   margin-top: 12px;
   margin-bottom: 24px;
+  @media ${QUERIES.tablet} {
+    width: 100%;
+  }
 `;
 
 const DurationContainer = styled.div`

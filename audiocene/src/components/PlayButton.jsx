@@ -1,7 +1,12 @@
 import styled from "styled-components";
+import { QUERIES } from "../constants";
 
 const Container = styled.div`
   width: 100%;
+
+  @media ${QUERIES.tablet} {
+    width: revert;
+  }
 `;
 
 const Play = styled.button`

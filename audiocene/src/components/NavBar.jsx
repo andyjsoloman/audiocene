@@ -35,6 +35,7 @@ const NavLi = styled.li`
 
   @media ${QUERIES.tablet} {
     display: none;
+    position: fixed;
   }
 `;
 

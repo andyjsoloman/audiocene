@@ -5,7 +5,7 @@ import { QUERIES } from "../constants";
 const GeolocateContainer = styled.div`
   position: absolute;
   z-index: 1000;
-  bottom: 6rem;
+  bottom: 4rem;
   left: 25%;
   color: var(--color-black);
 
