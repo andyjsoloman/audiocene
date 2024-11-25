@@ -59,6 +59,7 @@ export default function MapGL() {
   const [done, setDone] = useState(false);
   const [tempLat, setTempLat] = useState(null);
   const [tempLng, setTempLng] = useState(null);
+  const [isMobile, setIsMobile] = useState(null);
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
   const { setCurrentBounds } = useCurrentBounds();
@@ -79,6 +80,11 @@ export default function MapGL() {
   // } = useRecordingsByMapBounds(bounds.current);
 
   // console.log("list", recordingsByBounds);
+
+  useEffect(() => {
+    // Check screen width when the component mounts
+    setIsMobile(window.innerWidth <= 1100);
+  }, []);
 
   useEffect(() => {
     if (mapLat && mapLng) {
@@ -152,7 +158,12 @@ export default function MapGL() {
   const handleMapLoad = (map) => {
     mapRef.current = map;
     // Set padding when the map is loaded
-    map.setPadding({ top: 50, bottom: 50, left: 50, right: 500 });
+    map.setPadding({
+      top: 50,
+      bottom: 50,
+      left: 50,
+      right: isMobile ? 50 : 500,
+    });
     map.setFog({
       "horizon-blend": 0.3,
       "high-color": "#a1d7e9",
