@@ -86,6 +86,7 @@ html {
   --color-black: hsl(195, 59%, 9%);
   --color-bg: hsl(195, 24%, 98%);
   --color-grey: hsl(195, 5%, 80%);
+  --color-mdgrey: hsl(195, 5%, 60%);
   --color-dkgrey: hsl(195, 13%, 24%);
   --color-ltgrey: hsl(220, 14%, 96%);
   --color-primary-hover: hsl(195, 100%, 13%);
