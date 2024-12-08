@@ -1,11 +1,12 @@
 import NavBar from "../components/NavBar";
+import Experience from "../hero_shader/Experience";
 
 function Homepage() {
   return (
     <>
       <NavBar />
-      <div>AUDIOCENE HOME</div>
-      <h1 className="wordmark">audiocene</h1>
+
+      <Experience />
     </>
   );
 }
