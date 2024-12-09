@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unknown-property */
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import * as THREE from "three";
 import vertexShader from "./pt-vertex.glsl";
 import fragmentShader from "./pt-fragment.glsl";
@@ -11,6 +11,7 @@ import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { GUI } from "lil-gui";
 import { SUBTRACTION, Evaluator, Brush } from "three-bvh-csg";
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
+import useWindowDimensions from "../lib/useWindowDimensions";
 
 export default function ProceduralTerrain() {
   const mesh = useRef();
@@ -30,11 +31,28 @@ export default function ProceduralTerrain() {
   debugObject.colorSnow = "#ffffff";
   debugObject.colorRock = "#aeada3";
 
+  const [fovLevel, setFovLevel] = useState(80);
+
+  const { width } = useWindowDimensions();
+  console.log(width);
+
+  useEffect(() => {
+    if (width > 1100) {
+      setFovLevel(80);
+    } else if (width < 1100 && width > 550) {
+      setFovLevel(90);
+    } else if (width < 550) {
+      setFovLevel(110);
+    }
+  }, [width]);
+
   const { camera } = useThree();
   useEffect(() => {
     camera.position.set(-15, 5, 0);
     camera.lookAt(0, 0, 0);
-  }, [camera]);
+    camera.fov = fovLevel;
+    camera.updateProjectionMatrix();
+  }, [camera, fovLevel]);
 
   const geometry = useMemo(() => {
     const geom = new THREE.PlaneGeometry(15, 15, 512, 512);
