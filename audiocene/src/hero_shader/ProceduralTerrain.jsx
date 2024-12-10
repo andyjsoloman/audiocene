@@ -206,7 +206,7 @@ export default function ProceduralTerrain() {
 
   //BOARD
   const board = useMemo(() => {
-    const boardFill = new Brush(new THREE.CylinderGeometry(8, 8, 2, 64));
+    const boardFill = new Brush(new THREE.CylinderGeometry(10, 8, 2, 64));
     const boardHole = new Brush(new THREE.CylinderGeometry(7.5, 7.5, 2.5, 64));
     boardHole.position.y = 0.2;
     boardHole.updateMatrixWorld();
@@ -217,7 +217,7 @@ export default function ProceduralTerrain() {
 
   board.geometry.clearGroups();
   board.material = new THREE.MeshStandardMaterial({
-    color: "#ffffff",
+    color: "#98cdec",
     metalness: 0,
     roughness: 0.3,
   });
@@ -242,7 +242,7 @@ export default function ProceduralTerrain() {
       <directionalLight
         color="#ffffff"
         intensity={1}
-        position={[6.25, 5, 1]}
+        position={[6.25, 4, 1.5]}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.1}
@@ -253,10 +253,10 @@ export default function ProceduralTerrain() {
         shadow-camera-left={-8}
         shadow-bias={-0.02}
       />
-      {/* <directionalLight
+      <directionalLight
         color="#ffffff"
-        intensity={0.5}
-        position={[-6.25, 3, -2]}
+        intensity={0.15}
+        position={[-6.25, 5, -2]}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.1}
@@ -266,7 +266,7 @@ export default function ProceduralTerrain() {
         shadow-camera-bottom={-8}
         shadow-camera-left={-8}
         shadow-bias={-0.02}
-      /> */}
+      />
 
       <mesh
         ref={mesh}
