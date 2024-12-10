@@ -34,7 +34,6 @@ export default function ProceduralTerrain() {
   const [fovLevel, setFovLevel] = useState(80);
 
   const { width } = useWindowDimensions();
-  console.log(width);
 
   useEffect(() => {
     if (width > 1100) {
@@ -133,43 +132,44 @@ export default function ProceduralTerrain() {
     cloudUniforms.u_time.value = clock.getElapsedTime();
   });
 
-  useEffect(() => {
-    const gui = new GUI({ width: 400 });
-    gui.domElement.classList.add("custom-gui");
-    gui
-      .add(uniforms.u_positionFrequency, "value", 0, 1, 0.001)
-      .name("u_positionFrequency");
-    gui.add(uniforms.u_strength, "value", 0, 10, 0.001).name("u_strength");
-    gui
-      .add(uniforms.u_warpFrequency, "value", 0, 10, 0.001)
-      .name("u_warpFrequency");
-    gui
-      .add(uniforms.u_warpStrength, "value", 0, 1, 0.001)
-      .name("u_warpStrength");
-    gui
-      .addColor(debugObject, "colorWaterDeep")
-      .onChange(() =>
-        uniforms.u_colorWaterDeep.value.set(debugObject.colorWaterDeep)
-      );
-    gui
-      .addColor(debugObject, "colorWaterSurface")
-      .onChange(() =>
-        uniforms.u_colorWaterSurface.value.set(debugObject.colorWaterSurface)
-      );
-    gui
-      .addColor(debugObject, "colorSand")
-      .onChange(() => uniforms.u_colorSand.value.set(debugObject.colorSand));
-    gui
-      .addColor(debugObject, "colorGrass")
-      .onChange(() => uniforms.u_colorGrass.value.set(debugObject.colorGrass));
-    gui
-      .addColor(debugObject, "colorSnow")
-      .onChange(() => uniforms.u_colorSnow.value.set(debugObject.colorSnow));
-    gui
-      .addColor(debugObject, "colorRock")
-      .onChange(() => uniforms.u_colorRock.value.set(debugObject.colorRock));
-    return () => gui.destroy();
-  }, [uniforms]);
+  //LIL-GUI HELPER
+  //   useEffect(() => {
+  //     const gui = new GUI({ width: 400 });
+  //     gui.domElement.classList.add("custom-gui");
+  //     gui
+  //       .add(uniforms.u_positionFrequency, "value", 0, 1, 0.001)
+  //       .name("u_positionFrequency");
+  //     gui.add(uniforms.u_strength, "value", 0, 10, 0.001).name("u_strength");
+  //     gui
+  //       .add(uniforms.u_warpFrequency, "value", 0, 10, 0.001)
+  //       .name("u_warpFrequency");
+  //     gui
+  //       .add(uniforms.u_warpStrength, "value", 0, 1, 0.001)
+  //       .name("u_warpStrength");
+  //     gui
+  //       .addColor(debugObject, "colorWaterDeep")
+  //       .onChange(() =>
+  //         uniforms.u_colorWaterDeep.value.set(debugObject.colorWaterDeep)
+  //       );
+  //     gui
+  //       .addColor(debugObject, "colorWaterSurface")
+  //       .onChange(() =>
+  //         uniforms.u_colorWaterSurface.value.set(debugObject.colorWaterSurface)
+  //       );
+  //     gui
+  //       .addColor(debugObject, "colorSand")
+  //       .onChange(() => uniforms.u_colorSand.value.set(debugObject.colorSand));
+  //     gui
+  //       .addColor(debugObject, "colorGrass")
+  //       .onChange(() => uniforms.u_colorGrass.value.set(debugObject.colorGrass));
+  //     gui
+  //       .addColor(debugObject, "colorSnow")
+  //       .onChange(() => uniforms.u_colorSnow.value.set(debugObject.colorSnow));
+  //     gui
+  //       .addColor(debugObject, "colorRock")
+  //       .onChange(() => uniforms.u_colorRock.value.set(debugObject.colorRock));
+  //     return () => gui.destroy();
+  //   }, [uniforms]);
 
   //WATER
   const water = useMemo(() => {
@@ -251,6 +251,7 @@ export default function ProceduralTerrain() {
         shadow-camera-right={8}
         shadow-camera-bottom={-8}
         shadow-camera-left={-8}
+        shadow-bias={-0.02}
       />
       <mesh
         ref={mesh}
