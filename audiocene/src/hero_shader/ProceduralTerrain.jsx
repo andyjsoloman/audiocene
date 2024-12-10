@@ -37,7 +37,7 @@ export default function ProceduralTerrain() {
 
   useEffect(() => {
     if (width > 1100) {
-      setFovLevel(80);
+      setFovLevel(60);
     } else if (width < 1100 && width > 550) {
       setFovLevel(90);
     } else if (width < 550) {
@@ -47,7 +47,7 @@ export default function ProceduralTerrain() {
 
   const { camera } = useThree();
   useEffect(() => {
-    camera.position.set(-15, 5, 0);
+    camera.position.set(-16, 9, 0);
     camera.lookAt(0, 0, 0);
     camera.fov = fovLevel;
     camera.updateProjectionMatrix();
@@ -185,7 +185,7 @@ export default function ProceduralTerrain() {
   useEffect(() => {
     if (water) {
       water.rotation.x = -Math.PI * 0.5;
-      water.position.y = -0.1;
+      water.position.y = 1.9;
       scene.add(water);
 
       return () => {
@@ -227,7 +227,7 @@ export default function ProceduralTerrain() {
   // Add the board to the scene
   useEffect(() => {
     if (board) {
-      board.position.set(0, 0, 0);
+      board.position.set(0, 2, 0);
       scene.add(board);
 
       return () => {
@@ -238,11 +238,11 @@ export default function ProceduralTerrain() {
 
   return (
     <>
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.75} />
       <directionalLight
         color="#ffffff"
         intensity={1}
-        position={[6.25, 3, 1]}
+        position={[6.25, 5, 1]}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.1}
@@ -253,9 +253,24 @@ export default function ProceduralTerrain() {
         shadow-camera-left={-8}
         shadow-bias={-0.02}
       />
+      {/* <directionalLight
+        color="#ffffff"
+        intensity={0.5}
+        position={[-6.25, 3, -2]}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-near={0.1}
+        shadow-camera-far={30}
+        shadow-camera-top={8}
+        shadow-camera-right={8}
+        shadow-camera-bottom={-8}
+        shadow-camera-left={-8}
+        shadow-bias={-0.02}
+      /> */}
+
       <mesh
         ref={mesh}
-        position={[0, 0, 0]}
+        position={[0, 2, 0]}
         rotation={[-Math.PI, 0, 0]}
         geometry={geometry}
         customDepthMaterial={depthMaterial}
@@ -263,7 +278,7 @@ export default function ProceduralTerrain() {
         <primitive object={material} attach="material" />
       </mesh>
       <mesh
-        position={[0, 0.25, 0]}
+        position={[0, 2.25, 0]}
         rotation={[-Math.PI, 0, 0]}
         geometry={clouds}
       >
