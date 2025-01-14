@@ -9,10 +9,17 @@ const StyledLogin = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   padding: 3.2rem 4rem;
   border-radius: 24px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   gap: 1rem;
+`;
+
+const FormContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
 `;
 
 export default function LoginForm() {
@@ -41,8 +48,9 @@ export default function LoginForm() {
   return (
     <StyledLogin onSubmit={handleSubmit}>
       <Heading as="h4">Login to your account</Heading>
-      <div>
-        <label htmlFor="email">Email address</label>
+
+      <FormContent>
+        <label htmlFor="email">Email address:</label>
         <input
           type="email"
           id="email"
@@ -51,10 +59,10 @@ export default function LoginForm() {
           value={email}
           disabled={isLoading}
         />
-      </div>
+      </FormContent>
 
-      <div>
-        <label htmlFor="password">Password</label>
+      <FormContent>
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
@@ -63,7 +71,7 @@ export default function LoginForm() {
           value={password}
           disabled={isLoading}
         />
-      </div>
+      </FormContent>
 
       <div>
         <Button disabled={isLoading}>Login</Button>

@@ -104,7 +104,7 @@ function RecordingDetail() {
       <DetailPanel>
         <DetailHeader>
           <Title>{recording.title}</Title>
-          {user.id == currentUser.id && (
+          {user && currentUser && user.id === currentUser.id && (
             <HeaderButtons>
               <Button
                 variant="tertiary"
