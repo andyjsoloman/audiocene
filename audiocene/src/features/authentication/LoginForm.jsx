@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Heading from "../../components/Heading.jsx";
 import { useLogin } from "./useLogin.js";
+import { Link } from "react-router-dom";
 
 const StyledLogin = styled.form`
   display: flex;
@@ -76,6 +77,7 @@ export default function LoginForm() {
       <div>
         <Button disabled={isLoading}>Login</Button>
       </div>
+      <Link to="/forgot-password">Forgot Password?</Link>
     </StyledLogin>
   );
 }

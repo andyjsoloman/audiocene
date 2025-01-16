@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import Homepage from "./pages/Homepage";
 import AppLayout from "./pages/AppLayout";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
@@ -58,6 +59,10 @@ function App() {
                 />
               </Route>
               <Route path="login" element={<Login />}></Route>
+              <Route
+                path="forgot-password"
+                element={<ForgotPassword />}
+              ></Route>
               <Route path="about" element={<About />}></Route>
               <Route path="signup" element={<Signup />}></Route>
               <Route path="profile/:id" element={<Profile />}></Route>
