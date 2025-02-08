@@ -8,6 +8,7 @@ import Homepage from "./pages/Homepage";
 import AppLayout from "./pages/AppLayout";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
@@ -63,6 +64,7 @@ function App() {
                 path="forgot-password"
                 element={<ForgotPassword />}
               ></Route>
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="about" element={<About />}></Route>
               <Route path="signup" element={<Signup />}></Route>
               <Route path="profile/:id" element={<Profile />}></Route>

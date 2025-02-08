@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
-// import { supabase } from "../../services/supabaseClient";
+import supabase from "../../services/supabase.js";
 
 const StyledForgotPassword = styled.form`
   display: flex;
@@ -25,7 +25,7 @@ export default function ForgotPasswordForm() {
 
     setIsSubmitting(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/reset-password",
+      redirectTo: "http://localhost:5173/reset-password",
     });
 
     if (error) {
