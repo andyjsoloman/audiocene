@@ -1,16 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { useQuery } from "@tanstack/react-query";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useGeoLocation } from "../hooks/useGeolocation";
-import Button from "./Button";
+
 import useUrlPositon from "../hooks/useUrlPosition";
-import {
-  useRecordings,
-  useRecordingsByMapBounds,
-} from "../features/recordings/useRecordings";
+import { useRecordings } from "../features/recordings/useRecordings";
 import useDebounce from "../hooks/useDebounce";
 import { useCurrentBounds } from "../contexts/RecordingsByBoundsContext";
 import { QUERIES } from "../constants";
@@ -42,7 +38,7 @@ const PopupContent = styled.span`
 export default function MapGL() {
   const navigate = useNavigate();
 
-  const { loadingRecordings, recordingsError, recordings } = useRecordings();
+  const { recordings } = useRecordings();
 
   const [mapPosition, setMapPosition] = useState([
     50.71733015526967, 1.8731689453125002,
@@ -183,6 +179,14 @@ export default function MapGL() {
     navigate(`add?lat=${lat}&lng=${lng}`);
   };
 
+  const getYourPosition = () => {
+    getPosition();
+    setViewState((prev) => ({
+      ...prev,
+      zoom: 6,
+    }));
+  };
+
   return (
     <>
       <MapCont>
@@ -191,8 +195,9 @@ export default function MapGL() {
           onMove={(evt) => setViewState(evt.viewState)}
           mapboxAccessToken={MAPBOX_TOKEN}
           style={{ width: "100%", height: "100%" }}
-          mapStyle="mapbox://styles/mapbox/satellite-v9"
+          mapStyle="mapbox://styles/mapbox/standard-satellite"
           projection="globe"
+          showPlaceLabels={true}
           onLoad={(evt) => handleMapLoad(evt.target)}
           onClick={handleMapClick}
         >
@@ -239,7 +244,7 @@ export default function MapGL() {
         </Map>
 
         <GeoLocateButton
-          getPosition={getPosition}
+          getYourPosition={getYourPosition}
           isLoadingPosition={isLoadingPosition}
         />
       </MapCont>
