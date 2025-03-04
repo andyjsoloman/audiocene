@@ -82,7 +82,9 @@ export async function createEditRecording(newRecording, id, userId) {
 
   const imagePath = hasImagePath
     ? newRecording.image
-    : `${supabaseUrl}/storage/v1/object/public/images/${imageName}`;
+    : newRecording.image.name
+    ? `${supabaseUrl}/storage/v1/object/public/images/${imageName}`
+    : null;
 
   // 1. Create / Edit Recording
   let query = supabase.from("recordings");
