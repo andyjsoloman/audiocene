@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useCreateRecording } from "../features/recordings/useCreateRecording";
 import { useEditRecording } from "../features/recordings/useEditRecording";
 import FileInput from "./FileInput";
+import Error from "./Error";
 
 // const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -158,7 +159,8 @@ export default function Form({ recordingToEdit = {} }) {
   function onSubmit(data) {
     const audio = typeof data.audio === "string" ? data.audio : data.audio[0];
 
-    const image = typeof data.image === "string" ? data.image : data.image[0];
+    const image =
+      typeof data.image === "string" ? data.image : data.image[0] || null;
 
     if (isEditSession) {
       delete data.lat;
@@ -174,7 +176,7 @@ export default function Form({ recordingToEdit = {} }) {
       recordingData.position = { lat, lng };
 
       createRecording(
-        { ...recordingData, audio: audio, image: image },
+        { ...recordingData, audio: audio, ...(image ? { image } : {}) },
         {
           onSuccess: (data) => reset(),
         }
@@ -211,7 +213,7 @@ export default function Form({ recordingToEdit = {} }) {
           {...register("title", { required: "This field is required" })}
         />
       </FormRow>
-      <FormRow label="Audio File" error={errors?.title?.message}>
+      <FormRow label="Audio File">
         <FileInput
           id="audio"
           defaultValue=""
@@ -219,18 +221,35 @@ export default function Form({ recordingToEdit = {} }) {
           accept="audio/*"
           {...register("audio", {
             required: isEditSession ? false : "This field is required",
+            validate: (fileList) => {
+              const file = fileList[0];
+              if (file && file.size > 30 * 1024 * 1024) {
+                return "Audio file size must be less than 30MB";
+              }
+              return true;
+            },
           })}
         />
       </FormRow>
-      <FormRow label="Photo (optional)" error={errors?.title?.message}>
+      {errors?.audio && <Error>{errors.audio.message}</Error>}
+      <FormRow label="Photo (optional)">
         <FileInput
           id="image"
           defaultValue=""
           type="file"
           accept="image/*"
-          {...register("image")}
+          {...register("image", {
+            validate: (fileList) => {
+              const file = fileList[0];
+              if (file && file.size > 500 * 1024) {
+                return "Image file size must be less than 5MB";
+              }
+              return true;
+            },
+          })}
         />
       </FormRow>
+      {errors?.image && <Error>{errors.image.message}</Error>}
       <FormRow label="Notes">
         <textarea
           id="notes"
@@ -258,12 +277,14 @@ export default function Form({ recordingToEdit = {} }) {
         />
       </FormRow>
       <ButtonRow>
-        <Button disabled={isCreating}>
-          {isEditing
-            ? "Loading"
-            : isEditSession
-            ? "Save Changes"
-            : "Add Recording"}
+        <Button disabled={isWorking}>
+          {isWorking ? (
+            <LoadingSpinner size="small" />
+          ) : isEditSession ? (
+            "Save Changes"
+          ) : (
+            "Add Recording"
+          )}
         </Button>
       </ButtonRow>
     </form>

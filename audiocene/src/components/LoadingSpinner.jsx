@@ -14,8 +14,8 @@ const SpinnerContainer = styled.div`
 `;
 
 const Spinner = styled.div`
-  width: 4rem;
-  height: 4rem;
+  width: ${(props) => (props.size === "small" ? "2rem" : "4rem")};
+  height: ${(props) => (props.size === "small" ? "2rem" : "4rem")};
   border-radius: 50%;
   background: conic-gradient(#0000 10%, var(--color-primary));
   mask: radial-gradient(
@@ -26,10 +26,10 @@ const Spinner = styled.div`
   animation: ${rotate} 1.5s infinite linear;
 `;
 
-export default function LoadingSpinner() {
+export default function LoadingSpinner({ size = "large" }) {
   return (
     <SpinnerContainer>
-      <Spinner />
+      <Spinner size={size} />
     </SpinnerContainer>
   );
 }
