@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+
 import { useGeoLocation } from "../hooks/useGeolocation";
 
 import useUrlPositon from "../hooks/useUrlPosition";
@@ -232,6 +233,7 @@ export default function MapGL() {
                 )}
               </Marker>
             ))}
+
           {tempLat && (
             <Marker longitude={tempLng} latitude={tempLat} anchor="bottom">
               <img
