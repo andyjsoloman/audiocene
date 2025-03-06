@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Map, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import supercluster from "supercluster";
 
 import { useGeoLocation } from "../hooks/useGeolocation";
 
@@ -38,45 +39,71 @@ const PopupContent = styled.span`
 
 export default function MapGL() {
   const navigate = useNavigate();
-
   const { recordings } = useRecordings();
 
+  // DEFAULT MAP POSITION
   const [mapPosition, setMapPosition] = useState([
     50.71733015526967, 1.8731689453125002,
-  ]); // DEFAULT MAP POSITION
+  ]);
+
+  //Geolocation state & function
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     getPosition,
   } = useGeoLocation();
+
+  //Get map lat/lng from url params
   const [mapLat, mapLng] = useUrlPositon();
+
+  //refs for markers, map & bounds
   const markerRefs = useRef({});
   const mapRef = useRef(null);
   const bounds = useRef(null);
+
+  //Interaction tracking
   const [done, setDone] = useState(false);
   const [tempLat, setTempLat] = useState(null);
   const [tempLng, setTempLng] = useState(null);
   const [isMobile, setIsMobile] = useState(null);
+
+  //Get active marker from url params
   const [searchParams] = useSearchParams();
   const activeMarkerId = searchParams.get("id");
+
+  //Context for updating map bounds
   const { setCurrentBounds } = useCurrentBounds();
 
+  //Initial view state
   const [viewState, setViewState] = useState({
     longitude: mapPosition[1],
     latitude: mapPosition[0],
     zoom: 3,
   });
+
   const [visibleRecordings, setVisibleRecordings] = useState([]);
 
-  // THE FOLLOWING API CALL SEEMS TO TRIGGER CONSTANTLY AND ALSO DOES NOT RETURN THE EXPECTED RESULTS.
-  // CHECK THE LNG & LAT? IT'S ALSO POSSIBLE THE THIS WON'T WORK IN GLOBE MAP
-  // const {
-  //   loadingRecordingsByBounds,
-  //   recordingsByBounds,
-  //   recordingsByBoundsError,
-  // } = useRecordingsByMapBounds(bounds.current);
+  const cluster = useRef(
+    new supercluster({
+      radius: 60, // Distance in pixels to cluster points
+      maxZoom: 16, // Don't cluster above this zoom level
+    })
+  );
 
-  // console.log("list", recordingsByBounds);
+  useEffect(() => {
+    if (Array.isArray(recordings) && recordings.length > 0) {
+      cluster.current.load(
+        recordings.map((rec) => ({
+          type: "Feature",
+          properties: { cluster: false, recordingId: rec.id, title: rec.title },
+          geometry: {
+            type: "Point",
+            coordinates: [rec.position.lng, rec.position.lat],
+          },
+        }))
+      );
+    }
+  }, [recordings]);
 
   useEffect(() => {
     // Check screen width when the component mounts
@@ -152,6 +179,28 @@ export default function MapGL() {
     debouncedGetBounds();
   }, [viewState, debouncedGetBounds]);
 
+  const getClusters = useCallback(() => {
+    if (!mapRef.current || !cluster.current) return [];
+    if (mapRef.current) {
+      const mapBounds = mapRef.current.getBounds();
+      const zoom = mapRef.current.getZoom();
+
+      if (!mapBounds) return [];
+
+      return cluster.current.getClusters(
+        [
+          mapBounds.getWest(),
+          mapBounds.getSouth(),
+          mapBounds.getEast(),
+          mapBounds.getNorth(),
+        ],
+        Math.floor(zoom)
+      );
+    }
+  }, [mapRef.current]);
+
+  const clusters = getClusters();
+
   const handleMapLoad = (map) => {
     mapRef.current = map;
     // Set padding when the map is loaded
@@ -202,37 +251,85 @@ export default function MapGL() {
           onLoad={(evt) => handleMapLoad(evt.target)}
           onClick={handleMapClick}
         >
-          {Array.isArray(recordings) &&
-            recordings.map((recording, index) => (
+          {clusters.map((clusterData) => {
+            const [longitude, latitude] = clusterData.geometry.coordinates;
+            const {
+              cluster: isCluster,
+              cluster_id,
+              recordingId,
+              point_count,
+            } = clusterData.properties;
+
+            const markerKey = isCluster
+              ? `cluster-${cluster_id}`
+              : `recording-${recordingId}`;
+
+            if (isCluster) {
+              return (
+                <Marker
+                  key={markerKey}
+                  longitude={longitude}
+                  latitude={latitude}
+                >
+                  <div
+                    style={{
+                      background: "rgba(0, 0, 0, 0.6)",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: `${20 + (point_count / recordings.length) * 30}px`,
+                      height: `${
+                        20 + (point_count / recordings.length) * 30
+                      }px`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      const expansionZoom = Math.min(
+                        supercluster.getClusterExpansionZoom(cluster_id),
+                        16
+                      );
+                      setViewState({
+                        ...viewState,
+                        longitude,
+                        latitude,
+                        zoom: expansionZoom,
+                      });
+                    }}
+                  >
+                    {point_count}
+                  </div>
+                </Marker>
+              );
+            }
+
+            // Render individual recording markers
+            return (
               <Marker
-                key={recording.id}
-                longitude={recording.position.lng}
-                latitude={recording.position.lat}
+                key={markerKey}
+                longitude={longitude}
+                latitude={latitude}
                 anchor="bottom"
-                onClick={() =>
-                  navigate(
-                    `explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
-                  )
-                }
               >
                 <img
                   src="/mapMarker.svg"
                   alt="Marker"
                   style={{ width: 45, height: 60 }}
                 />
-                {activeMarkerId === String(recording.id) && (
+                {activeMarkerId === String(recordingId) && (
                   <Popup
-                    longitude={recording.position.lng}
-                    latitude={recording.position.lat}
+                    longitude={longitude}
+                    latitude={latitude}
                     closeOnClick={false}
                     offset={[0, -60]}
-                    // onClose={() => navigate(`/app/explore`)} ---> this will get triggered by (and override) any navigation away from activeMarker
                   >
-                    <PopupContent>{recording.title}</PopupContent>
+                    <PopupContent>{clusterData.properties.title}</PopupContent>
                   </Popup>
                 )}
               </Marker>
-            ))}
+            );
+          })}
 
           {tempLat && (
             <Marker longitude={tempLng} latitude={tempLat} anchor="bottom">
