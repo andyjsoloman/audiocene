@@ -133,3 +133,19 @@ export async function updateCurrentUser({
   // Return the updated user object
   return data;
 }
+
+export async function checkIfUserExists(email, fullName) {
+  const { data, error } = await supabase
+    .from("profiles") // Adjust if your table is named differently
+    .select("email_address, display_name")
+    .or(`email_address.eq.${email},display_name.eq.${fullName}`); // Query both fields at once
+
+  if (error) throw new Error(error.message);
+
+  if (data.length === 0) return { emailExists: false, usernameExists: false };
+
+  return {
+    emailExists: data.some((user) => user.email_address === email),
+    usernameExists: data.some((user) => user.display_name === fullName),
+  };
+}

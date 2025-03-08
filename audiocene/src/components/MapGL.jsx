@@ -207,11 +207,11 @@ export default function MapGL() {
 
       // Check if range is accessible (indirectly, since it's internal)
       const tree = cluster.current.trees?.[cluster.current._limitZoom(zoom)];
-      console.log("Tree:", tree);
-      console.log(
-        "Tree range method exists:",
-        tree && typeof tree.range === "function"
-      );
+      // console.log("Tree:", tree);
+      // console.log(
+      //   "Tree range method exists:",
+      //   tree && typeof tree.range === "function"
+      // );
 
       return clusters;
     } catch (error) {
