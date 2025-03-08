@@ -181,21 +181,42 @@ export default function MapGL() {
 
   const getClusters = useCallback(() => {
     if (!mapRef.current || !cluster.current) return [];
-    if (mapRef.current) {
-      const mapBounds = mapRef.current.getBounds();
-      const zoom = mapRef.current.getZoom();
 
-      if (!mapBounds) return [];
+    const mapBounds = mapRef.current.getBounds();
+    const zoom = Math.floor(mapRef.current.getZoom());
 
-      return cluster.current.getClusters(
+    if (!mapBounds) return [];
+
+    // Check if cluster.current is defined and has getClusters method
+    if (!cluster.current.getClusters) {
+      console.error("Supercluster instance is missing `getClusters` method.");
+      return [];
+    }
+
+    // Try getting clusters and handle possible errors
+    try {
+      const clusters = cluster.current.getClusters(
         [
           mapBounds.getWest(),
           mapBounds.getSouth(),
           mapBounds.getEast(),
           mapBounds.getNorth(),
         ],
-        Math.floor(zoom)
+        zoom
       );
+
+      // Check if range is accessible (indirectly, since it's internal)
+      const tree = cluster.current.trees?.[cluster.current._limitZoom(zoom)];
+      console.log("Tree:", tree);
+      console.log(
+        "Tree range method exists:",
+        tree && typeof tree.range === "function"
+      );
+
+      return clusters;
+    } catch (error) {
+      console.error("Error while getting clusters:", error);
+      return [];
     }
   }, [mapRef.current]);
 
