@@ -22,7 +22,7 @@ function Experience() {
         <Canvas shadows>
           {/* <axesHelper args={[5]} position={[0, 5, 0]} /> */}
           <color args={["hsl(195, 24%, 98%)"]} attach="background" />
-          <OrbitControls />
+          <OrbitControls maxPolarAngle={Math.PI * 0.45} />
 
           <Marker position={[-4, 3.75, -4]} scale={0.6} />
           <Marker position={[-4, 3.75, 3]} scale={0.6} />
