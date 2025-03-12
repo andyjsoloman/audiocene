@@ -2,6 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+  default-src 'self';
+  script-src 'self' 'nonce-randomString' 'unsafe-eval' https://www.gstatic.com;
+  style-src 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
+  style-src-elem 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
+  font-src 'self' https://fonts.gstatic.com https://use.typekit.net;
+  img-src 'self' data: https://naiqpffpxlusflmdzeqa.supabase.co;
+  connect-src 'self' https://naiqpffpxlusflmdzeqa.supabase.co https://www.gstatic.com data: https://api.mapbox.com https://events.mapbox.com;
+  worker-src 'self' blob: https://www.gstatic.com;
+  "
+    />
+
     <link rel="icon" type="image/svg" href="/logo.svg" />
     <link rel="stylesheet" href="https://use.typekit.net/drx4itm.css" />
     <link rel="stylesheet" href="https://use.typekit.net/qqi6onu.css" />
