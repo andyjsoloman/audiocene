@@ -100,7 +100,7 @@ html {
 
 .custom-gui {
   position: absolute;
-  margin-top: 100px; /* Change to your desired position */
-  right: 20px; /* Change to your desired position */
-  z-index: 100; /* Ensure it is above other elements */
+  margin-top: 100px;
+  right: 20px;
+  z-index: 100;
 }
