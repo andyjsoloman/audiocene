@@ -17,10 +17,7 @@ export default function ProceduralTerrain() {
   const mesh = useRef();
   const { scene } = useThree();
   const debugObject = {};
-  const perlinTexture = useLoader(
-    TextureLoader,
-    "src/assets/gabor 6 - 128x128.png"
-  );
+  const perlinTexture = useLoader(TextureLoader, "./gabor 6 - 128x128.png");
   perlinTexture.wrapS = THREE.RepeatWrapping;
   perlinTexture.wrapT = THREE.RepeatWrapping;
 

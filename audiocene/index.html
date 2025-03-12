@@ -5,15 +5,16 @@
     <meta
       http-equiv="Content-Security-Policy"
       content="
-  default-src 'self';
-  script-src 'self' 'nonce-randomString' 'unsafe-eval' https://www.gstatic.com;
-  style-src 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
-  style-src-elem 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
-  font-src 'self' https://fonts.gstatic.com https://use.typekit.net;
-  img-src 'self' data: https://naiqpffpxlusflmdzeqa.supabase.co;
-  connect-src 'self' https://naiqpffpxlusflmdzeqa.supabase.co https://www.gstatic.com data: https://api.mapbox.com https://events.mapbox.com;
-  worker-src 'self' blob: https://www.gstatic.com;
-  "
+      default-src 'self';
+      script-src 'self' 'nonce-randomString' 'unsafe-eval' https://www.gstatic.com;
+      style-src 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
+      style-src-elem 'self' 'unsafe-inline' https://use.typekit.net https://unpkg.com https://p.typekit.net;
+      font-src 'self' https://fonts.gstatic.com https://use.typekit.net;
+      img-src 'self' data: https://naiqpffpxlusflmdzeqa.supabase.co;
+      connect-src 'self' https://naiqpffpxlusflmdzeqa.supabase.co https://www.gstatic.com data: https://api.mapbox.com https://events.mapbox.com;
+      worker-src 'self' blob: https://www.gstatic.com;
+      media-src 'self' https://naiqpffpxlusflmdzeqa.supabase.co;
+    "
     />
 
     <link rel="icon" type="image/svg" href="/logo.svg" />

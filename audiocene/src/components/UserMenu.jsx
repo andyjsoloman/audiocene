@@ -112,7 +112,9 @@ function UserMenu() {
 
   const fullName = session?.user?.user_metadata?.fullName || "Guest";
 
-  const { avatar } = user.user_metadata;
+  const avatar = user?.user_metadata?.avatar
+    ? user.user_metadata.avatar
+    : "../profile.svg";
 
   function goToProfile() {
     navigate(`/profile/${user.id}`);
