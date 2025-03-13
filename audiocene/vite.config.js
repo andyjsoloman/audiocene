@@ -8,4 +8,7 @@ dotenv.config();
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), glsl()],
+  server: {
+    allowedHosts: ["ffdf-135-12-199-92.ngrok-free.app"],
+  },
 });
