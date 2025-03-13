@@ -255,7 +255,10 @@ export default function MapGL() {
     navigate(`add?lat=${lat}&lng=${lng}`);
   };
 
-  const getYourPosition = () => {
+  const getYourPosition = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
     getPosition();
     setViewState((prev) => ({
       ...prev,
