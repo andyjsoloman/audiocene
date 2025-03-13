@@ -12,6 +12,7 @@ export function useGeoLocation(defaultPosition = null) {
 
     setIsLoading(true);
 
+    // Trigger geolocation request only when user has clicked
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setPosition({
@@ -47,15 +48,5 @@ export function useGeoLocation(defaultPosition = null) {
     );
   }
 
-  // Prompt for location permissions (especially useful for mobile)
-  function promptLocationPermission() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        () => {}, // This will trigger the permission prompt
-        (err) => {} // Ignore errors here since we want to only trigger the prompt
-      );
-    }
-  }
-
-  return { isLoading, position, error, getPosition, promptLocationPermission };
+  return { isLoading, position, error, getPosition };
 }
