@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Heading from "../../components/Heading.jsx";
 import { useLogin } from "./useLogin.js";
 import { Link } from "react-router-dom";
+import { QUERIES } from "../../constants";
 
 const StyledLogin = styled.form`
   display: flex;
@@ -15,12 +16,18 @@ const StyledLogin = styled.form`
   border-radius: 24px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   gap: 1rem;
+  @media ${QUERIES.mobile} {
+    max-width: 80%;
+  }
 `;
 
 const FormContent = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 16px;
+  @media ${QUERIES.mobile} {
+    font-size: 0.8rem;
+  }
 `;
 
 export default function LoginForm() {

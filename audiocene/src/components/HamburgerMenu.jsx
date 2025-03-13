@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { QUERIES } from "../constants";
+import { useUser } from "../features/authentication/useUser";
 
 const HamburgerContainer = styled.div`
   background-color: var(--color-bg);
@@ -61,6 +62,7 @@ function HamburgerMenu() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const dropDownRef = useRef(null);
   const triggerRef = useRef(null);
+  const { user } = useUser();
 
   function toggleDropdown() {
     setDropDownOpen(!dropDownOpen);
@@ -90,6 +92,9 @@ function HamburgerMenu() {
   }
   function goToAbout() {
     navigate(`/about`);
+  }
+  function goToLogin() {
+    navigate(`/login`);
   }
 
   return (
@@ -144,6 +149,21 @@ function HamburgerMenu() {
           >
             About
           </DropdownItem>
+          {!user && (
+            <DropdownItem
+              role="menuitem"
+              tabIndex={0}
+              onClick={goToLogin}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  goToLogin();
+                }
+              }}
+            >
+              Login
+            </DropdownItem>
+          )}
         </Dropdown>
       )}
     </HamburgerContainer>
