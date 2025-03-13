@@ -2,8 +2,14 @@
   "redirects": [
     {
       "source": "/:path*",
-      "destination": "/",
+      "destination": "/index.html",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/:path*(/*.js|/*.css|/*.png|/*.jpg|/*.svg)",
+      "destination": "/$1"
     }
   ]
 }
