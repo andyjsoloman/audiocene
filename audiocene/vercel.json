@@ -3,13 +3,20 @@
     {
       "source": "/:path*",
       "destination": "/index.html",
-      "permanent": false
+      "permanent": false,
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-deployment-url",
+          "value": "audiocene.vercel.app"
+        }
+      ]
     }
   ],
   "rewrites": [
     {
-      "source": "/:path*(/*.js|/*.css|/*.png|/*.jpg|/*.svg)",
-      "destination": "/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
