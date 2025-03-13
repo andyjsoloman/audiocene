@@ -95,7 +95,12 @@ export default function MapGL() {
       cluster.current.load(
         recordings.map((rec) => ({
           type: "Feature",
-          properties: { cluster: false, recordingId: rec.id, title: rec.title },
+          properties: {
+            cluster: false,
+            recordingId: rec.id,
+            title: rec.title,
+            recording: rec,
+          },
           geometry: {
             type: "Point",
             coordinates: [rec.position.lng, rec.position.lat],
@@ -277,6 +282,7 @@ export default function MapGL() {
             const {
               cluster: isCluster,
               cluster_id,
+              recording,
               recordingId,
               point_count,
             } = clusterData.properties;
@@ -308,7 +314,7 @@ export default function MapGL() {
                     }}
                     onClick={() => {
                       const expansionZoom = Math.min(
-                        supercluster.getClusterExpansionZoom(cluster_id),
+                        cluster.current.getClusterExpansionZoom(cluster_id),
                         16
                       );
                       setViewState({
@@ -332,6 +338,11 @@ export default function MapGL() {
                 longitude={longitude}
                 latitude={latitude}
                 anchor="bottom"
+                onClick={() =>
+                  navigate(
+                    `explore/${recording.id}?id=${recording.id}&lat=${recording.position.lat}&lng=${recording.position.lng}`
+                  )
+                }
               >
                 <img
                   src="/mapMarker.svg"
