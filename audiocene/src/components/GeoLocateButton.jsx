@@ -53,7 +53,9 @@ function GeoLocateButton({ getYourPosition, isLoadingPosition }) {
         </Button>
       </GeolocateContainer>
       <LocateButton
-        onClick={(e) => getYourPosition(e)}
+        onClick={(e) => {
+          getYourPosition(e);
+        }}
         onTouchStart={(e) => getYourPosition(e)}
       >
         <LocateIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
